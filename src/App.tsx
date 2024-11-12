@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import Plot from 'react-plotly.js';
-import './App.css';
 import { PieData, Config } from 'plotly.js';
-import { visibilityIcon } from './assets/icons';
+import { visibilityIcon, hideVisibilityIcon } from './assets/icons';
 
 const StyledWrapper = styled.div`
     border-radius: 0.5rem;
@@ -29,6 +28,50 @@ const StyledLegend = styled.div`
         font-size: 0.813rem;
         color: rgba(112, 112, 144, 1);
     }
+`;
+
+const StyledHeader = styled.header`
+    h5 {
+        font-size: 1rem;
+    }
+`;
+
+const StyledDivider = styled.hr`
+    border: 1px solid rgba(224, 224, 237, 1);
+    margin: 1.375rem 0;
+    /* margin-right: 0.5rem; */
+`;
+
+const StyledRow = styled.div`
+    margin: 1.375rem 0;
+    display: flex;
+    align-items: center;
+
+    & > * {
+        margin-right: 1rem;
+    }
+
+    .row {
+        font-size: 1.375rem;
+    }
+
+    .icon {
+        cursor: pointer;
+    }
+
+    .description {
+        font-weight: 700;
+        color: var(--font-color);
+        font-size: 0.875rem;
+    }
+`;
+
+const StyledDot = styled.span<{ color?: string }>`
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: ${({ color }) => color || 'rgba(24, 102, 219, 1)'};
 `;
 
 function App() {
@@ -131,16 +174,30 @@ function App() {
             <StyledPieChart>
                 <Plot data={data} layout={layout} config={config} />
                 <StyledLegend>
-                    <div>
+                    <StyledHeader>
                         <h5>Pricing campaigns</h5>
                         <p>Ensure complete allocation of products among pricing campaigns</p>
-                        <hr />
-                    </div>
+                    </StyledHeader>
+                    <StyledDivider />
                     <div>
-                        <div>
-                            <img src={visibilityIcon} alt='Visibility Icon' />
-                        </div>
-                        <div></div>
+                        <StyledRow>
+                            <img className='icon' src={visibilityIcon} alt='Visibility Icon' />
+                            <span className='data'>62.5%</span>
+                            <span className='divider'>-</span>
+
+                            <p className='description'>
+                                <StyledDot className='dot' /> Products in pricing campaign
+                            </p>
+                        </StyledRow>
+                        <StyledRow>
+                            <img className='icon' src={hideVisibilityIcon} alt='Hide visibility Icon' />
+                            <span className='data'>37.5%</span>
+                            <span className='divider'>-</span>
+
+                            <p className='description'>
+                                <StyledDot className='dot' color={'#e94723'} /> Products in pricing campaign
+                            </p>
+                        </StyledRow>
                     </div>
                 </StyledLegend>
             </StyledPieChart>

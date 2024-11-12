@@ -38,6 +38,11 @@ const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+
+  h5 {
+    font-size: 1rem;
+  }
 `;
 
 export default GlobalStyle;
