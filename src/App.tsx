@@ -11,12 +11,17 @@ const StyledWrapper = styled.div`
 
     background: rgba(246, 246, 248, 1);
     .slice path.surface[style*='fill: rgb(24, 102, 219)'] {
-        filter: drop-shadow(0 0 7px rgba(24, 102, 219, 0.7));
+        // prettier-ignore
+        filter: 
+            drop-shadow(0 0 4px rgba(24, 102, 219, 0.7));
+        /* mask-image: radial-gradient(circle at 50% 50%, #0d3b7f 0%, #176ae5 100%); */
+        /* mask-size: cover; */
     }
 `;
 
 const StyledPieChart = styled.div`
     display: flex;
+    gap: 2rem;
 `;
 
 const StyledGroupHeader = styled.div`
@@ -26,7 +31,7 @@ const StyledGroupHeader = styled.div`
 const StyledLegend = styled.div`
     p {
         font-size: 0.813rem;
-        color: rgba(112, 112, 144, 1);
+        color: var(--text-placeholder);
     }
 `;
 
@@ -39,7 +44,6 @@ const StyledHeader = styled.header`
 const StyledDivider = styled.hr`
     border: 1px solid rgba(224, 224, 237, 1);
     margin: 1.375rem 0;
-    /* margin-right: 0.5rem; */
 `;
 
 const StyledRow = styled.div`
@@ -51,25 +55,38 @@ const StyledRow = styled.div`
         margin-right: 1rem;
     }
 
-    .row {
-        font-size: 1.375rem;
-    }
-
     .icon {
         cursor: pointer;
     }
 
+    .data {
+        width: 76px;
+        font-size: 22px;
+        font-weight: 300;
+        line-height: 28.6px;
+    }
+
+    .divider {
+        width: 8px;
+        height: 1px;
+        background-color: var(--text-placeholder);
+        display: inline-block;
+        vertical-align: middle;
+    }
+
     .description {
-        font-weight: 700;
+        font-weight: 600;
         color: var(--font-color);
         font-size: 0.875rem;
+        display: flex;
     }
 `;
 
 const StyledDot = styled.span<{ color?: string }>`
     display: inline-block;
-    width: 10px;
-    height: 10px;
+    margin-right: 0.5rem;
+    width: 1rem;
+    height: 1rem;
     border-radius: 50%;
     background: ${({ color }) => color || 'rgba(24, 102, 219, 1)'};
 `;
@@ -84,7 +101,7 @@ function App() {
             type: 'pie',
             hoverinfo: 'skip',
             marker: {
-                colors: ['rgba(0,0,0,0)', 'rgb(238 238 242)'], // GREY
+                colors: ['rgba(0,0,0,0)', 'background: rgba(238, 238, 242, 1)'], // GREY
             },
         },
         {
@@ -169,7 +186,7 @@ function App() {
     return (
         <StyledWrapper>
             <StyledGroupHeader>
-                <h5>Statistics</h5>
+                <h4>Statistics</h4>
             </StyledGroupHeader>
             <StyledPieChart>
                 <Plot data={data} layout={layout} config={config} />
@@ -183,7 +200,7 @@ function App() {
                         <StyledRow>
                             <img className='icon' src={visibilityIcon} alt='Visibility Icon' />
                             <span className='data'>62.5%</span>
-                            <span className='divider'>-</span>
+                            <span className='divider'></span>
 
                             <p className='description'>
                                 <StyledDot className='dot' /> Products in pricing campaign
@@ -192,7 +209,7 @@ function App() {
                         <StyledRow>
                             <img className='icon' src={hideVisibilityIcon} alt='Hide visibility Icon' />
                             <span className='data'>37.5%</span>
-                            <span className='divider'>-</span>
+                            <span className='divider'></span>
 
                             <p className='description'>
                                 <StyledDot className='dot' color={'#e94723'} /> Products in pricing campaign
