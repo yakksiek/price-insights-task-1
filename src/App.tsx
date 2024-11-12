@@ -1,11 +1,33 @@
+import styled from 'styled-components';
 import Plot from 'react-plotly.js';
 import './App.css';
 import { PieData, Config } from 'plotly.js';
-import styled from 'styled-components';
+import { visibilityIcon } from './assets/icons';
 
 const StyledWrapper = styled.div`
+    border-radius: 0.5rem;
+    h5 {
+        text-align: left;
+    }
+
+    background: rgba(246, 246, 248, 1);
     .slice path.surface[style*='fill: rgb(24, 102, 219)'] {
         filter: drop-shadow(0 0 7px rgba(24, 102, 219, 0.7));
+    }
+`;
+
+const StyledPieChart = styled.div`
+    display: flex;
+`;
+
+const StyledGroupHeader = styled.div`
+    padding: 1.125rem 0.938rem;
+`;
+
+const StyledLegend = styled.div`
+    p {
+        font-size: 0.813rem;
+        color: rgba(112, 112, 144, 1);
     }
 `;
 
@@ -86,6 +108,8 @@ function App() {
         height: 200,
         width: 200,
         showlegend: false,
+        plot_bgcolor: 'rgba(0, 0, 0, 0)',
+        paper_bgcolor: 'rgba(0, 0, 0, 0)',
         margin: {
             l: 8,
             r: 8,
@@ -101,8 +125,25 @@ function App() {
 
     return (
         <StyledWrapper>
-            <h5>Statistics</h5>
-            <Plot data={data} layout={layout} config={config} />
+            <StyledGroupHeader>
+                <h5>Statistics</h5>
+            </StyledGroupHeader>
+            <StyledPieChart>
+                <Plot data={data} layout={layout} config={config} />
+                <StyledLegend>
+                    <div>
+                        <h5>Pricing campaigns</h5>
+                        <p>Ensure complete allocation of products among pricing campaigns</p>
+                        <hr />
+                    </div>
+                    <div>
+                        <div>
+                            <img src={visibilityIcon} alt='Visibility Icon' />
+                        </div>
+                        <div></div>
+                    </div>
+                </StyledLegend>
+            </StyledPieChart>
         </StyledWrapper>
     );
 }
