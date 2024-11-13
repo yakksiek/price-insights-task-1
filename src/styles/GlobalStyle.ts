@@ -34,6 +34,10 @@ const GlobalStyle = createGlobalStyle`
     // paddings
     --card-padding: 1.125rem 0.938rem; // 21px 15px
 
+    // margins
+    --header-margin-bottom: 23px;
+    --header-icon-mr: 1rem;
+
 
 
   }

@@ -5,7 +5,6 @@ const StyledPageWrapper = styled.div`
     min-width: 1770px;
     margin: 0 auto;
     overflow-x: auto;
-    background: transparent;
 `;
 
 export default StyledPageWrapper;
