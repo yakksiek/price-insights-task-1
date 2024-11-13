@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import RepricingPage from '../pages/RepricingPage';
 import ReportsPage from '../pages/ReportsPage';
 import AppLayout from '../layouts/AppLayout';
@@ -10,7 +10,7 @@ export const router = createBrowserRouter([
         errorElement: <ErrorPage />,
         element: <AppLayout />,
         children: [
-            { index: true, element: <RepricingPage /> },
+            { index: true, element: <Navigate to='/repricing' replace /> },
             { path: '/repricing', element: <RepricingPage /> },
             { path: '/reports', element: <ReportsPage /> },
         ],
