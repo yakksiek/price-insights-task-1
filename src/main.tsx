@@ -7,6 +7,11 @@ import { router } from './routes';
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <GlobalStyle />
-        <RouterProvider router={router} />
+        <RouterProvider
+            router={router}
+            future={{
+                v7_startTransition: true,
+            }}
+        />
     </StrictMode>,
 );

@@ -56,7 +56,7 @@ interface BlockComponentProps {
 function BlockComponent({ name }: BlockComponentProps) {
     const renderedItems = colors.map(item => {
         return (
-            <div className='item' style={{ backgroundColor: item }}>
+            <div key={item} className='item' style={{ backgroundColor: item }}>
                 <img src={dragHandleIcon} alt='drag handle icon' />
                 <p>{item}</p>
             </div>
