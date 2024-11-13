@@ -2,10 +2,14 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   :root {
+
+    // font
+    --font-size-default: 14px;
     --font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 
-    // width
+    // width & height
     --max-width: 1770px;
+    --header-height: 80px;
 
 
     // font colours
