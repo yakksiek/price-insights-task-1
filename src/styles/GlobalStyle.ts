@@ -2,13 +2,36 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   :root {
-    --font-color: rgba(17, 17, 25, 1);
-    --background-color: rgba(238, 238, 242, 1);
     --font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 
+    // width
+    --max-width: 1770px;
 
+
+    // font colours
+    --font-color: rgba(17, 17, 25, 1);
+    --text-placeholder: rgba(112, 112, 144, 1);
+    
     // colours
-    --text-placeholder: rgba(112, 112, 144, 1)
+    --primary-blue: rgb(23, 106, 229);
+    --primary-orange: rgb(234, 84, 0);
+    --background-color: rgba(238, 238, 242, 1);
+    --background-color-section: rgba(246, 246, 248, 1); 
+    --icon-border-color: rgba(235, 235, 242, 1);
+    --icon-background-color:rgba(235, 235, 242, 0.5);
+
+
+    /* border: 1px solid rgba(235, 235, 242, 1) */
+
+    // radius
+    --card-radius: 0.5rem;
+
+
+    // paddings
+    --card-padding: 1.125rem 0.938rem; // 21px 15px
+
+
+
   }
 
   * {
