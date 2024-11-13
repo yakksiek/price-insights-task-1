@@ -7,7 +7,11 @@ const StyledCardHeader = styled.div`
     align-items: center;
 `;
 
-const StyledIconWrapper = styled.span`
+interface StyledIconWrapperProps {
+    $isOpen: boolean;
+}
+
+const StyledIconWrapper = styled.span<StyledIconWrapperProps>`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -17,16 +21,24 @@ const StyledIconWrapper = styled.span`
     border-radius: var(--card-radius);
     background-color: var(--icon-background-color);
     margin-right: 1rem;
+    cursor: pointer;
+
+    img {
+        transition: transform 0.3s ease;
+        transform: ${({ $isOpen }) => ($isOpen ? 'rotate(0deg)' : 'rotate(180deg)')};
+    }
 `;
 
 interface CardHeaderProps {
     cardHeaderText: string;
+    toggleOpenHandler: () => void;
+    isOpen: boolean;
 }
 
-function CardHeader({ cardHeaderText }: CardHeaderProps) {
+function CardHeader({ cardHeaderText, toggleOpenHandler, isOpen }: CardHeaderProps) {
     return (
         <StyledCardHeader>
-            <StyledIconWrapper>
+            <StyledIconWrapper onClick={toggleOpenHandler} $isOpen={isOpen}>
                 <img src={doubleChevronUpIcon} alt='Double chevron up icon' />
             </StyledIconWrapper>
             <h4>{cardHeaderText}</h4>
