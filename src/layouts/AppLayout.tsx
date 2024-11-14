@@ -8,8 +8,8 @@ const StyledMainContent = styled.main`
     padding: 70px 75px 80px 75px;
     background-color: transparent;
     // minus padding left & right
-    width: 1770px - 150px;
-    overflow-x: auto;
+    /* width: 1770px - 150px;
+    overflow-x: auto; */
 `;
 
 function AppLayout() {
