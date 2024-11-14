@@ -7,8 +7,8 @@ function RepricingPage() {
         <StyledPageWrapper>
             <StatisticsComponent />
             <BlockComponent name='A' />
-            <BlockComponent name='B' />
-            <BlockComponent name='C' />
+            {/* <BlockComponent name='B' />
+            <BlockComponent name='C' /> */}
         </StyledPageWrapper>
     );
 }

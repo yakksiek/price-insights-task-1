@@ -2,7 +2,12 @@ import styled from 'styled-components';
 import { arrowDownIcon, arrowUpIcon, dragHandleIcon } from '../../assets/icons';
 import { StyledCardWrapper } from '../../components/Card';
 
-const colors = ['crimson', 'lightyellow', 'lightgreen'];
+// prettier-ignore
+const colors = [
+  'crimson', 
+  'lightyellow', 
+  'lightgreen'
+];
 
 const StyledHeader = styled.header`
     display: flex;
