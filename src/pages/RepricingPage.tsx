@@ -1,11 +1,10 @@
-import { useState } from 'react';
-import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
+import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 
+import styled from 'styled-components';
 import StyledPageWrapper from '../components/PageWrapper';
 import BlockComponent from '../features/Block/BlockComponent';
 import StatisticsComponent from '../features/Statistics/StatisticsComponent';
-import * as u from '../utils';
-import styled from 'styled-components';
+import usePangeaDnd from '../hooks/usePangeaDnd';
 
 const blocksData = [
     {
@@ -40,17 +39,7 @@ const blocksData = [
 const StyledBlocksWrapper = styled.div``;
 
 function RepricingPage() {
-    const [blocks, setBlocks] = useState(blocksData);
-
-    const handleMoveUp = (index: number) => {
-        const reorderedBlocks = u.reorder(blocks, index, index - 1);
-        setBlocks(reorderedBlocks);
-    };
-
-    const handleMoveDown = (index: number) => {
-        const reorderedBlocks = u.reorder(blocks, index, index + 1);
-        setBlocks(reorderedBlocks);
-    };
+    const { items: blocks, handleOnDragEnd, handleMoveDown, handleMoveUp } = usePangeaDnd(blocksData);
 
     const renderedBlocks = blocks.map((blockItem, index) => {
         const isFirst = index === 0;
@@ -80,15 +69,6 @@ function RepricingPage() {
             </Draggable>
         );
     });
-
-    const handleOnDragEnd = (result: DropResult) => {
-        const { destination, source } = result;
-
-        if (!destination || destination.index === source.index) return;
-
-        const reorderedBlocks = u.reorder(blocks, source.index, destination.index);
-        setBlocks(reorderedBlocks);
-    };
 
     return (
         <StyledPageWrapper>

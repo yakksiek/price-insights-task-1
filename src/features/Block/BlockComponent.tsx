@@ -1,11 +1,10 @@
-import { useState } from 'react';
-import { DragDropContext, Draggable, DraggableProvidedDragHandleProps, Droppable, DropResult } from '@hello-pangea/dnd';
+import { DragDropContext, Draggable, DraggableProvidedDragHandleProps, Droppable } from '@hello-pangea/dnd';
 import styled from 'styled-components';
 
-import * as u from '../../utils';
 import { ArrowDownIcon, ArrowUpIcon } from '../../assets/icons';
 import { StyledCardWrapper } from '../../components/Card';
 import DraggableHandle from '../../components/DraggableHandle';
+import usePangeaDnd from '../../hooks/usePangeaDnd';
 
 const StyledHeader = styled.header`
     display: flex;
@@ -84,16 +83,7 @@ interface BlockComponentProps {
 }
 
 function BlockComponent({ blockData, isFirst, isLast, onMoveUp, onMoveDown, dragHandleProps }: BlockComponentProps) {
-    const [blockItems, setBlockItems] = useState(blockData.items);
-
-    const handleOnDragEnd = (result: DropResult) => {
-        const { destination, source } = result;
-
-        if (!destination || destination.index === source.index) return;
-
-        const reorderedBlockItems = u.reorder(blockItems, source.index, destination.index);
-        setBlockItems(reorderedBlockItems);
-    };
+    const { items: blockItems, handleOnDragEnd } = usePangeaDnd(blockData.items);
 
     const renderedListItems = blockItems.map((item, index) => {
         const { id, name } = item;
