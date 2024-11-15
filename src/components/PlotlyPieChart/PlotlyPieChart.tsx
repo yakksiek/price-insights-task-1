@@ -1,7 +1,7 @@
 import { Config, PieData } from 'plotly.js';
 import Plot from 'react-plotly.js';
 import styled from 'styled-components';
-import { hideVisibilityIcon, visibilityIcon } from '../../assets/icons';
+import { HideVisibilityIcon, VisibilityIcon } from '../../assets/icons';
 import { getCssVariable } from '../../utils';
 
 // PROBLEMS & QUESTIONABLE CHOICES
@@ -202,7 +202,8 @@ function PlotlyPieChart({ configData }: PlotlyPieChartProps) {
                 <StyledDivider />
                 <div>
                     <StyledRow>
-                        <img className='icon' src={visibilityIcon} alt='Visibility Icon' />
+                        {/* <img className='icon' src={visibilityIcon} alt='Visibility Icon' /> */}
+                        <VisibilityIcon />
                         <span className='data'>{configPrimaryData}%</span>
                         <span className='divider'></span>
 
@@ -212,7 +213,8 @@ function PlotlyPieChart({ configData }: PlotlyPieChartProps) {
                         </p>
                     </StyledRow>
                     <StyledRow>
-                        <img className='icon' src={hideVisibilityIcon} alt='Hide visibility Icon' />
+                        {/* <img className='icon' src={HideVisibilityIcon} alt='Hide visibility Icon' /> */}
+                        <HideVisibilityIcon />
                         <span className='data'>{100 - configPrimaryData}%</span>
                         <span className='divider'></span>
 

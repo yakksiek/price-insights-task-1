@@ -1,17 +1,17 @@
-import visibilityIcon from './visibilityIcon.svg';
-import hideVisibilityIcon from './hideVisibilityIcon.svg';
-import doubleChevronUpIcon from './doubleChevronUpIcon.svg';
-import logoIcon from './logoIcon.svg';
-import dragHandleIcon from './dragHandleIcon.svg';
-import arrowDownIcon from './arrowDownIcon.svg';
-import arrowUpIcon from './arrowUpIcon.svg';
+import VisibilityIcon from './visibilityIcon.svg';
+import HideVisibilityIcon from './hideVisibilityIcon.svg';
+import DoubleChevronUpIcon from './doubleChevronUpIcon.svg';
+import LogoIcon from './logoIcon.svg';
+import DragHandleIcon from '/src/assets/icons/dragHandleIcon.svg';
+import ArrowDownIcon from './arrowDownIcon.svg';
+import ArrowUpIcon from './arrowUpIcon.svg';
 
 export {
-    visibilityIcon,
-    hideVisibilityIcon,
-    doubleChevronUpIcon,
-    logoIcon,
-    arrowUpIcon,
-    dragHandleIcon,
-    arrowDownIcon,
+    VisibilityIcon,
+    HideVisibilityIcon,
+    DoubleChevronUpIcon,
+    LogoIcon,
+    ArrowUpIcon,
+    DragHandleIcon,
+    ArrowDownIcon,
 };

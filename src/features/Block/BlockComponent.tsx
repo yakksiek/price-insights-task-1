@@ -1,8 +1,11 @@
-import { DragDropContext, Draggable, DraggableProvidedDragHandleProps, Droppable } from '@hello-pangea/dnd';
+import { useState } from 'react';
+import { DragDropContext, Draggable, DraggableProvidedDragHandleProps, Droppable, DropResult } from '@hello-pangea/dnd';
 import styled from 'styled-components';
 
-import { arrowDownIcon, arrowUpIcon, dragHandleIcon } from '../../assets/icons';
+import * as u from '../../utils';
+import { ArrowDownIcon, ArrowUpIcon } from '../../assets/icons';
 import { StyledCardWrapper } from '../../components/Card';
+import DraggableHandle from '../../components/DraggableHandle';
 
 const StyledHeader = styled.header`
     display: flex;
@@ -14,13 +17,6 @@ const StyledHeader = styled.header`
 const StyledTitleWrapper = styled.div`
     display: flex;
     align-items: center;
-
-    img {
-        margin-right: 1rem;
-        &:hover {
-            cursor: grab;
-        }
-    }
 `;
 
 const StyledActionButtonsWrapper = styled.div`
@@ -29,13 +25,13 @@ const StyledActionButtonsWrapper = styled.div`
 
     button {
         cursor: pointer;
-        border: 1px solid black;
         padding: 1rem;
         border-radius: var(--card-radius);
+        color: var(--primary-blue);
 
         &:disabled {
             pointer-events: none;
-            border: 1px solid lightgrey;
+            color: lightgrey;
         }
     }
 `;
@@ -88,20 +84,40 @@ interface BlockComponentProps {
 }
 
 function BlockComponent({ blockData, isFirst, isLast, onMoveUp, onMoveDown, dragHandleProps }: BlockComponentProps) {
-    const handleOnDragEnd = () => {
-        console.log('first');
+    const [blockItems, setBlockItems] = useState(blockData.items);
+
+    const handleOnDragEnd = (result: DropResult) => {
+        const { destination, source } = result;
+
+        if (!destination || destination.index === source.index) return;
+
+        const reorderedBlockItems = u.reorder(blockItems, source.index, destination.index);
+        setBlockItems(reorderedBlockItems);
     };
 
-    const renderedListItems = blockData.items.map((item, index) => {
+    const renderedListItems = blockItems.map((item, index) => {
         const { id, name } = item;
         return (
             <Draggable key={id} draggableId={item.id} index={index}>
-                {provided => (
-                    <StyledListItem $color={name} className='item' ref={provided.innerRef} {...provided.draggableProps}>
-                        <img src={dragHandleIcon} alt='drag handle icon' {...provided.dragHandleProps} />
-                        <p>{name}</p>
-                    </StyledListItem>
-                )}
+                {provided => {
+                    if (!provided.dragHandleProps) return null;
+
+                    return (
+                        <StyledListItem
+                            $color={name}
+                            className='item'
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                        >
+                            <DraggableHandle
+                                dragHandleProps={provided.dragHandleProps}
+                                marginRight={true}
+                                background={true}
+                            />
+                            <p>{name}</p>
+                        </StyledListItem>
+                    );
+                }}
             </Draggable>
         );
     });
@@ -110,20 +126,20 @@ function BlockComponent({ blockData, isFirst, isLast, onMoveUp, onMoveDown, drag
         <StyledCardWrapper>
             <StyledHeader>
                 <StyledTitleWrapper>
-                    <img src={dragHandleIcon} alt='drag handle icon' {...dragHandleProps} />
+                    <DraggableHandle dragHandleProps={dragHandleProps} marginRight={true} />
                     <h4>{blockData.name}</h4>
                 </StyledTitleWrapper>
                 <StyledActionButtonsWrapper>
                     <button disabled={isLast} aria-disabled={isLast} onClick={onMoveDown}>
-                        <img src={arrowDownIcon} alt='arrow down icon' className='arrow-up' />
+                        <ArrowDownIcon />
                     </button>
                     <button disabled={isFirst} aria-disabled={isFirst} onClick={onMoveUp}>
-                        <img src={arrowUpIcon} alt='arrow up icon' className='arrow-down' />
+                        <ArrowUpIcon />
                     </button>
                 </StyledActionButtonsWrapper>
             </StyledHeader>
             <DragDropContext onDragEnd={handleOnDragEnd}>
-                <Droppable droppableId='droppable-elements'>
+                <Droppable droppableId='droppable-elements' direction='vertical'>
                     {provided =>
                         // prettier-ignore
                         <StyledList 
@@ -131,6 +147,7 @@ function BlockComponent({ blockData, isFirst, isLast, onMoveUp, onMoveDown, drag
                         ref={provided.innerRef}
                         >
                             {renderedListItems}
+                            {provided.placeholder}
                         </StyledList>
                     }
                 </Droppable>

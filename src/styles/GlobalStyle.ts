@@ -21,14 +21,13 @@ const GlobalStyle = createGlobalStyle`
     --primary-orange: rgb(234, 84, 0);
     --background-color: rgba(238, 238, 242, 1);
     --background-color-section: rgba(246, 246, 248, 1); 
+    --icon-background-transparent: rgba(255, 255, 255, 0.6);
     --icon-border-color: rgba(235, 235, 242, 1);
     --icon-background-color:rgba(235, 235, 242, 0.5);
 
-
-    /* border: 1px solid rgba(235, 235, 242, 1) */
-
     // radius
-    --card-radius: 0.5rem;
+    --card-radius: 8px;
+    --icon-bg-radius: 4px;
 
 
     // paddings

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { doubleChevronUpIcon } from '../../assets/icons';
+import { DoubleChevronUpIcon } from '../../assets/icons';
 
 const StyledCardHeader = styled.div`
     display: flex;
@@ -23,7 +23,7 @@ const StyledIconWrapper = styled.span<StyledIconWrapperProps>`
     margin-right: 1rem;
     cursor: pointer;
 
-    img {
+    svg {
         transition: transform 0.3s ease;
         transform: ${({ $isOpen }) => ($isOpen ? 'rotate(0deg)' : 'rotate(180deg)')};
     }
@@ -39,7 +39,7 @@ function CardHeader({ cardHeaderText, toggleOpenHandler, isOpen }: CardHeaderPro
     return (
         <StyledCardHeader>
             <StyledIconWrapper onClick={toggleOpenHandler} $isOpen={isOpen}>
-                <img src={doubleChevronUpIcon} alt='Double chevron up icon' />
+                <DoubleChevronUpIcon />
             </StyledIconWrapper>
             <h4>{cardHeaderText}</h4>
         </StyledCardHeader>

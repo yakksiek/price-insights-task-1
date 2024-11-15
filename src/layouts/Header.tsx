@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { logoIcon } from '../assets/icons';
+import { LogoIcon } from '../assets/icons';
 import { NavLink } from 'react-router-dom';
 
 const StyledHeader = styled.header`
@@ -37,7 +37,7 @@ const StyledNavLink = styled(NavLink)`
 function Header() {
     return (
         <StyledHeader>
-            <img src={logoIcon} alt='logo icon wrapper' />
+            <LogoIcon />
             <NavLinks>
                 <StyledNavLink to='/reports'>Reports</StyledNavLink>
                 <StyledNavLink to='/repricing'>Repricing</StyledNavLink>
