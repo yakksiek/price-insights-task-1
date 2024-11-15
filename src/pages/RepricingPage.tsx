@@ -58,12 +58,13 @@ function RepricingPage() {
 
         return (
             <Draggable key={blockItem.id} draggableId={blockItem.id} index={index}>
-                {provided =>
+                {provided => {
+                    if (!provided.dragHandleProps) return null;
                     // prettier-ignore
-                    <div 
+                    return (<div 
                         ref={provided.innerRef} 
                         {...provided.draggableProps} 
-                        {...provided.dragHandleProps}
+                        // {...provided.dragHandleProps}
                          className="draggable-block"
                     >
                         <BlockComponent
@@ -72,9 +73,10 @@ function RepricingPage() {
                             isLast={isLast}
                             onMoveUp={() => handleMoveUp(index)}
                             onMoveDown={() => handleMoveDown(index)}
+                            dragHandleProps={provided.dragHandleProps}
                         />
-                    </div>
-                }
+                    </div>)
+                }}
             </Draggable>
         );
     });

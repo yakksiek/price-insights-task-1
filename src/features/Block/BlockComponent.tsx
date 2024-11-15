@@ -1,4 +1,6 @@
+import { DragDropContext, Draggable, DraggableProvidedDragHandleProps, Droppable } from '@hello-pangea/dnd';
 import styled from 'styled-components';
+
 import { arrowDownIcon, arrowUpIcon, dragHandleIcon } from '../../assets/icons';
 import { StyledCardWrapper } from '../../components/Card';
 
@@ -15,7 +17,9 @@ const StyledTitleWrapper = styled.div`
 
     img {
         margin-right: 1rem;
-        cursor: pointer;
+        &:hover {
+            cursor: grab;
+        }
     }
 `;
 
@@ -47,8 +51,19 @@ const StyledList = styled.ul`
 
         img {
             margin-right: 1rem;
-            cursor: pointer;
         }
+    }
+`;
+
+interface StyledListItemProps {
+    $color: string;
+}
+
+const StyledListItem = styled.li<StyledListItemProps>`
+    background-color: ${props => props.$color};
+
+    img:hover {
+        cursor: grab;
     }
 `;
 
@@ -69,16 +84,25 @@ interface BlockComponentProps {
     isLast: boolean;
     onMoveUp: () => void;
     onMoveDown: () => void;
+    dragHandleProps: DraggableProvidedDragHandleProps;
 }
 
-function BlockComponent({ blockData, isFirst, isLast, onMoveUp, onMoveDown }: BlockComponentProps) {
-    const renderedListItems = blockData.items.map(item => {
+function BlockComponent({ blockData, isFirst, isLast, onMoveUp, onMoveDown, dragHandleProps }: BlockComponentProps) {
+    const handleOnDragEnd = () => {
+        console.log('first');
+    };
+
+    const renderedListItems = blockData.items.map((item, index) => {
         const { id, name } = item;
         return (
-            <li key={id} className='item' style={{ backgroundColor: name }}>
-                <img src={dragHandleIcon} alt='drag handle icon' />
-                <p>{name}</p>
-            </li>
+            <Draggable key={id} draggableId={item.id} index={index}>
+                {provided => (
+                    <StyledListItem $color={name} className='item' ref={provided.innerRef} {...provided.draggableProps}>
+                        <img src={dragHandleIcon} alt='drag handle icon' {...provided.dragHandleProps} />
+                        <p>{name}</p>
+                    </StyledListItem>
+                )}
+            </Draggable>
         );
     });
 
@@ -86,7 +110,7 @@ function BlockComponent({ blockData, isFirst, isLast, onMoveUp, onMoveDown }: Bl
         <StyledCardWrapper>
             <StyledHeader>
                 <StyledTitleWrapper>
-                    <img src={dragHandleIcon} alt='drag handle icon' />
+                    <img src={dragHandleIcon} alt='drag handle icon' {...dragHandleProps} />
                     <h4>{blockData.name}</h4>
                 </StyledTitleWrapper>
                 <StyledActionButtonsWrapper>
@@ -98,7 +122,19 @@ function BlockComponent({ blockData, isFirst, isLast, onMoveUp, onMoveDown }: Bl
                     </button>
                 </StyledActionButtonsWrapper>
             </StyledHeader>
-            <StyledList>{renderedListItems}</StyledList>
+            <DragDropContext onDragEnd={handleOnDragEnd}>
+                <Droppable droppableId='droppable-elements'>
+                    {provided =>
+                        // prettier-ignore
+                        <StyledList 
+                        {...provided.droppableProps} 
+                        ref={provided.innerRef}
+                        >
+                            {renderedListItems}
+                        </StyledList>
+                    }
+                </Droppable>
+            </DragDropContext>
         </StyledCardWrapper>
     );
 }
