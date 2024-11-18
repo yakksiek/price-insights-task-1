@@ -56,10 +56,6 @@ interface StyledListItemProps {
 
 const StyledListItem = styled.li<StyledListItemProps>`
     background-color: ${props => props.$color};
-
-    img:hover {
-        cursor: grab;
-    }
 `;
 
 interface ListItem {
