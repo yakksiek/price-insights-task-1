@@ -5,6 +5,7 @@ import { ArrowDownIcon, ArrowUpIcon } from '../../assets/icons';
 import { StyledCardWrapper } from '../../components/Card';
 import DraggableHandle from '../../components/DraggableHandle';
 import usePangeaDnd from '../../hooks/usePangeaDnd';
+import { BlockData } from './block.types';
 
 const StyledHeader = styled.header`
     display: flex;
@@ -57,17 +58,6 @@ interface StyledListItemProps {
 const StyledListItem = styled.li<StyledListItemProps>`
     background-color: ${props => props.$color};
 `;
-
-interface ListItem {
-    id: string;
-    name: string;
-}
-
-interface BlockData {
-    items: ListItem[];
-    name: string;
-    id: string;
-}
 
 interface BlockComponentProps {
     blockData: BlockData;
