@@ -23,7 +23,7 @@ interface PragmaiticBlockItem {
     itemData: ListItem;
 }
 
-function PragmaticBlockItem({ itemData }: PragmaiticBlockItem) {
+function PragramaticListItem({ itemData }: PragmaiticBlockItem) {
     const { name } = itemData;
 
     return (
@@ -34,4 +34,4 @@ function PragmaticBlockItem({ itemData }: PragmaiticBlockItem) {
     );
 }
 
-export default PragmaticBlockItem;
+export default PragramaticListItem;

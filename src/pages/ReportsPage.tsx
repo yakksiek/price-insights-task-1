@@ -1,3 +1,16 @@
+import { extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
+import { getReorderDestinationIndex } from '@atlaskit/pragmatic-drag-and-drop-hitbox/util/get-reorder-destination-index';
+import {
+    BaseEventPayload,
+    DropTargetLocalizedData,
+    ElementDragType,
+} from '@atlaskit/pragmatic-drag-and-drop/dist/types/internal-types';
+import { dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+
+import * as u from '../utils';
+import invariant from 'tiny-invariant';
 import StyledPageWrapper from '../components/PageWrapper';
 import PragmaticBlock from '../features/PragmaticBlock/PragmaticBlock';
 
@@ -31,12 +44,63 @@ const blocksData = [
     },
 ];
 
+const StyledBlockWrapper = styled.div``;
+
 function ReportsPage() {
-    const renderedBlocks = blocksData.map(block => {
+    const [blocks, setBlocks] = useState(blocksData);
+    const blockWrapperRef = useRef<HTMLDivElement | null>(null);
+
+    const handleDrop = useCallback(
+        (args: BaseEventPayload<ElementDragType> & DropTargetLocalizedData) => {
+            if (!args.location || !args.source) return;
+
+            const { source, location } = args;
+
+            // dragging block information
+            const draggedBlockId = source.data.blockId;
+            const draggedBlockIndex = blocks.findIndex(block => block.id === draggedBlockId);
+
+            // on which block was draggble dropped
+            const [destinationBlockRecord] = location.current.dropTargets;
+            const desinationBlockId = destinationBlockRecord.data.blockId;
+
+            const indexOfTarget = blocks.findIndex(block => block.id === desinationBlockId);
+
+            const closestEdgeOfTarget = extractClosestEdge(destinationBlockRecord.data);
+
+            const destinationIndex = getReorderDestinationIndex({
+                startIndex: draggedBlockIndex,
+                indexOfTarget,
+                closestEdgeOfTarget,
+                axis: 'vertical',
+            });
+
+            const newOrderedBlocks = u.reorder(blocks, draggedBlockIndex, destinationIndex);
+            setBlocks(newOrderedBlocks);
+        },
+        [blocks],
+    );
+
+    useEffect(() => {
+        const blockWrapperEl = blockWrapperRef.current;
+        invariant(blockWrapperEl);
+
+        return dropTargetForElements({
+            element: blockWrapperEl,
+            getData: () => ({ wrapperId: 'blockWrapper' }),
+            onDrop: handleDrop,
+        });
+    }, [handleDrop]);
+
+    const renderedBlocks = blocks.map(block => {
         return <PragmaticBlock blockData={block} key={block.id} />;
     });
 
-    return <StyledPageWrapper>{renderedBlocks}</StyledPageWrapper>;
+    return (
+        <StyledPageWrapper>
+            <StyledBlockWrapper ref={blockWrapperRef}>{renderedBlocks}</StyledBlockWrapper>
+        </StyledPageWrapper>
+    );
 }
 
 export default ReportsPage;

@@ -1,8 +1,14 @@
+import { draggable, dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
+import { attachClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
+import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { StyledCardWrapper } from '../../components/Card';
+import invariant from 'tiny-invariant';
+
 import { DragHandleIcon } from '../../assets/icons';
+import { StyledCardWrapper } from '../../components/Card';
 import { BlockData } from '../Block/block.types';
-import PragmaticBlockItem from './PragmaticBlockItem';
+import PragramaticListItem from './PragmaticListItem';
 
 const StyledHeader = styled.header`
     display: flex;
@@ -14,6 +20,10 @@ const StyledHeader = styled.header`
     }
 `;
 
+const StyledHandleWrapper = styled.div`
+    cursor: grab;
+`;
+
 const StyledList = styled.ul``;
 
 interface PragmaticBlockProps {
@@ -21,18 +31,48 @@ interface PragmaticBlockProps {
 }
 
 function PragmaticBlock({ blockData }: PragmaticBlockProps) {
-    const { name, items } = blockData;
+    const { name, items, id } = blockData;
+    const blockRef = useRef<HTMLDivElement | null>(null);
+    const handleRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        const blockEl = blockRef.current;
+        const handleEl = handleRef.current;
+        invariant(blockEl, 'Block element is not available');
+        invariant(handleEl, 'Handle element is not available');
+
+        return combine(
+            draggable({
+                element: blockEl,
+                dragHandle: handleEl,
+                getInitialData: () => ({ type: 'block', blockId: id }),
+            }),
+            dropTargetForElements({
+                element: blockEl,
+                getData: ({ input, element }) => {
+                    const data = { type: 'block', blockId: id };
+
+                    return attachClosestEdge(data, {
+                        input,
+                        element,
+                        allowedEdges: ['top', 'bottom'],
+                    });
+                },
+                getIsSticky: () => true,
+            }),
+        );
+    }, [id]);
 
     const renderedItems = items.map(item => {
-        return <PragmaticBlockItem itemData={item} key={item.id} />;
+        return <PragramaticListItem itemData={item} key={item.id} />;
     });
 
     return (
-        <StyledCardWrapper>
+        <StyledCardWrapper ref={blockRef}>
             <StyledHeader>
-                <div>
+                <StyledHandleWrapper ref={handleRef}>
                     <DragHandleIcon />
-                </div>
+                </StyledHandleWrapper>
                 <h4>{name}</h4>
             </StyledHeader>
             <StyledList>{renderedItems}</StyledList>
