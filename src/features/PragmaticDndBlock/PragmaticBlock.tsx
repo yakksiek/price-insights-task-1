@@ -1,4 +1,8 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { getReorderDestinationIndex } from '@atlaskit/pragmatic-drag-and-drop-hitbox/util/get-reorder-destination-index';
+import { flushSync } from 'react-dom';
 import { attachClosestEdge, extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
+import { triggerPostMoveFlash } from '@atlaskit/pragmatic-drag-and-drop-flourish/trigger-post-move-flash';
 import { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/types';
 import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
 import {
@@ -7,10 +11,11 @@ import {
     ElementDragType,
 } from '@atlaskit/pragmatic-drag-and-drop/dist/types/internal-types';
 import { draggable, dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
-import { useEffect, useRef, useState } from 'react';
+
 import styled from 'styled-components';
 import invariant from 'tiny-invariant';
 
+import * as u from '../../utils';
 import { DragHandleIcon } from '../../assets/icons';
 import { StyledCardWrapper } from '../../components/Card';
 import DropIndicator from '../../components/DropIndicator';
@@ -39,9 +44,12 @@ interface PragmaticBlockProps {
 
 function PragmaticBlock({ blockData }: PragmaticBlockProps) {
     const [closestEdge, setClosestEdge] = useState<Edge | null>(null);
-    const { name, items, id } = blockData;
+    const [items, setItems] = useState(blockData.items);
+    const { name, id } = blockData;
     const blockRef = useRef<HTMLDivElement | null>(null);
     const handleRef = useRef<HTMLDivElement | null>(null);
+    const listRef = useRef<HTMLUListElement | null>(null);
+    const wrapperId = `${id}List`;
 
     useEffect(() => {
         const blockEl = blockRef.current;
@@ -51,6 +59,7 @@ function PragmaticBlock({ blockData }: PragmaticBlockProps) {
 
         // Is it ok, to use import from internal types for BaseEventPayload<ElementDragType> & DropTargetLocalizedData?
         const handleClosestEdgeUpdate = (args: BaseEventPayload<ElementDragType> & DropTargetLocalizedData) => {
+            if (args.source.data.type !== 'block') return;
             const isDraggableInDropZone = args.source.data.blockId !== id;
             if (isDraggableInDropZone) {
                 const extractedEdge = extractClosestEdge(args.self.data);
@@ -75,6 +84,7 @@ function PragmaticBlock({ blockData }: PragmaticBlockProps) {
                         allowedEdges: ['top', 'bottom'],
                     });
                 },
+
                 onDragEnter: args => {
                     handleClosestEdgeUpdate(args);
                 },
@@ -91,8 +101,60 @@ function PragmaticBlock({ blockData }: PragmaticBlockProps) {
         );
     }, [id]);
 
+    const handleDrop = useCallback(
+        (args: BaseEventPayload<ElementDragType> & DropTargetLocalizedData) => {
+            if (!args.location || !args.source) return;
+
+            const { source, location } = args;
+
+            const draggableItemType = source.data.type;
+            if (draggableItemType !== wrapperId) return;
+
+            // dragging block information
+            const draggedItemId = source.data.listItemId;
+            const draggedItemIndex = items.findIndex(item => item.id === draggedItemId);
+
+            // on which block was draggble dropped
+            const [destinationBlockRecord] = location.current.dropTargets;
+            const desinationItemId = destinationBlockRecord.data.listItemId;
+
+            const indexOfTarget = items.findIndex(item => item.id === desinationItemId);
+
+            const closestEdgeOfTarget = extractClosestEdge(destinationBlockRecord.data);
+
+            const destinationIndex = getReorderDestinationIndex({
+                startIndex: draggedItemIndex,
+                indexOfTarget,
+                closestEdgeOfTarget,
+                axis: 'vertical',
+            });
+
+            const newOrderedBlocks = u.reorder(items, draggedItemIndex, destinationIndex);
+            setItems(newOrderedBlocks);
+
+            flushSync(() => {
+                const element = document.querySelector(`[data-task-id="${draggedItemId}"]`);
+                if (element instanceof HTMLElement) {
+                    triggerPostMoveFlash(element);
+                }
+            });
+        },
+        [items, wrapperId],
+    );
+
+    useEffect(() => {
+        const blockWrapperEl = listRef.current;
+        invariant(blockWrapperEl);
+
+        return dropTargetForElements({
+            element: blockWrapperEl,
+            getData: () => ({ wrapperId }),
+            onDrop: handleDrop,
+        });
+    }, [handleDrop, id, wrapperId]);
+
     const renderedItems = items.map(item => {
-        return <PragramaticListItem itemData={item} key={item.id} />;
+        return <PragramaticListItem itemData={item} key={item.id} groupName={id} />;
     });
 
     return (
@@ -103,7 +165,7 @@ function PragmaticBlock({ blockData }: PragmaticBlockProps) {
                 </StyledHandleWrapper>
                 <h4>{name}</h4>
             </StyledHeader>
-            <StyledList>{renderedItems}</StyledList>
+            <StyledList ref={listRef}>{renderedItems}</StyledList>
             {closestEdge && <DropIndicator edge={closestEdge} />}
         </StyledCardWrapper>
     );

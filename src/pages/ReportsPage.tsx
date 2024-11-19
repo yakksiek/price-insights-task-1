@@ -56,6 +56,7 @@ function ReportsPage() {
         // is it ok to use internal types?
         (args: BaseEventPayload<ElementDragType> & DropTargetLocalizedData) => {
             if (!args.location || !args.source) return;
+            if (args.source.data.type !== 'block') return;
 
             const { source, location } = args;
 
@@ -98,7 +99,7 @@ function ReportsPage() {
 
         return dropTargetForElements({
             element: blockWrapperEl,
-            getData: () => ({ wrapperId: 'blockWrapper' }),
+            getData: () => ({ wrapperId: 'block' }),
             onDrop: handleDrop,
         });
     }, [handleDrop]);
