@@ -14,7 +14,7 @@ import styled from 'styled-components';
 import * as u from '../utils';
 import invariant from 'tiny-invariant';
 import StyledPageWrapper from '../components/PageWrapper';
-import PragmaticBlock from '../features/PragmaticBlock/PragmaticBlock';
+import PragmaticBlock from '../features/PragmaticDndBlock/PragmaticBlock';
 
 const blocksData = [
     {

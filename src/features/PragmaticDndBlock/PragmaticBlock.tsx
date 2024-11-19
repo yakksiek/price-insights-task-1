@@ -1,22 +1,21 @@
+import { attachClosestEdge, extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
+import { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/types';
+import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
 import {
     BaseEventPayload,
-    ElementDragType,
     DropTargetLocalizedData,
+    ElementDragType,
 } from '@atlaskit/pragmatic-drag-and-drop/dist/types/internal-types';
-import { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/types';
 import { draggable, dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
-import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
-import { attachClosestEdge, extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import invariant from 'tiny-invariant';
 
 import { DragHandleIcon } from '../../assets/icons';
 import { StyledCardWrapper } from '../../components/Card';
-import { BlockData } from '../Block/block.types';
-import PragramaticListItem from './PragmaticListItem';
-import { allowedEdges } from './edges';
 import DropIndicator from '../../components/DropIndicator';
+import { BlockData } from '../BeautifulDnbBlock/block.types';
+import PragramaticListItem from './PragmaticListItem';
 
 const StyledHeader = styled.header`
     display: flex;
@@ -73,7 +72,7 @@ function PragmaticBlock({ blockData }: PragmaticBlockProps) {
                     return attachClosestEdge(data, {
                         input,
                         element,
-                        allowedEdges: Array.from(allowedEdges),
+                        allowedEdges: ['top', 'bottom'],
                     });
                 },
                 onDragEnter: args => {

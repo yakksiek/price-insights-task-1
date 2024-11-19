@@ -2,7 +2,7 @@ import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 
 import styled from 'styled-components';
 import StyledPageWrapper from '../components/PageWrapper';
-import BlockComponent from '../features/Block/BlockComponent';
+import BlockComponent from '../features/BeautifulDnbBlock/BlockComponent';
 import StatisticsComponent from '../features/Statistics/StatisticsComponent';
 import usePangeaDnd from '../hooks/usePangeaDnd';
 

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ListItem } from '../Block/block.types';
+import { ListItem } from '../BeautifulDnbBlock/block.types';
 import { DragHandleIcon } from '../../assets/icons';
 
 interface StyledListItemProps {
