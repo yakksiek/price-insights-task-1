@@ -76,7 +76,6 @@ function PragmaticBlock({ blockData }: PragmaticBlockProps) {
                         allowedEdges: Array.from(allowedEdges),
                     });
                 },
-                getIsSticky: () => true,
                 onDragEnter: args => {
                     handleClosestEdgeUpdate(args);
                 },
@@ -98,7 +97,7 @@ function PragmaticBlock({ blockData }: PragmaticBlockProps) {
     });
 
     return (
-        <StyledCardWrapper ref={blockRef}>
+        <StyledCardWrapper ref={blockRef} data-task-id={id}>
             <StyledHeader>
                 <StyledHandleWrapper ref={handleRef}>
                     <DragHandleIcon />

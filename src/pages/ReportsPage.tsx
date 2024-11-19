@@ -1,4 +1,6 @@
+import { flushSync } from 'react-dom';
 import { extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
+import { triggerPostMoveFlash } from '@atlaskit/pragmatic-drag-and-drop-flourish/trigger-post-move-flash';
 import { getReorderDestinationIndex } from '@atlaskit/pragmatic-drag-and-drop-hitbox/util/get-reorder-destination-index';
 import {
     BaseEventPayload,
@@ -51,6 +53,7 @@ function ReportsPage() {
     const blockWrapperRef = useRef<HTMLDivElement | null>(null);
 
     const handleDrop = useCallback(
+        // is it ok to use internal types?
         (args: BaseEventPayload<ElementDragType> & DropTargetLocalizedData) => {
             if (!args.location || !args.source) return;
 
@@ -77,6 +80,14 @@ function ReportsPage() {
 
             const newOrderedBlocks = u.reorder(blocks, draggedBlockIndex, destinationIndex);
             setBlocks(newOrderedBlocks);
+
+            // use
+            flushSync(() => {
+                const element = document.querySelector(`[data-task-id="${draggedBlockId}"]`);
+                if (element instanceof HTMLElement) {
+                    triggerPostMoveFlash(element);
+                }
+            });
         },
         [blocks],
     );
