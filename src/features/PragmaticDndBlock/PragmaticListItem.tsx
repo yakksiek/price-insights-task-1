@@ -30,6 +30,10 @@ const StyledListItem = styled.li<StyledListItemProps>`
 
     svg {
         margin-right: 1rem;
+
+        &:hover {
+            cursor: grab;
+        }
     }
 `;
 
