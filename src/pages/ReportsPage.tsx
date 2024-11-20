@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import StyledPageWrapper from '../components/PageWrapper';
 import PragmaticBlock from '../features/PragmaticDndBlock/PragmaticBlock';
 import * as u from '../utils';
+import useReorder from '../hooks/useReorder';
 
 const blocksData = [
     {
@@ -40,6 +41,7 @@ const blocksData = [
 
 function ReportsPage() {
     const [blocks, setBlocks] = useState(blocksData);
+    const { handleMoveDown, handleMoveUp } = useReorder({ initialItems: blocks });
     const blockWrapperRef = useRef<HTMLDivElement | null>(null);
 
     const handleDrop = useCallback(
@@ -137,8 +139,20 @@ function ReportsPage() {
         });
     }, [handleDrop]);
 
-    const renderedBlocks = blocks.map(block => {
-        return <PragmaticBlock blockData={block} key={block.id} />;
+    const renderedBlocks = blocks.map((block, index) => {
+        const isFirst = index === 0;
+        const isLast = index === blocks.length - 1;
+
+        return (
+            <PragmaticBlock
+                blockData={block}
+                key={block.id}
+                onMoveUp={() => handleMoveUp(index, setBlocks)}
+                onMoveDown={() => handleMoveDown(index, setBlocks)}
+                isFirst={isFirst}
+                isLast={isLast}
+            />
+        );
     });
 
     return (

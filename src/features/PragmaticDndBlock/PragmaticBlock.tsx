@@ -10,18 +10,30 @@ import DraggableHandle from '../../components/DraggableHandle';
 import { BlockData } from '../../shared/block.types';
 import PragmaticDndTarget from './PragmaticDndTarget';
 import PragramaticListItem from './PragmaticListItem';
+import ReorderButtons from '../../components/ReorderButtons';
 
 const StyledHeader = styled.header`
     display: flex;
     align-items: center;
+    justify-content: space-between;
     height: var(--card-header-height);
+`;
+
+const StyledTitleWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    height: 100%;
 `;
 
 interface PragmaticBlockProps {
     blockData: BlockData;
+    onMoveUp: () => void;
+    onMoveDown: () => void;
+    isFirst: boolean;
+    isLast: boolean;
 }
 
-function PragmaticBlock({ blockData }: PragmaticBlockProps) {
+function PragmaticBlock({ blockData, onMoveDown, onMoveUp, isLast, isFirst }: PragmaticBlockProps) {
     const { name, id } = blockData;
 
     const handleShouldHandleDrop = (args: BaseEventPayload<ElementDragType> & DropTargetLocalizedData) => {
@@ -47,10 +59,13 @@ function PragmaticBlock({ blockData }: PragmaticBlockProps) {
         return (
             <StyledBlockWrapper>
                 <StyledHeader>
-                    <div ref={handleRef}>
-                        <DraggableHandle marginRight={true} />
-                    </div>
-                    <h4>{name}</h4>
+                    <StyledTitleWrapper>
+                        <div ref={handleRef}>
+                            <DraggableHandle marginRight={true} />
+                        </div>
+                        <h4>{name}</h4>
+                    </StyledTitleWrapper>
+                    <ReorderButtons isFirst={isFirst} isLast={isLast} onMoveDown={onMoveDown} onMoveUp={onMoveUp} />
                 </StyledHeader>
                 <ul>{renderedItems}</ul>
             </StyledBlockWrapper>
