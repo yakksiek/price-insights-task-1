@@ -13,7 +13,7 @@ import invariant from 'tiny-invariant';
 
 import DraggableHandle from '../../components/DraggableHandle';
 import DropIndicator from '../../components/DropIndicator';
-import { ListItem } from '../BeautifulDnbBlock/block.types';
+import { ListItem } from '../../shared/block.types';
 
 interface StyledListItemProps {
     $color: string;

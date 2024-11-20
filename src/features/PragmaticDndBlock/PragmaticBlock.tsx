@@ -14,7 +14,7 @@ import { useEffect, useRef, useState } from 'react';
 import { StyledCardWrapper as StyledBlockWrapper } from '../../components/Card';
 import DraggableHandle from '../../components/DraggableHandle';
 import DropIndicator from '../../components/DropIndicator';
-import { BlockData } from '../BeautifulDnbBlock/block.types';
+import { BlockData } from '../../shared/block.types';
 import PragramaticListItem from './PragmaticListItem';
 
 const StyledHeader = styled.header`

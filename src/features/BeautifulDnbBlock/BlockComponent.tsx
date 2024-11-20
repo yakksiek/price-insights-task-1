@@ -5,7 +5,7 @@ import { ArrowDownIcon, ArrowUpIcon } from '../../assets/icons';
 import { StyledCardWrapper } from '../../components/Card';
 import DraggableHandle from '../../components/DraggableHandle';
 import usePangeaDnd from '../../hooks/usePangeaDnd';
-import { BlockData } from './block.types';
+import { BlockData } from '../../shared/block.types';
 
 const StyledHeader = styled.header`
     display: flex;

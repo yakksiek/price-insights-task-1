@@ -2,13 +2,11 @@ import { extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/clo
 import { getReorderDestinationIndex } from '@atlaskit/pragmatic-drag-and-drop-hitbox/util/get-reorder-destination-index';
 import { BaseEventPayload, ElementDragType } from '@atlaskit/pragmatic-drag-and-drop/dist/types/internal-types';
 import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
-import { reorder } from '@atlaskit/pragmatic-drag-and-drop/reorder';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
 
-import * as u from '../utils';
 import StyledPageWrapper from '../components/PageWrapper';
 import PragmaticBlock from '../features/PragmaticDndBlock/PragmaticBlock';
+import * as u from '../utils';
 
 const blocksData = [
     {
@@ -40,118 +38,65 @@ const blocksData = [
     },
 ];
 
-const StyledBlockWrapper = styled.div``;
-
-interface ReorderCardArgs {
-    blockId: string;
-    startIndex: number;
-    finishIndex: number;
-}
-
 function ReportsPage() {
     const [blocks, setBlocks] = useState(blocksData);
     const blockWrapperRef = useRef<HTMLDivElement | null>(null);
-
-    const reorderCard = useCallback(
-        ({ blockId, startIndex, finishIndex }: ReorderCardArgs) => {
-            // Get the source column data
-            const sourceBlockData = blocks.find(block => block.id === blockId);
-            if (!sourceBlockData) return;
-
-            // Call the reorder function to get a new array
-            // of cards with the moved card's new position
-            const updatedItems = reorder({
-                list: sourceBlockData.items,
-                startIndex,
-                finishIndex,
-            });
-
-            const updatedBlocks = blocks.map(block => {
-                if (block.id === blockId) {
-                    // Update the block with the reordered items
-                    return {
-                        ...block,
-                        items: updatedItems,
-                    };
-                }
-                // Return other blocks as-is
-                return block;
-            });
-
-            // Update the blocks state
-            setBlocks(updatedBlocks);
-        },
-        [blocks],
-    );
 
     const handleDrop = useCallback(
         (args: BaseEventPayload<ElementDragType>) => {
             if (!args.location || !args.source) return;
 
             const { source, location } = args;
-            const destination = location.current.dropTargets.length;
-            if (!destination) {
+            const destinationTargets = location.current.dropTargets;
+            if (!destinationTargets) {
                 return;
             }
 
             const draggableSourceType = source.data.type;
 
             if (draggableSourceType === 'card') {
-                // Retrieve the ID of the card being dragged
-                const draggedCardId = source.data.cardId;
+                const draggedCardId = source.data.cardId as string;
 
-                // Get the source column from the initial drop targets
-                const [, sourceColumnRecord] = location.initial.dropTargets;
-
-                // Retrieve the ID of the source column
-                const sourceBlockId = sourceColumnRecord.data.blockId as string;
-
-                // Get the data of the source column
+                // get initial starting block > blockID and find the block in the block data
+                const [, sourceBlockRecord] = location.initial.dropTargets;
+                const sourceBlockId = sourceBlockRecord.data.blockId as string;
                 const sourceBlockData = blocks.find(block => block.id === sourceBlockId);
                 if (!sourceBlockData) return;
 
-                // Get the index of the card being dragged in the source column
-                const draggedCardIndex = sourceBlockData.items.findIndex(card => card.id === draggedCardId);
+                const draggedCardIndex = u.returnItemIndexInArrById(draggedCardId, sourceBlockData.items);
 
-                if (location.current.dropTargets.length === 2) {
-                    // console.log(location.current.dropTargets);
-                    // Destructure and extract the destination card and column data from the drop targets
-                    const [destinationCardRecord, destinationBlockRecord] = location.current.dropTargets;
+                // check if source block is the same as destination block
+                // because items don't move between blocks
+                const [destinationCardRecord, destinationBlockRecord] = location.current.dropTargets;
+                const destinationBlockId = destinationBlockRecord.data.blockId;
+                if (sourceBlockId !== destinationBlockId) return;
 
-                    // Extract the destination Block ID from the destination block data
-                    const destinationBlockId = destinationBlockRecord.data.blockId;
+                // Find the index of the target card within the destination block's cards
+                const destinationCardId = destinationCardRecord.data.cardId as string;
+                const indexOfTarget = u.returnItemIndexInArrById(destinationCardId, sourceBlockData.items);
 
-                    // return if the block is different than the source block
-                    if (sourceBlockId !== destinationBlockId) {
-                        return console.log('wrong column');
-                    }
+                // Determine the closest edge of the target card: top or bottom
+                const closestEdgeOfTarget = extractClosestEdge(destinationCardRecord.data);
 
-                    // Find the index of the target card within the destination block's cards
-                    const indexOfTarget = sourceBlockData?.items.findIndex(
-                        card => card.id === destinationCardRecord.data.cardId,
-                    );
+                const destinationIndex = getReorderDestinationIndex({
+                    startIndex: draggedCardIndex,
+                    indexOfTarget,
+                    closestEdgeOfTarget,
+                    axis: 'vertical',
+                });
 
-                    // Determine the closest edge of the target card: top or bottom
-                    const closestEdgeOfTarget = extractClosestEdge(destinationCardRecord.data);
+                const reorderdBlocks = u.reorderCard({
+                    blockId: sourceBlockId,
+                    blockData: sourceBlockData,
+                    startIndex: draggedCardIndex,
+                    finishIndex: destinationIndex,
+                    blocks: blocks,
+                });
 
-                    const destinationIndex = getReorderDestinationIndex({
-                        startIndex: draggedCardIndex,
-                        indexOfTarget,
-                        closestEdgeOfTarget,
-                        axis: 'vertical',
-                    });
-
-                    reorderCard({
-                        blockId: sourceBlockId,
-                        startIndex: draggedCardIndex,
-                        finishIndex: destinationIndex,
-                    });
-                }
+                setBlocks(reorderdBlocks);
             }
 
             if (draggableSourceType === 'block') {
-                console.log('it is block');
-
                 const draggedBlockId = source.data.blockId;
                 if (!draggedBlockId) return;
 
@@ -163,7 +108,7 @@ function ReportsPage() {
                 const destinationBlockRecord = dropTargets[dropTargets.length - 1];
                 const destinationBlockId = destinationBlockRecord.data.blockId;
 
-                // if dragged block and destination block are the same
+                // if dragged block and destination block are the same, return
                 if (draggedBlockId === destinationBlockId) return;
 
                 const draggedBlockIndex = blocks.findIndex(block => block.id === draggedBlockId);
@@ -183,7 +128,7 @@ function ReportsPage() {
                 setBlocks(reorderedBlocks);
             }
         },
-        [blocks, reorderCard],
+        [blocks],
     );
 
     useEffect(() => {
@@ -198,7 +143,7 @@ function ReportsPage() {
 
     return (
         <StyledPageWrapper>
-            <StyledBlockWrapper ref={blockWrapperRef}>{renderedBlocks}</StyledBlockWrapper>
+            <div ref={blockWrapperRef}>{renderedBlocks}</div>
         </StyledPageWrapper>
     );
 }
