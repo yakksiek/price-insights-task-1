@@ -5,8 +5,10 @@ import StyledPageWrapper from '../components/PageWrapper';
 import BlockComponent from '../features/BeautifulDnbBlock/BlockComponent';
 import StatisticsComponent from '../features/Statistics/StatisticsComponent';
 import usePangeaDnd from '../hooks/usePangeaDnd';
+import useReorder from '../hooks/useReorder';
+import { BlockData } from '../shared/block.types';
 
-const blocksData = [
+const blocksData: BlockData[] = [
     {
         id: 'blockA',
         name: 'Block A',
@@ -39,7 +41,8 @@ const blocksData = [
 const StyledBlocksWrapper = styled.div``;
 
 function RepricingPage() {
-    const { items: blocks, handleOnDragEnd, handleMoveDown, handleMoveUp } = usePangeaDnd(blocksData);
+    const { items: blocks, handleOnDragEnd, setItems } = usePangeaDnd(blocksData);
+    const { handleMoveDown, handleMoveUp } = useReorder({ initialItems: blocks });
 
     const renderedBlocks = blocks.map((blockItem, index) => {
         const isFirst = index === 0;
@@ -53,15 +56,14 @@ function RepricingPage() {
                     return (<div 
                         ref={provided.innerRef} 
                         {...provided.draggableProps} 
-                        // {...provided.dragHandleProps}
                          className="draggable-block"
                     >
                         <BlockComponent
                             blockData={blockItem}
                             isFirst={isFirst}
                             isLast={isLast}
-                            onMoveUp={() => handleMoveUp(index)}
-                            onMoveDown={() => handleMoveDown(index)}
+                            onMoveUp={() => handleMoveUp(index, setItems)}
+                            onMoveDown={() => handleMoveDown(index, setItems)}
                             dragHandleProps={provided.dragHandleProps}
                         />
                     </div>)

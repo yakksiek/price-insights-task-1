@@ -6,8 +6,7 @@ import * as u from '../utils';
 type UseDragAndDropReturn<T> = {
     items: T[];
     handleOnDragEnd: (result: DropResult) => void;
-    handleMoveUp: (index: number) => void;
-    handleMoveDown: (index: number) => void;
+    setItems: React.Dispatch<React.SetStateAction<T[]>>;
 };
 
 function usePangeaDnd<T>(initialItems: T[]): UseDragAndDropReturn<T> {
@@ -22,21 +21,10 @@ function usePangeaDnd<T>(initialItems: T[]): UseDragAndDropReturn<T> {
         setItems(reorderedBlockItems);
     };
 
-    const handleMoveUp = (index: number) => {
-        const reorderedBlocks = u.reorder(items, index, index - 1);
-        setItems(reorderedBlocks);
-    };
-
-    const handleMoveDown = (index: number) => {
-        const reorderedBlocks = u.reorder(items, index, index + 1);
-        setItems(reorderedBlocks);
-    };
-
     return {
         items,
         handleOnDragEnd,
-        handleMoveUp,
-        handleMoveDown,
+        setItems,
     };
 }
 
