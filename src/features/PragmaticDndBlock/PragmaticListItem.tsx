@@ -56,6 +56,10 @@ function PragramaticListItem({ itemData }: PragmaiticBlockItem) {
         const handleClosestEdgeUpdate = (args: BaseEventPayload<ElementDragType> & DropTargetLocalizedData) => {
             if (!args.source) return;
 
+            const draggableType = args.source.data.type;
+            const isCardType = draggableType === 'card';
+            if (!isCardType) return;
+
             if (args.location.current.dropTargets.length === 2) {
                 const [, destinationBlock] = args.location.current.dropTargets;
                 const [, sourceBlock] = args.location.initial.dropTargets;

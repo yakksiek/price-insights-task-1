@@ -1,19 +1,12 @@
-import { flushSync } from 'react-dom';
-import { reorder } from '@atlaskit/pragmatic-drag-and-drop/reorder';
 import { extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
-import { triggerPostMoveFlash } from '@atlaskit/pragmatic-drag-and-drop-flourish/trigger-post-move-flash';
 import { getReorderDestinationIndex } from '@atlaskit/pragmatic-drag-and-drop-hitbox/util/get-reorder-destination-index';
-import {
-    BaseEventPayload,
-    DropTargetLocalizedData,
-    ElementDragType,
-} from '@atlaskit/pragmatic-drag-and-drop/dist/types/internal-types';
-import { dropTargetForElements, monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+import { BaseEventPayload, ElementDragType } from '@atlaskit/pragmatic-drag-and-drop/dist/types/internal-types';
+import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+import { reorder } from '@atlaskit/pragmatic-drag-and-drop/reorder';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import * as u from '../utils';
-import invariant from 'tiny-invariant';
 import StyledPageWrapper from '../components/PageWrapper';
 import PragmaticBlock from '../features/PragmaticDndBlock/PragmaticBlock';
 
@@ -91,50 +84,6 @@ function ReportsPage() {
         [blocks],
     );
 
-    // const handleDrop = useCallback(
-    //     // is it ok to use internal types?
-    //     (args: BaseEventPayload<ElementDragType>) => {
-    //         if (!args.location || !args.source) return;
-    //         console.log(args.source.data.type);
-    //         // if (args.source.data.type !== 'blockWrapper') return;
-
-    //         const { source, location } = args;
-
-    //         // dragging block information
-    //         const draggedBlockId = source.data.blockId;
-    //         const draggedBlockIndex = blocks.findIndex(block => block.id === draggedBlockId);
-
-    //         // on which block was draggble dropped
-    //         const [destinationBlockRecord] = location.current.dropTargets;
-    //         console.log(location.current.dropTargets);
-    //         const desinationBlockId = destinationBlockRecord.data.blockId;
-    //         console.log(desinationBlockId);
-
-    //         const indexOfTarget = blocks.findIndex(block => block.id === desinationBlockId);
-
-    //         const closestEdgeOfTarget = extractClosestEdge(destinationBlockRecord.data);
-
-    //         const destinationIndex = getReorderDestinationIndex({
-    //             startIndex: draggedBlockIndex,
-    //             indexOfTarget,
-    //             closestEdgeOfTarget,
-    //             axis: 'vertical',
-    //         });
-
-    //         const newOrderedBlocks = u.reorder(blocks, draggedBlockIndex, destinationIndex);
-    //         setBlocks(newOrderedBlocks);
-
-    //         // use
-    //         flushSync(() => {
-    //             const element = document.querySelector(`[data-task-id="${draggedBlockId}"]`);
-    //             if (element instanceof HTMLElement) {
-    //                 triggerPostMoveFlash(element);
-    //             }
-    //         });
-    //     },
-    //     [blocks],
-    // );
-
     const handleDrop = useCallback(
         (args: BaseEventPayload<ElementDragType>) => {
             if (!args.location || !args.source) return;
@@ -145,7 +94,9 @@ function ReportsPage() {
                 return;
             }
 
-            if (source.data.type === 'card') {
+            const draggableSourceType = source.data.type;
+
+            if (draggableSourceType === 'card') {
                 // Retrieve the ID of the card being dragged
                 const draggedCardId = source.data.cardId;
 
@@ -196,6 +147,40 @@ function ReportsPage() {
                         finishIndex: destinationIndex,
                     });
                 }
+            }
+
+            if (draggableSourceType === 'block') {
+                console.log('it is block');
+
+                const draggedBlockId = source.data.blockId;
+                if (!draggedBlockId) return;
+
+                const dropTargets = location.current.dropTargets;
+                if (dropTargets.length === 0) return;
+                // wonky solution?
+                // because propagation first we catch listItem(card) and then block
+                // so in drop targets array block with be always second so we take only the last element from the drop targets array
+                const destinationBlockRecord = dropTargets[dropTargets.length - 1];
+                const destinationBlockId = destinationBlockRecord.data.blockId;
+
+                // if dragged block and destination block are the same
+                if (draggedBlockId === destinationBlockId) return;
+
+                const draggedBlockIndex = blocks.findIndex(block => block.id === draggedBlockId);
+                const destinationBlockIndex = blocks.findIndex(block => block.id === destinationBlockId);
+
+                // Determine the closest edge of the target card: top or bottom
+                const closestEdgeOfTarget = extractClosestEdge(destinationBlockRecord.data);
+
+                const destinationIndex = getReorderDestinationIndex({
+                    startIndex: draggedBlockIndex,
+                    indexOfTarget: destinationBlockIndex,
+                    closestEdgeOfTarget,
+                    axis: 'vertical',
+                });
+
+                const reorderedBlocks = u.reorder(blocks, draggedBlockIndex, destinationIndex);
+                setBlocks(reorderedBlocks);
             }
         },
         [blocks, reorderCard],
