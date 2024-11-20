@@ -19,13 +19,7 @@ const Container = styled.div`
     position: relative;
 `;
 
-const PragmaticDndTarget = ({
-    dragType,
-    getInitialData,
-    shouldHandleDrop,
-    renderContent,
-}: // children,
-PragmaticDndTargetProps) => {
+const PragmaticDndTarget = ({ dragType, getInitialData, shouldHandleDrop, renderContent }: PragmaticDndTargetProps) => {
     const elementRef = useRef<HTMLDivElement | null>(null);
     const handleRef = useRef<HTMLDivElement | null>(null);
 
@@ -40,7 +34,6 @@ PragmaticDndTargetProps) => {
     return (
         <Container ref={elementRef} data-drop-type={dragType}>
             {renderContent(handleRef)}
-            {/* {children} */}
             {closestEdge && <DropIndicator edge={closestEdge} />}
         </Container>
     );

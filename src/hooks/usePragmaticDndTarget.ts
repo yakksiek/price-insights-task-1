@@ -56,7 +56,7 @@ const useDraggableDropTarget = ({
                     attachClosestEdge(getInitialData(), {
                         input,
                         element,
-                        allowedEdges: ['top', 'bottom'],
+                        allowedEdges: ['bottom'],
                     }),
                 getIsSticky: () => true,
                 onDragEnter: handleClosestEdgeUpdate,
