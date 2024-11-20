@@ -1,19 +1,12 @@
-import { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/dist/types/types';
 import {
     BaseEventPayload,
     DropTargetLocalizedData,
     ElementDragType,
 } from '@atlaskit/pragmatic-drag-and-drop/dist/types/internal-types';
-import { attachClosestEdge, extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
-import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
-import { draggable, dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
-import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import invariant from 'tiny-invariant';
-
 import DraggableHandle from '../../components/DraggableHandle';
-import DropIndicator from '../../components/DropIndicator';
 import { ListItem } from '../../shared/block.types';
+import PragmaticDndTarget from './PragmaticDndTarget';
 
 interface StyledListItemProps {
     $color: string;
@@ -28,78 +21,153 @@ const StyledListItem = styled.li<StyledListItemProps>`
     align-items: center;
 `;
 
-interface PragmaiticBlockItem {
+interface PragmaticListItemProps {
     itemData: ListItem;
 }
 
-function PragramaticListItem({ itemData }: PragmaiticBlockItem) {
-    const [closestEdge, setClosestEdge] = useState<Edge | null>(null);
-    const listItem = useRef<HTMLLIElement | null>(null);
-    const handleRef = useRef<HTMLDivElement | null>(null);
+function PragramaticListItem({ itemData }: PragmaticListItemProps) {
     const { name, id } = itemData;
 
-    useEffect(() => {
-        const listItemEl = listItem.current;
-        const handleEl = handleRef.current;
-        invariant(listItemEl, 'List item element is not available');
-        invariant(handleEl, 'Handle item element is not available');
+    const handleShouldHandleDrop = (args: BaseEventPayload<ElementDragType> & DropTargetLocalizedData) => {
+        if (!args.source) return false;
 
-        const handleClosestEdgeUpdate = (args: BaseEventPayload<ElementDragType> & DropTargetLocalizedData) => {
-            if (!args.source) return;
+        const draggableType = args.source.data.type;
+        if (draggableType !== 'card') return false;
 
-            const draggableType = args.source.data.type;
-            const isCardType = draggableType === 'card';
-            if (!isCardType) return;
+        if (args.location.current.dropTargets.length !== 2) return false;
 
-            if (args.location.current.dropTargets.length === 2) {
-                const [, destinationBlock] = args.location.current.dropTargets;
-                const [, sourceBlock] = args.location.initial.dropTargets;
-                const isCorrectBlock = destinationBlock.data.blockId === sourceBlock.data.blockId;
-                if (!isCorrectBlock) return;
+        const [, destinationBlock] = args.location.current.dropTargets;
+        const [, sourceBlock] = args.location.initial.dropTargets;
+        if (destinationBlock.data.blockId !== sourceBlock.data.blockId) return false;
 
-                const isDraggableInDropZone = args.source.data.cardId !== id;
-                if (isDraggableInDropZone) {
-                    const extractedEdge = extractClosestEdge(args.self.data);
-                    setClosestEdge(extractedEdge);
-                }
-            }
-        };
+        return args.source.data.cardId !== id;
+    };
 
-        return combine(
-            draggable({
-                element: listItemEl,
-                dragHandle: handleEl,
-                getInitialData: () => ({ type: 'card', cardId: id }),
-            }),
-            dropTargetForElements({
-                element: listItemEl,
-                getData: ({ input, element }) => {
-                    const data = { type: 'card', cardId: id };
-
-                    return attachClosestEdge(data, {
-                        input,
-                        element,
-                        allowedEdges: ['top', 'bottom'],
-                    });
-                },
-                getIsSticky: () => true,
-                onDragEnter: args => handleClosestEdgeUpdate(args),
-                onDrag: args => handleClosestEdgeUpdate(args),
-                onDragLeave: () => setClosestEdge(null),
-                onDrop: () => setClosestEdge(null),
-            }),
+    const renderedContent = (handleRef: React.RefObject<HTMLDivElement>) => {
+        return (
+            <StyledListItem $color={name}>
+                <div ref={handleRef}>
+                    <DraggableHandle marginRight={true} background={true} />
+                </div>
+                <p>{name}</p>
+            </StyledListItem>
         );
-    }, [id]);
+    };
 
     return (
-        <StyledListItem $color={name} ref={listItem}>
-            <div ref={handleRef}>
-                <DraggableHandle marginRight={true} background={true} />
-            </div>
-            <p>{name}</p>
-            {closestEdge && <DropIndicator edge={closestEdge} />}
-        </StyledListItem>
+        <PragmaticDndTarget
+            dragType='card'
+            getInitialData={() => ({ type: 'card', cardId: id })}
+            shouldHandleDrop={handleShouldHandleDrop}
+            renderContent={renderedContent}
+        />
     );
 }
 
 export default PragramaticListItem;
+
+// import { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/dist/types/types';
+// import {
+//     BaseEventPayload,
+//     DropTargetLocalizedData,
+//     ElementDragType,
+// } from '@atlaskit/pragmatic-drag-and-drop/dist/types/internal-types';
+// import { attachClosestEdge, extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
+// import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
+// import { draggable, dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+// import { useEffect, useRef, useState } from 'react';
+// import styled from 'styled-components';
+// import invariant from 'tiny-invariant';
+
+// import DraggableHandle from '../../components/DraggableHandle';
+// import DropIndicator from '../../components/DropIndicator';
+// import { ListItem } from '../../shared/block.types';
+
+// interface StyledListItemProps {
+//     $color: string;
+// }
+
+// const StyledListItem = styled.li<StyledListItemProps>`
+//     position: relative;
+//     background-color: ${props => props.$color};
+//     padding: 1rem;
+//     margin-bottom: 1rem;
+//     display: flex;
+//     align-items: center;
+// `;
+
+// interface PragmaiticBlockItem {
+//     itemData: ListItem;
+// }
+
+// function PragramaticListItem({ itemData }: PragmaiticBlockItem) {
+//     const [closestEdge, setClosestEdge] = useState<Edge | null>(null);
+//     const listItem = useRef<HTMLLIElement | null>(null);
+//     const handleRef = useRef<HTMLDivElement | null>(null);
+//     const { name, id } = itemData;
+
+//     useEffect(() => {
+//         const listItemEl = listItem.current;
+//         const handleEl = handleRef.current;
+//         invariant(listItemEl, 'List item element is not available');
+//         invariant(handleEl, 'Handle item element is not available');
+
+//         const handleClosestEdgeUpdate = (args: BaseEventPayload<ElementDragType> & DropTargetLocalizedData) => {
+//             if (!args.source) return;
+
+//             const draggableType = args.source.data.type;
+//             const isCardType = draggableType === 'card';
+//             if (!isCardType) return;
+
+//             if (args.location.current.dropTargets.length === 2) {
+//                 const [, destinationBlock] = args.location.current.dropTargets;
+//                 const [, sourceBlock] = args.location.initial.dropTargets;
+//                 const isCorrectBlock = destinationBlock.data.blockId === sourceBlock.data.blockId;
+//                 if (!isCorrectBlock) return;
+
+//                 const isDraggableInDropZone = args.source.data.cardId !== id;
+//                 if (isDraggableInDropZone) {
+//                     const extractedEdge = extractClosestEdge(args.self.data);
+//                     setClosestEdge(extractedEdge);
+//                 }
+//             }
+//         };
+
+//         return combine(
+//             draggable({
+//                 element: listItemEl,
+//                 dragHandle: handleEl,
+//                 getInitialData: () => ({ type: 'card', cardId: id }),
+//             }),
+//             dropTargetForElements({
+//                 element: listItemEl,
+//                 getData: ({ input, element }) => {
+//                     const data = { type: 'card', cardId: id };
+
+//                     return attachClosestEdge(data, {
+//                         input,
+//                         element,
+//                         allowedEdges: ['top', 'bottom'],
+//                     });
+//                 },
+//                 getIsSticky: () => true,
+//                 onDragEnter: args => handleClosestEdgeUpdate(args),
+//                 onDrag: args => handleClosestEdgeUpdate(args),
+//                 onDragLeave: () => setClosestEdge(null),
+//                 onDrop: () => setClosestEdge(null),
+//             }),
+//         );
+//     }, [id]);
+
+//     return (
+//         <StyledListItem $color={name} ref={listItem}>
+//             <div ref={handleRef}>
+//                 <DraggableHandle marginRight={true} background={true} />
+//             </div>
+//             <p>{name}</p>
+//             {closestEdge && <DropIndicator edge={closestEdge} />}
+//         </StyledListItem>
+//     );
+// }
+
+// export default PragramaticListItem;
