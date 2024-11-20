@@ -1,3 +1,4 @@
+import { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/dist/types/types';
 import {
     BaseEventPayload,
     DropTargetLocalizedData,
@@ -23,10 +24,12 @@ const StyledListItem = styled.li<StyledListItemProps>`
 
 interface PragmaticListItemProps {
     itemData: ListItem;
+    isFirst: boolean;
 }
 
-function PragramaticListItem({ itemData }: PragmaticListItemProps) {
+function PragramaticListItem({ itemData, isFirst }: PragmaticListItemProps) {
     const { name, id } = itemData;
+    const allowedEdges: Edge[] = isFirst ? ['top', 'bottom'] : ['bottom'];
 
     const handleShouldHandleDrop = (args: BaseEventPayload<ElementDragType> & DropTargetLocalizedData) => {
         if (!args.source) return false;
@@ -67,6 +70,7 @@ function PragramaticListItem({ itemData }: PragmaticListItemProps) {
             getInitialData={() => ({ type: 'card', cardId: id })}
             shouldHandleDrop={handleShouldHandleDrop}
             renderContent={renderedContent}
+            allowedEdges={allowedEdges}
         />
     );
 }

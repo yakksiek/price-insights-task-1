@@ -16,6 +16,7 @@ interface UseDraggableDropTargetProps {
     dragType: string;
     getInitialData: () => Record<string, string>;
     shouldHandleDrop: (args: BaseEventPayload<ElementDragType> & DropTargetLocalizedData) => boolean;
+    allowedEdges?: Edge[];
 }
 
 const useDraggableDropTarget = ({
@@ -24,6 +25,7 @@ const useDraggableDropTarget = ({
     dragType,
     getInitialData,
     shouldHandleDrop,
+    allowedEdges = ['bottom', 'top'],
 }: UseDraggableDropTargetProps) => {
     const [closestEdge, setClosestEdge] = useState<Edge | null>(null);
 
@@ -56,7 +58,7 @@ const useDraggableDropTarget = ({
                     attachClosestEdge(getInitialData(), {
                         input,
                         element,
-                        allowedEdges: ['bottom'],
+                        allowedEdges,
                     }),
                 getIsSticky: () => true,
                 onDragEnter: handleClosestEdgeUpdate,
@@ -73,7 +75,7 @@ const useDraggableDropTarget = ({
         return () => {
             cleanup();
         };
-    }, [elementRef, handleRef, dragType, getInitialData, shouldHandleDrop]);
+    }, [elementRef, handleRef, dragType, getInitialData, shouldHandleDrop, allowedEdges]);
 
     return closestEdge;
 };

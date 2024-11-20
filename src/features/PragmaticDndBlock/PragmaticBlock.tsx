@@ -4,6 +4,7 @@ import {
     ElementDragType,
 } from '@atlaskit/pragmatic-drag-and-drop/dist/types/internal-types';
 import styled from 'styled-components';
+import { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/dist/types/types';
 
 import { StyledCardWrapper as StyledBlockWrapper } from '../../components/Card';
 import DraggableHandle from '../../components/DraggableHandle';
@@ -35,6 +36,7 @@ interface PragmaticBlockProps {
 
 function PragmaticBlock({ blockData, onMoveDown, onMoveUp, isLast, isFirst }: PragmaticBlockProps) {
     const { name, id } = blockData;
+    const allowedEdges: Edge[] = isFirst ? ['top', 'bottom'] : ['bottom'];
 
     const handleShouldHandleDrop = (args: BaseEventPayload<ElementDragType> & DropTargetLocalizedData) => {
         if (!args.source) return false;
@@ -51,8 +53,9 @@ function PragmaticBlock({ blockData, onMoveDown, onMoveUp, isLast, isFirst }: Pr
         return isDraggableInDropZone;
     };
 
-    const renderedItems = blockData.items.map(item => {
-        return <PragramaticListItem itemData={item} key={item.id} />;
+    const renderedItems = blockData.items.map((item, index) => {
+        const isFirst = index === 0;
+        return <PragramaticListItem itemData={item} key={item.id} isFirst={isFirst} />;
     });
 
     const renderedContent = (handleRef: React.RefObject<HTMLDivElement>) => {
@@ -78,6 +81,7 @@ function PragmaticBlock({ blockData, onMoveDown, onMoveUp, isLast, isFirst }: Pr
             getInitialData={() => ({ type: 'block', blockId: id })}
             shouldHandleDrop={handleShouldHandleDrop}
             renderContent={renderedContent}
+            allowedEdges={allowedEdges}
         />
     );
 }

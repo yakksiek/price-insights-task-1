@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
+import { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/dist/types/types';
 import {
     BaseEventPayload,
     DropTargetLocalizedData,
@@ -13,13 +14,20 @@ interface PragmaticDndTargetProps {
     getInitialData: () => Record<string, string>;
     shouldHandleDrop: (args: BaseEventPayload<ElementDragType> & DropTargetLocalizedData) => boolean;
     renderContent: (handleRef: React.RefObject<HTMLDivElement>) => React.ReactNode;
+    allowedEdges?: Edge[];
 }
 
 const Container = styled.div`
     position: relative;
 `;
 
-const PragmaticDndTarget = ({ dragType, getInitialData, shouldHandleDrop, renderContent }: PragmaticDndTargetProps) => {
+const PragmaticDndTarget = ({
+    dragType,
+    getInitialData,
+    shouldHandleDrop,
+    renderContent,
+    allowedEdges,
+}: PragmaticDndTargetProps) => {
     const elementRef = useRef<HTMLDivElement | null>(null);
     const handleRef = useRef<HTMLDivElement | null>(null);
 
@@ -29,6 +37,7 @@ const PragmaticDndTarget = ({ dragType, getInitialData, shouldHandleDrop, render
         dragType,
         getInitialData,
         shouldHandleDrop,
+        allowedEdges,
     });
 
     return (
