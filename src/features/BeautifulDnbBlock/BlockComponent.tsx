@@ -12,11 +12,13 @@ const StyledHeader = styled.header`
     justify-content: space-between;
     align-items: center;
     margin-bottom: var(--header-margin-bottom);
+    height: var(--card-header-height);
 `;
 
 const StyledTitleWrapper = styled.div`
     display: flex;
     align-items: center;
+    height: 100%;
 `;
 
 const StyledActionButtonsWrapper = styled.div`
@@ -85,11 +87,9 @@ function BlockComponent({ blockData, isFirst, isLast, onMoveUp, onMoveDown, drag
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                         >
-                            <DraggableHandle
-                                dragHandleProps={provided.dragHandleProps}
-                                marginRight={true}
-                                background={true}
-                            />
+                            <div {...provided.dragHandleProps}>
+                                <DraggableHandle marginRight={true} background={true} />
+                            </div>
                             <p>{name}</p>
                         </StyledListItem>
                     );
@@ -102,7 +102,9 @@ function BlockComponent({ blockData, isFirst, isLast, onMoveUp, onMoveDown, drag
         <StyledCardWrapper>
             <StyledHeader>
                 <StyledTitleWrapper>
-                    <DraggableHandle dragHandleProps={dragHandleProps} marginRight={true} />
+                    <div {...dragHandleProps}>
+                        <DraggableHandle marginRight={true} />
+                    </div>
                     <h4>{blockData.name}</h4>
                 </StyledTitleWrapper>
                 <StyledActionButtonsWrapper>

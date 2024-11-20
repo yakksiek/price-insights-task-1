@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { DragHandleIcon } from '../assets/icons';
-import { DraggableProvidedDragHandleProps } from '@hello-pangea/dnd';
 
 interface StyledWrapperProps {
     $color: string;
@@ -18,11 +17,15 @@ const StyledWrapper = styled.div<StyledWrapperProps>`
     align-items: center;
     justify-content: center;
     border-radius: var(--icon-bg-radius);
-    width: 16px;
     height: 22px;
+    width: 14px;
 
     &:hover {
         cursor: grab;
+    }
+
+    &:active {
+        cursor: grabbing;
     }
 
     svg {
@@ -36,7 +39,6 @@ interface DraggableHandleProps {
     padding?: boolean;
     marginRight?: boolean;
     background?: boolean;
-    dragHandleProps: DraggableProvidedDragHandleProps;
 }
 
 function DraggableHandle({
@@ -44,16 +46,9 @@ function DraggableHandle({
     padding = false,
     marginRight = false,
     background = false,
-    dragHandleProps,
 }: DraggableHandleProps) {
     return (
-        <StyledWrapper
-            $color={color}
-            $padding={padding}
-            $marginRight={marginRight}
-            $background={background}
-            {...dragHandleProps}
-        >
+        <StyledWrapper $color={color} $padding={padding} $marginRight={marginRight} $background={background}>
             <DragHandleIcon />
         </StyledWrapper>
     );

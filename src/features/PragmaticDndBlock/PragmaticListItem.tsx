@@ -1,3 +1,9 @@
+import { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/dist/types/types';
+import {
+    BaseEventPayload,
+    DropTargetLocalizedData,
+    ElementDragType,
+} from '@atlaskit/pragmatic-drag-and-drop/dist/types/internal-types';
 import { attachClosestEdge, extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
 import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
 import { draggable, dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
@@ -5,13 +11,7 @@ import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import invariant from 'tiny-invariant';
 
-import { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/dist/types/types';
-import {
-    BaseEventPayload,
-    DropTargetLocalizedData,
-    ElementDragType,
-} from '@atlaskit/pragmatic-drag-and-drop/dist/types/internal-types';
-import { DragHandleIcon } from '../../assets/icons';
+import DraggableHandle from '../../components/DraggableHandle';
 import DropIndicator from '../../components/DropIndicator';
 import { ListItem } from '../BeautifulDnbBlock/block.types';
 
@@ -24,17 +24,8 @@ const StyledListItem = styled.li<StyledListItemProps>`
     background-color: ${props => props.$color};
     padding: 1rem;
     margin-bottom: 1rem;
-
     display: flex;
     align-items: center;
-
-    svg {
-        margin-right: 1rem;
-
-        &:hover {
-            cursor: grab;
-        }
-    }
 `;
 
 interface PragmaiticBlockItem {
@@ -103,7 +94,7 @@ function PragramaticListItem({ itemData }: PragmaiticBlockItem) {
     return (
         <StyledListItem $color={name} ref={listItem}>
             <div ref={handleRef}>
-                <DragHandleIcon />
+                <DraggableHandle marginRight={true} background={true} />
             </div>
             <p>{name}</p>
             {closestEdge && <DropIndicator edge={closestEdge} />}

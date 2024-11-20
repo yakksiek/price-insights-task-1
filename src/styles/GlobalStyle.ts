@@ -10,6 +10,7 @@ const GlobalStyle = createGlobalStyle`
     // width & height
     --max-width: 1770px;
     --header-height: 80px;
+    --card-header-height: 70px;
 
 
     // font colours
