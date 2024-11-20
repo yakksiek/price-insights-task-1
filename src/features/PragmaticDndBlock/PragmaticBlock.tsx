@@ -1,6 +1,13 @@
 import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
+import { attachClosestEdge, extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
+import {
+    BaseEventPayload,
+    DropTargetLocalizedData,
+    ElementDragType,
+} from '@atlaskit/pragmatic-drag-and-drop/dist/types/internal-types';
+import { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/dist/types/types';
 import { draggable, dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import styled from 'styled-components';
 import invariant from 'tiny-invariant';
@@ -9,6 +16,7 @@ import { DragHandleIcon } from '../../assets/icons';
 import { StyledCardWrapper as StyledBlockWrapper } from '../../components/Card';
 import { BlockData } from '../BeautifulDnbBlock/block.types';
 import PragramaticListItem from './PragmaticListItem';
+import DropIndicator from '../../components/DropIndicator';
 
 const StyledHeader = styled.header`
     display: flex;
@@ -31,7 +39,7 @@ interface PragmaticBlockProps {
 }
 
 function PragmaticBlock({ blockData }: PragmaticBlockProps) {
-    // const [closestEdge, setClosestEdge] = useState<Edge | null>(null);
+    const [closestEdge, setClosestEdge] = useState<Edge | null>(null);
     const { name, id } = blockData;
     const blockRef = useRef<HTMLDivElement | null>(null);
     const handleRef = useRef<HTMLDivElement | null>(null);
@@ -42,6 +50,23 @@ function PragmaticBlock({ blockData }: PragmaticBlockProps) {
         invariant(blockEl, 'Block element is not available');
         invariant(handleEl, 'Handle element is not available');
 
+        const handleClosestEdgeUpdate = (args: BaseEventPayload<ElementDragType> & DropTargetLocalizedData) => {
+            if (!args.source) return;
+
+            const draggableType = args.source.data.type;
+            const isBlockType = draggableType === 'block';
+            if (!isBlockType) return;
+
+            const dropTargets = args.location.current.dropTargets;
+            if (dropTargets.length === 0) return;
+
+            const isDraggableInDropZone = args.source.data.blockId !== id;
+            if (isDraggableInDropZone) {
+                const extractedEdge = extractClosestEdge(args.self.data);
+                setClosestEdge(extractedEdge);
+            }
+        };
+
         return combine(
             draggable({
                 element: blockEl,
@@ -50,8 +75,20 @@ function PragmaticBlock({ blockData }: PragmaticBlockProps) {
             }),
             dropTargetForElements({
                 element: blockEl,
-                getData: () => ({ blockId: id }),
+                getData: ({ input, element }) => {
+                    const data = { type: 'block', blockId: id };
+
+                    return attachClosestEdge(data, {
+                        input,
+                        element,
+                        allowedEdges: ['top', 'bottom'],
+                    });
+                },
                 getIsSticky: () => true,
+                onDragEnter: args => handleClosestEdgeUpdate(args),
+                onDrag: args => handleClosestEdgeUpdate(args),
+                onDragLeave: () => setClosestEdge(null),
+                onDrop: () => setClosestEdge(null),
             }),
         );
     }, [id]);
@@ -69,7 +106,7 @@ function PragmaticBlock({ blockData }: PragmaticBlockProps) {
                 <h4>{name}</h4>
             </StyledHeader>
             <StyledList>{renderedItems}</StyledList>
-            {/* {closestEdge && <DropIndicator edge={closestEdge} />} */}
+            {closestEdge && <DropIndicator edge={closestEdge} />}
         </StyledBlockWrapper>
     );
 }

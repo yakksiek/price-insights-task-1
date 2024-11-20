@@ -92,22 +92,10 @@ function PragramaticListItem({ itemData }: PragmaiticBlockItem) {
                     });
                 },
                 getIsSticky: () => true,
-                onDragEnter: args => {
-                    // Update the closest edge when a draggable item enters the drop zone
-                    handleClosestEdgeUpdate(args);
-                },
-                onDrag: args => {
-                    // Continuously update the closest edge while dragging over the drop zone
-                    handleClosestEdgeUpdate(args);
-                },
-                onDragLeave: () => {
-                    // Reset the closest edge when the draggable item leaves the drop zone
-                    setClosestEdge(null);
-                },
-                onDrop: () => {
-                    // Reset the closest edge when the draggable item is dropped
-                    setClosestEdge(null);
-                },
+                onDragEnter: args => handleClosestEdgeUpdate(args),
+                onDrag: args => handleClosestEdgeUpdate(args),
+                onDragLeave: () => setClosestEdge(null),
+                onDrop: () => setClosestEdge(null),
             }),
         );
     }, [id]);
