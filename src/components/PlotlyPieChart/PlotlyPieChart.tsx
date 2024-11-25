@@ -1,6 +1,8 @@
 import { Config, PieData } from 'plotly.js';
 import Plot from 'react-plotly.js';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { getCssVariable } from '../../utils';
+import * as t from '../../types';
 
 // PROBLEMS & QUESTIONABLE CHOICES
 // 1. no gradient on colour slices
@@ -9,32 +11,30 @@ import styled from 'styled-components';
 // 4. drop-shadow not working on safari
 
 interface StyledWrapperProps {
-    $primaryBlue: string;
+    $primaryColor: string;
+    $colorScheme: t.ColorScheme;
 }
 
 const StyledWrapper = styled.div<StyledWrapperProps>`
-    display: flex;
-    gap: 2rem;
+    .slice path.surface[style*='fill: ${({ $primaryColor }) => $primaryColor}'] {
+        filter: drop-shadow(0 0 4px var(--blue-drop-shadow));
 
-    .slice path.surface[style*='fill: ${({ $primaryBlue }) => $primaryBlue}'] {
-        filter: drop-shadow(0 0 4px rgba(24, 102, 219, 0.7));
+        ${({ $colorScheme }) =>
+            $colorScheme === 'purple' &&
+            css`
+                filter: drop-shadow(0 0 5px var(--purple-drop-shadow));
+            `}
     }
 `;
 
-interface ChartConfig {
-    configPrimaryData: number;
-    colorPrimary: string;
-    colorSecondary: string;
-}
-
 interface PlotlyPieChartProps {
-    chartConfig: ChartConfig;
+    chartConfig: t.PlotlyChartConfig;
 }
 
 function PlotlyPieChart({ chartConfig }: PlotlyPieChartProps) {
-    const { colorPrimary, colorSecondary, configPrimaryData } = chartConfig;
-    const primaryBlue = colorPrimary;
-    const primaryOrange = colorSecondary;
+    const { colorPrimary, configPrimaryData, colorScheme } = chartConfig;
+    const primaryOrange = getCssVariable('--primary-orange') || 'rgb(234, 84, 0)';
+    const primaryColor = colorPrimary;
 
     const data: Partial<PieData>[] = [
         {
@@ -60,7 +60,6 @@ function PlotlyPieChart({ chartConfig }: PlotlyPieChartProps) {
             domain: {
                 column: 1,
                 y: [0.032, 0.967],
-                // y: [0.032, 0.97],
             },
             pull: [0.01, 0],
             direction: 'counterclockwise',
@@ -74,15 +73,14 @@ function PlotlyPieChart({ chartConfig }: PlotlyPieChartProps) {
             hole: 0.75,
             type: 'pie',
             marker: {
-                colors: ['rgba(0,0,0,0)', primaryBlue], // BLUE
+                colors: ['rgba(0,0,0,0)', primaryColor], // PRIMARY
             },
             domain: {
                 column: 1,
-                // y: [0, 0.985],
             },
             direction: 'counterclockwise',
             sort: false,
-            pull: [0, 0.01], // Slightly pull the BLUE slice
+            pull: [0, 0.01], // Slightly pull the PRIMARY slice
         },
     ];
 
@@ -125,7 +123,7 @@ function PlotlyPieChart({ chartConfig }: PlotlyPieChartProps) {
     };
 
     return (
-        <StyledWrapper $primaryBlue={primaryBlue}>
+        <StyledWrapper $primaryColor={primaryColor} $colorScheme={colorScheme}>
             <Plot data={data} layout={layout} config={config} />
         </StyledWrapper>
     );

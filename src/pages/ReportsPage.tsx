@@ -4,43 +4,23 @@ import { BaseEventPayload, ElementDragType } from '@atlaskit/pragmatic-drag-and-
 import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import ChartJsPieChart from '../components/ChartJsPieChart';
 import StyledPageWrapper from '../components/PageWrapper';
+import {
+    chartJDataCampaigns,
+    chartJsDataMonitoring,
+    pricingCampaignsData,
+    pricingMonitoringData,
+    reportsBlockData,
+} from '../db';
 import PragmaticBlock from '../features/PragmaticDndBlock/PragmaticBlock';
-import * as u from '../utils';
+import PieChartRenderer from '../features/Statistics/PieChartRenderer';
+import StatisticsComponent from '../features/Statistics/StatisticsComponent';
 import useReorder from '../hooks/useReorder';
-
-const blocksData = [
-    {
-        id: 'blockA',
-        name: 'Block A',
-        items: [
-            { id: '1a', name: '#E7CCCC' },
-            { id: '1b', name: '#EDE8DC' },
-            { id: '1c', name: '#A5B68D' },
-        ],
-    },
-    {
-        id: 'blockB',
-        name: 'Block B',
-        items: [
-            { id: '2a', name: '#b25858' },
-            { id: '2b', name: '#61ec6c' },
-            { id: '2c', name: '#2d0529' },
-        ],
-    },
-    {
-        id: 'blockC',
-        name: 'Block C',
-        items: [
-            { id: '3a', name: '#e501016d' },
-            { id: '3b', name: '#d3275d' },
-            { id: '3c', name: '#00ddf1' },
-        ],
-    },
-];
+import * as u from '../utils';
 
 function ReportsPage() {
-    const [blocks, setBlocks] = useState(blocksData);
+    const [blocks, setBlocks] = useState(reportsBlockData);
     const { handleMoveDown, handleMoveUp } = useReorder({ initialItems: blocks });
     const blockWrapperRef = useRef<HTMLDivElement | null>(null);
 
@@ -105,8 +85,9 @@ function ReportsPage() {
                 const dropTargets = location.current.dropTargets;
                 if (dropTargets.length === 0) return;
                 // wonky solution?
-                // because propagation first we catch listItem(card) and then block
-                // so in drop targets array block with be always second so we take only the last element from the drop targets array
+                // because of propagation first we catch listItem(card) and then block
+                // so in drop targets array block will always be second/last
+                // so we take/taget only the last element from the drop targets array
                 const destinationBlockRecord = dropTargets[dropTargets.length - 1];
                 const destinationBlockId = destinationBlockRecord.data.blockId;
 
@@ -157,6 +138,16 @@ function ReportsPage() {
 
     return (
         <StyledPageWrapper>
+            <StatisticsComponent>
+                <PieChartRenderer
+                    configData={pricingCampaignsData}
+                    chart={<ChartJsPieChart chartData={chartJDataCampaigns} />}
+                />
+                <PieChartRenderer
+                    configData={pricingMonitoringData}
+                    chart={<ChartJsPieChart chartData={chartJsDataMonitoring} />}
+                />
+            </StatisticsComponent>
             <div ref={blockWrapperRef}>{renderedBlocks}</div>
         </StyledPageWrapper>
     );

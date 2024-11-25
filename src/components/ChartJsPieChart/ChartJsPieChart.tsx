@@ -6,7 +6,8 @@ import { Doughnut } from 'react-chartjs-2';
 // in the middle of pie won't form closed circle, that's why orange and blue slices have manual dividers
 // 2. Since 'labels' are not used visually, they are leveraged as IDs to find datasets in plugins,
 // avoiding the need to manually specify indexes.
-// 3. changing the size of chart creating a shift in colors
+// 3. changing the size of chart creates a shift in colors because of the gradient fill, so I had to alter a bit original gradient colors
+// 4. should plugins be kept in a seperate file?
 
 interface ThicknessPluginOptions {
     thickness: Array<[number, number]>;
@@ -180,8 +181,6 @@ const shadowPlugin = {
         const datasetPrimary = chart.data.datasets.find(dataset => dataset.label === 'primary');
         if (!datasetPrimary) return;
         const datasetPrimaryIndex = chart.data.datasets.indexOf(datasetPrimary);
-
-        // const datasetIndex = 1; // Index of the dataset containing the blue slice
         const blueSegmentIndex = 2; // Index of the blue slice within the dataset
 
         const meta = chart.getDatasetMeta(datasetPrimaryIndex);
@@ -277,17 +276,18 @@ function ChartJsPieChart({ chartData }: PieChartProps) {
                 enabled: false,
             },
             thickness: {
+                // this looks really bad, I know
                 thickness: [
-                    [0, 51], // grey circle inside
-                    [30, 70], // Blue segment - blue slice
-                    [30, 70], // Blue segment - manual gap
-                    [30, 70], // Blue segment - transparent orange
-                    [30, 70], // Blue segment - manual gap
-                    [30, 65], // Orange segment - transparent blue
-                    [30, 65], // Orange segment - manual gap
-                    [30, 65], // Orange segment - oragne slice
-                    [30, 65], // Orange segment - manual gap
-                    [50, 70], // grey background for thinner slice
+                    [0, 61], // grey circle inside
+                    [60, 85], // Blue segment - blue slice
+                    [60, 85], // Blue segment - manual gap
+                    [60, 85], // Blue segment - transparent orange
+                    [60, 85], // Blue segment - manual gap
+                    [60, 78], // Orange segment - transparent blue
+                    [60, 78], // Orange segment - manual gap
+                    [60, 78], // Orange segment - oragne slice
+                    [60, 78], // Orange segment - manual gap
+                    [60, 85], // grey background for thinner slice
                 ],
             },
             gradientColors: {
@@ -300,7 +300,7 @@ function ChartJsPieChart({ chartData }: PieChartProps) {
             text: primaryData.toString(),
         },
         layout: {
-            padding: 2,
+            // padding: 2, // cannot be applied because of some layers that create background and foreground for the chart
         },
         events: [],
         animation: {
@@ -309,7 +309,7 @@ function ChartJsPieChart({ chartData }: PieChartProps) {
     };
 
     return (
-        <div style={{ width: '182px', height: '182px' }}>
+        <div style={{ width: '200px', height: '200px' }}>
             <Doughnut data={data} options={options} />
         </div>
     );

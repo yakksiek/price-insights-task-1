@@ -2,36 +2,27 @@ import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 
 import StyledPageWrapper from '../components/PageWrapper';
 import PlotlyPieChart from '../components/PlotlyPieChart';
-import { pricingCampaignsData, pricingMonitoringData, repricingBlockData } from '../db';
+import {
+    plotlyChartConfigMonitoringData,
+    plotlyChartConfigPricingCampaigns,
+    pricingCampaignsData,
+    pricingMonitoringData,
+    repricingBlockData,
+} from '../db';
 import BlockComponent from '../features/BeautifulDnbBlock/BlockComponent';
 import PieChartRenderer from '../features/Statistics/PieChartRenderer';
 import StatisticsComponent from '../features/Statistics/StatisticsComponent';
 import usePangeaDnd from '../hooks/usePangeaDnd';
 import useReorder from '../hooks/useReorder';
-import { getCssVariable } from '../utils';
 
-// this component is unecessarly complicated rendering Statistics children
-// and as a result polluting Repricing Page (and Reports Page)
-// with charts config data because I use with different
-// pages and different charts
+// This component is unnecessarily complicated as it renders the Statistics component's children,
+// resulting in the Repricing Page (and Reports Page) being polluted with chart configuration data.
+// I structured it this way to reuse the Statistics component across two pages and to allow the use
+// of a different chart library within the Statistics component.
 
 function RepricingPage() {
     const { items: blocks, handleOnDragEnd, setItems } = usePangeaDnd(repricingBlockData);
     const { handleMoveDown, handleMoveUp } = useReorder({ initialItems: blocks });
-    const primaryBlue = getCssVariable('--primary-blue') || 'rgb(23, 106, 229)';
-    const primaryOrange = getCssVariable('--primary-orange') || 'rgb(234, 84, 0)';
-
-    const chartConfigPricingCampaings = {
-        configPrimaryData: pricingCampaignsData.data,
-        colorPrimary: primaryBlue,
-        colorSecondary: primaryOrange,
-    };
-
-    const chartConfigMonitoringData = {
-        configPrimaryData: pricingMonitoringData.data,
-        colorPrimary: primaryBlue,
-        colorSecondary: primaryOrange,
-    };
 
     const renderedBlocks = blocks.map((blockItem, index) => {
         const isFirst = index === 0;
@@ -41,21 +32,19 @@ function RepricingPage() {
             <Draggable key={blockItem.id} draggableId={blockItem.id} index={index}>
                 {provided => {
                     if (!provided.dragHandleProps) return null;
-                    // prettier-ignore
-                    return (<div 
-                        ref={provided.innerRef} 
-                        {...provided.draggableProps} 
-                         className="draggable-block"
-                    >
-                        <BlockComponent
-                            blockData={blockItem}
-                            isFirst={isFirst}
-                            isLast={isLast}
-                            onMoveUp={() => handleMoveUp(index, setItems)}
-                            onMoveDown={() => handleMoveDown(index, setItems)}
-                            dragHandleProps={provided.dragHandleProps}
-                        />
-                    </div>)
+
+                    return (
+                        <div ref={provided.innerRef} {...provided.draggableProps}>
+                            <BlockComponent
+                                blockData={blockItem}
+                                isFirst={isFirst}
+                                isLast={isLast}
+                                onMoveUp={() => handleMoveUp(index, setItems)}
+                                onMoveDown={() => handleMoveDown(index, setItems)}
+                                dragHandleProps={provided.dragHandleProps}
+                            />
+                        </div>
+                    );
                 }}
             </Draggable>
         );
@@ -66,11 +55,11 @@ function RepricingPage() {
             <StatisticsComponent>
                 <PieChartRenderer
                     configData={pricingCampaignsData}
-                    chart={<PlotlyPieChart chartConfig={chartConfigPricingCampaings} />}
+                    chart={<PlotlyPieChart chartConfig={plotlyChartConfigPricingCampaigns} />}
                 />
                 <PieChartRenderer
                     configData={pricingMonitoringData}
-                    chart={<PlotlyPieChart chartConfig={chartConfigMonitoringData} />}
+                    chart={<PlotlyPieChart chartConfig={plotlyChartConfigMonitoringData} />}
                 />
             </StatisticsComponent>
             <DragDropContext onDragEnd={handleOnDragEnd}>

@@ -1,18 +1,10 @@
 import styled from 'styled-components';
 import { HideVisibilityIcon, VisibilityIcon } from '../../assets/icons';
-import { getCssVariable } from '../../utils';
+import * as t from '../../types';
 
-interface StyledPieChartProps {
-    $primaryBlue: string;
-}
-
-const StyledPieChart = styled.div<StyledPieChartProps>`
+const StyledPieChart = styled.div`
     display: flex;
     gap: 2rem;
-
-    .slice path.surface[style*='fill: ${({ $primaryBlue }) => $primaryBlue}'] {
-        filter: drop-shadow(0 0 4px rgba(24, 102, 219, 0.7));
-    }
 `;
 
 const StyledLegend = styled.div`
@@ -69,35 +61,27 @@ const StyledRow = styled.div`
     }
 `;
 
-const StyledDot = styled.span<{ color?: string }>`
+type AccentColors = 'blue' | 'purple' | 'orange';
+
+const StyledDot = styled.span<{ $color?: AccentColors }>`
     display: inline-block;
     margin-right: 0.5rem;
     width: 1rem;
     height: 1rem;
     border-radius: 50%;
-    background: ${({ color }) => color || 'var(--primary-blue)'};
+    background: ${({ $color }) => ($color ? `var(--primary-${$color})` : 'var(--primary-blue)')};
 `;
 
-interface ConfigData {
-    data: number;
-    labelPrimary: string;
-    labelSecondary: string;
-    header: string;
-    subheader: string;
-}
-
 interface PieChartRendererProps {
-    configData: ConfigData;
+    configData: t.ChartMetadata;
     chart: React.ReactNode;
 }
 
 function PieChartRenderer({ configData, chart }: PieChartRendererProps) {
-    const primaryBlue = getCssVariable('--primary-blue') || 'rgb(23, 106, 229)';
-    const primaryOrange = getCssVariable('--primary-orange') || 'rgb(234, 84, 0)';
     const { data: configPrimaryData, labelPrimary, labelSecondary, header, subheader } = configData;
 
     return (
-        <StyledPieChart $primaryBlue={primaryBlue}>
+        <StyledPieChart>
             {chart}
             <StyledLegend>
                 <StyledHeader>
@@ -112,7 +96,7 @@ function PieChartRenderer({ configData, chart }: PieChartRendererProps) {
                         <span className='divider'></span>
 
                         <p className='description'>
-                            <StyledDot className='dot' />
+                            <StyledDot className='dot' $color={configData.primaryColor || 'blue'} />
                             {labelPrimary}
                         </p>
                     </StyledRow>
@@ -122,7 +106,7 @@ function PieChartRenderer({ configData, chart }: PieChartRendererProps) {
                         <span className='divider'></span>
 
                         <p className='description'>
-                            <StyledDot className='dot' color={primaryOrange} />
+                            <StyledDot className='dot' $color='orange' />
                             {labelSecondary}
                         </p>
                     </StyledRow>

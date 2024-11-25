@@ -18,8 +18,23 @@ const GlobalStyle = createGlobalStyle`
     --text-placeholder: rgba(112, 112, 144, 1);
     
     // colours
+    // blue
     --primary-blue: rgb(23, 106, 229);
+    --blue-gradient-start: rgba(13, 59, 127, 1);
+    --blue-shadow: rgba(87, 137, 213, 0.787);
+    --blue-drop-shadow: rgba(24, 102, 219, 0.7);
+
+    // orange
     --primary-orange: rgb(234, 84, 0);
+    --orange-gradient-start: rgba(229, 78, 23, 1);
+
+    // purple
+    --primary-purple: rgb(113, 7, 226);
+    --purple-gradient-start: rgba(66, 10, 126, 1);
+    --purple-shadow: rgba(113, 7, 226, 0.2);
+    --purple-drop-shadow: rgba(113, 7, 226, 0.5);
+
+
     --background-color: rgba(238, 238, 242, 1);
     --background-color-section: rgba(246, 246, 248, 1); 
     --icon-background-transparent: rgba(255, 255, 255, 0.6);
