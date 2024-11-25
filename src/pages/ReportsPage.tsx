@@ -24,6 +24,8 @@ function ReportsPage() {
     const { handleMoveDown, handleMoveUp } = useReorder({ initialItems: blocks });
     const blockWrapperRef = useRef<HTMLDivElement | null>(null);
 
+    // I created usePragramticDndTarget for setting files draggable or droppable
+    // but this is a simple function, no hook needed, where is the best place for it?
     const handleDrop = useCallback(
         (args: BaseEventPayload<ElementDragType>) => {
             if (!args.location || !args.source) return;
