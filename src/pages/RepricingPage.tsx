@@ -1,48 +1,37 @@
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 
-import styled from 'styled-components';
 import StyledPageWrapper from '../components/PageWrapper';
+import PlotlyPieChart from '../components/PlotlyPieChart';
+import { pricingCampaignsData, pricingMonitoringData, repricingBlockData } from '../db';
 import BlockComponent from '../features/BeautifulDnbBlock/BlockComponent';
+import PieChartRenderer from '../features/Statistics/PieChartRenderer';
 import StatisticsComponent from '../features/Statistics/StatisticsComponent';
 import usePangeaDnd from '../hooks/usePangeaDnd';
 import useReorder from '../hooks/useReorder';
-import { BlockData } from '../shared/block.types';
+import { getCssVariable } from '../utils';
 
-const blocksData: BlockData[] = [
-    {
-        id: 'blockA',
-        name: 'Block A',
-        items: [
-            { id: '1a', name: 'crimson' },
-            { id: '1b', name: 'lightyellow' },
-            { id: '1c', name: 'lightgreen' },
-        ],
-    },
-    {
-        id: 'blockB',
-        name: 'Block B',
-        items: [
-            { id: '2a', name: 'crimson' },
-            { id: '2b', name: 'lightyellow' },
-            { id: '2c', name: 'lightgreen' },
-        ],
-    },
-    {
-        id: 'blockC',
-        name: 'Block C',
-        items: [
-            { id: '3a', name: 'crimson' },
-            { id: '3b', name: 'lightyellow' },
-            { id: '3c', name: 'lightgreen' },
-        ],
-    },
-];
-
-const StyledBlocksWrapper = styled.div``;
+// this component is unecessarly complicated rendering Statistics children
+// and as a result polluting Repricing Page (and Reports Page)
+// with charts config data because I use with different
+// pages and different charts
 
 function RepricingPage() {
-    const { items: blocks, handleOnDragEnd, setItems } = usePangeaDnd(blocksData);
+    const { items: blocks, handleOnDragEnd, setItems } = usePangeaDnd(repricingBlockData);
     const { handleMoveDown, handleMoveUp } = useReorder({ initialItems: blocks });
+    const primaryBlue = getCssVariable('--primary-blue') || 'rgb(23, 106, 229)';
+    const primaryOrange = getCssVariable('--primary-orange') || 'rgb(234, 84, 0)';
+
+    const chartConfigPricingCampaings = {
+        configPrimaryData: pricingCampaignsData.data,
+        colorPrimary: primaryBlue,
+        colorSecondary: primaryOrange,
+    };
+
+    const chartConfigMonitoringData = {
+        configPrimaryData: pricingMonitoringData.data,
+        colorPrimary: primaryBlue,
+        colorSecondary: primaryOrange,
+    };
 
     const renderedBlocks = blocks.map((blockItem, index) => {
         const isFirst = index === 0;
@@ -74,14 +63,23 @@ function RepricingPage() {
 
     return (
         <StyledPageWrapper>
-            <StatisticsComponent />
+            <StatisticsComponent>
+                <PieChartRenderer
+                    configData={pricingCampaignsData}
+                    chart={<PlotlyPieChart chartConfig={chartConfigPricingCampaings} />}
+                />
+                <PieChartRenderer
+                    configData={pricingMonitoringData}
+                    chart={<PlotlyPieChart chartConfig={chartConfigMonitoringData} />}
+                />
+            </StatisticsComponent>
             <DragDropContext onDragEnd={handleOnDragEnd}>
                 <Droppable droppableId='droppable-blocks' direction='vertical'>
                     {provided => (
-                        <StyledBlocksWrapper {...provided.droppableProps} ref={provided.innerRef}>
+                        <div {...provided.droppableProps} ref={provided.innerRef}>
                             {renderedBlocks}
                             {provided.placeholder}
-                        </StyledBlocksWrapper>
+                        </div>
                     )}
                 </Droppable>
             </DragDropContext>

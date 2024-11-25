@@ -1,23 +1,6 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { CardHeader, StyledCardWrapper } from '../../components/Card';
-import PlotlyPieChart from '../../components/PlotlyPieChart';
-import { useState } from 'react';
-
-const pricingCampaignsData = {
-    data: 62.5,
-    header: 'Pricing campaigns',
-    subheader: 'Ensure complete allocation of products among pricing campaigns',
-    labelPrimary: 'Products in pricing campaign',
-    labelSecondary: 'Products without pricing campaign',
-};
-
-const pricingMonitoringData = {
-    data: 20.5,
-    header: 'Pricing monitoring',
-    subheader: 'Ensure maximum coverage of products through monitoring',
-    labelPrimary: 'Assortment is covered by monitoring',
-    labelSecondary: 'Assortment not covered by monitoring',
-};
 
 interface ChartsWrapperProps {
     $isOpen: boolean;
@@ -36,7 +19,11 @@ const ChartsWrapper = styled.div<ChartsWrapperProps>`
     }
 `;
 
-function StatisticsComponent() {
+interface StatisticsComponentProps {
+    children: React.ReactNode;
+}
+
+function StatisticsComponent({ children }: StatisticsComponentProps) {
     const [isOpen, setIsOpen] = useState(true);
 
     const handleSetOpen = () => {
@@ -46,10 +33,7 @@ function StatisticsComponent() {
     return (
         <StyledCardWrapper>
             <CardHeader cardHeaderText='Statistics' toggleOpenHandler={handleSetOpen} isOpen={isOpen} />
-            <ChartsWrapper $isOpen={isOpen}>
-                <PlotlyPieChart configData={pricingCampaignsData} />
-                <PlotlyPieChart configData={pricingMonitoringData} />
-            </ChartsWrapper>
+            <ChartsWrapper $isOpen={isOpen}>{children}</ChartsWrapper>
         </StyledCardWrapper>
     );
 }
