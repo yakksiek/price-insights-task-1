@@ -73,40 +73,40 @@ const thicknessPlugin: Plugin<'pie' | 'doughnut'> = {
 const innerTextPlugin: Plugin<'pie' | 'doughnut'> = {
     id: 'text',
     afterDraw: function (chart) {
-        const text = chart.options.plugins?.text || ''; // Access text from plugin options
+        // Retrieve the custom text from plugin options
+        const text = chart.options.plugins?.text || '';
         if (!text) return;
 
-        const width = chart.width;
-        const height = chart.height;
-        const ctx = chart.ctx;
+        const { width, height, ctx } = chart;
 
         ctx.restore();
 
-        // Define font sizes for the main value and the percentage sign
-        const mainFontSize = 2; // Font size for the main value
-        const percentFontSize = 1; // Font size for the percentage sign
+        const styles = {
+            mainFontSize: 2,
+            percentFontSize: 1,
+            fontFamily: 'sans-serif',
+        };
 
-        // Main value
-        ctx.font = `${mainFontSize}em sans-serif`;
-        ctx.textBaseline = 'middle';
+        const setFontStyle = (fontSize: number) => {
+            ctx.font = `${fontSize}em ${styles.fontFamily}`;
+        };
+
+        setFontStyle(styles.mainFontSize);
         const mainValueWidth = ctx.measureText(text).width;
 
-        // Percentage sign ("%")
-        ctx.font = `${percentFontSize}em sans-serif`;
+        setFontStyle(styles.percentFontSize);
         const percentSignWidth = ctx.measureText('%').width;
 
-        // Calculate total width and center positions
         const totalWidth = mainValueWidth + percentSignWidth;
-        const textX = Math.round((width - totalWidth) / 2); // Center align
-        const textY = height / 2;
+        const centerX = Math.round((width - totalWidth) / 2);
+        const centerY = height / 2;
 
-        // Draw the main value
-        ctx.font = `${mainFontSize}em sans-serif`;
-        ctx.fillText(text, textX, textY);
+        setFontStyle(styles.mainFontSize);
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, centerX, centerY);
 
-        // Draw the percentage sign
-        ctx.font = `${percentFontSize}em sans-serif`;
-        ctx.fillText('%', textX + mainValueWidth, textY);
+        setFontStyle(styles.percentFontSize);
+        ctx.fillText('%', centerX + mainValueWidth, centerY);
 
         ctx.save();
     },
@@ -122,7 +122,6 @@ const gradientPlugin: Plugin<'pie' | 'doughnut'> = {
         const ctx = chart.ctx;
         const chartArea = chart.chartArea;
 
-        // Calculate the center and size of the gradient
         const xCenter = (chartArea.left + chartArea.right) / 2;
         const yCenter = (chartArea.top + chartArea.bottom) / 2;
         const innerRadius = 0;
@@ -165,7 +164,9 @@ const gradientPlugin: Plugin<'pie' | 'doughnut'> = {
         }
 
         chart.$gradientApplied = true; // Set flag to avoid redundant updates
-        chart.update(); // Triggering chart update so it applies immediately
+        // Triggering chart update so it applies immediately
+        // without it only on some action with chart the gradient applies
+        chart.update();
     },
 };
 
