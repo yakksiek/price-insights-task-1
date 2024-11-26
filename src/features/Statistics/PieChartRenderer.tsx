@@ -1,10 +1,27 @@
 import styled from 'styled-components';
 import { HideVisibilityIcon, VisibilityIcon } from '../../assets/icons';
 import * as t from '../../types';
+import { Breakpoints } from '../../types/enums';
 
 const StyledPieChart = styled.div`
+    margin: 0 auto;
     display: flex;
     gap: 2rem;
+
+    @media ${Breakpoints.MediumLarge} {
+        flex-direction: column;
+    }
+
+    @media ${Breakpoints.ExtraLarge} {
+        flex-direction: row;
+    }
+`;
+
+const StyledChartContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: var(--margin-l);
 `;
 
 const StyledLegend = styled.div`
@@ -82,7 +99,7 @@ function PieChartRenderer({ configData, chart }: PieChartRendererProps) {
 
     return (
         <StyledPieChart>
-            {chart}
+            <StyledChartContainer>{chart}</StyledChartContainer>
             <StyledLegend>
                 <StyledHeader>
                     <h5>{header}</h5>
