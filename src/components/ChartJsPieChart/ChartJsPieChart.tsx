@@ -248,7 +248,7 @@ function ChartJsPieChart({ chartData }: PieChartProps) {
                 label: 'primary',
                 data: [100 - primaryData, 0.25, primaryData, 0.25],
                 backgroundColor: ['transparent', 'transparent', primaryColor, 'transparent'],
-                borderColor: ['', '', 'white', ''],
+                borderColor: ['', '', 'rgba(246, 246, 248, 1)', ''],
                 borderWidth: [0, 0, 1, 0],
                 borderRadius: 2,
             },
