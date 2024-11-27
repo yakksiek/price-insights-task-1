@@ -1,5 +1,6 @@
 import { ArcElement, Chart, Chart as ChartJS, ChartType, Legend, Plugin, Tooltip } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+import styled from 'styled-components';
 
 // THINGS TO CONSIDER:
 // 1. general spacing/gap cannot be applied accross all slices as grey fill
@@ -8,6 +9,12 @@ import { Doughnut } from 'react-chartjs-2';
 // avoiding the need to manually specify indexes.
 // 3. changing the size of chart creates a shift in colors because of the gradient fill, so I had to alter a bit original gradient colors
 // 4. should plugins be kept in a seperate file?
+
+const StyledChartWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
 
 interface ThicknessPluginOptions {
     thickness: Array<[number, number]>;
@@ -277,18 +284,18 @@ function ChartJsPieChart({ chartData }: PieChartProps) {
                 enabled: false,
             },
             thickness: {
-                // this looks really bad, I know
+                // manually setting thickness for each pie slice
                 thickness: [
-                    [0, 61], // grey circle inside
-                    [60, 85], // Blue segment - blue slice
-                    [60, 85], // Blue segment - manual gap
-                    [60, 85], // Blue segment - transparent orange
-                    [60, 85], // Blue segment - manual gap
-                    [60, 78], // Orange segment - transparent blue
-                    [60, 78], // Orange segment - manual gap
-                    [60, 78], // Orange segment - oragne slice
-                    [60, 78], // Orange segment - manual gap
-                    [60, 85], // grey background for thinner slice
+                    [0, 66], // grey circle inside
+                    [65, 90], // Blue segment - blue slice
+                    [65, 90], // Blue segment - manual gap
+                    [65, 90], // Blue segment - transparent orange
+                    [65, 90], // Blue segment - manual gap
+                    [65, 83], // Orange segment - transparent blue
+                    [65, 83], // Orange segment - manual gap
+                    [65, 83], // Orange segment - oragne slice
+                    [65, 83], // Orange segment - manual gap
+                    [65, 90], // grey background for thinner slice
                 ],
             },
             gradientColors: {
@@ -300,9 +307,6 @@ function ChartJsPieChart({ chartData }: PieChartProps) {
             },
             text: primaryData.toString(),
         },
-        layout: {
-            // padding: 2, // cannot be applied because of some layers that create background and foreground for the chart
-        },
         events: [],
         animation: {
             duration: 0, // Disable all animations, including hover
@@ -310,9 +314,9 @@ function ChartJsPieChart({ chartData }: PieChartProps) {
     };
 
     return (
-        <div style={{ width: '200px', height: '200px' }}>
+        <StyledChartWrapper style={{ width: '215px', height: '215px' }}>
             <Doughnut data={data} options={options} />
-        </div>
+        </StyledChartWrapper>
     );
 }
 

@@ -9,10 +9,9 @@ export const pricingCampaignsData: t.ChartMetadata = {
 };
 
 export const pricingMonitoringData: t.ChartMetadata = {
-    data: 20.5,
+    data: 90.5,
     header: 'Pricing monitoring',
     subheader: 'Ensure maximum coverage of products through monitoring',
     labelPrimary: 'Assortment is covered by monitoring',
     labelSecondary: 'Assortment not covered by monitoring',
-    primaryColor: 'purple',
 };

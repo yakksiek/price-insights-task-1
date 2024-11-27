@@ -4,9 +4,11 @@ import * as t from '../../types';
 import { Breakpoints } from '../../types/enums';
 
 const StyledPieChart = styled.div`
-    margin: 0 auto;
     display: flex;
     gap: 2rem;
+    align-items: center;
+    overflow: hidden;
+    justify-content: center;
 
     @media ${Breakpoints.MediumLarge} {
         flex-direction: column;
@@ -21,10 +23,13 @@ const StyledChartContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: var(--margin-l);
+    flex: 1;
 `;
 
 const StyledLegend = styled.div`
+    padding: var(--padding-s);
+    flex: 2;
+
     p {
         font-size: 0.813rem;
         color: var(--text-placeholder);
@@ -39,7 +44,8 @@ const StyledHeader = styled.header`
 
 const StyledDivider = styled.hr`
     border: 1px solid rgba(224, 224, 237, 1);
-    margin: 1.375rem 0;
+    margin-top: 1.375rem;
+    max-width: 400px;
 `;
 
 const StyledRow = styled.div`

@@ -13,12 +13,7 @@ const ChartsWrapper = styled.div<ChartsWrapperProps>`
     padding: 0 40px;
     grid-template-rows: ${({ $isOpen }) => ($isOpen ? '1fr' : '0fr')};
     transition: grid-template-rows 0.3s;
-    margin: 0 auto;
     gap: 25px;
-
-    & > * {
-        overflow: hidden;
-    }
 
     @media ${Breakpoints.MediumLarge} {
         grid-auto-flow: column;
