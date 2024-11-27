@@ -150,7 +150,7 @@ function ReportsPage() {
                     chart={<ChartJsPieChart chartData={chartJsDataMonitoring} />}
                 />
             </StatisticsComponent>
-            {/* <div ref={blockWrapperRef}>{renderedBlocks}</div> */}
+            <div ref={blockWrapperRef}>{renderedBlocks}</div>
         </StyledPageWrapper>
     );
 }

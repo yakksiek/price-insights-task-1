@@ -2,9 +2,10 @@ import styled from 'styled-components';
 import { DoubleChevronUpIcon } from '../../assets/icons';
 
 const StyledCardHeader = styled.div`
+    height: 66px;
     display: flex;
     align-items: center;
-    margin-bottom: var(--header-margin-bottom);
+    padding: 0 var(--card-content-padding);
 `;
 
 interface StyledIconWrapperProps {

@@ -5,7 +5,7 @@ const GlobalStyle = createGlobalStyle`
 
     // font
     --font-size-default: 14px;
-    --font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    --font-family: Inter, system-ui, Helvetica, Arial, sans-serif;
 
     // width & height
     --max-width: 1770px;
@@ -13,11 +13,11 @@ const GlobalStyle = createGlobalStyle`
     --card-header-height: 70px;
 
 
-    // font colours
+    // font colors
     --font-color: rgba(17, 17, 25, 1);
     --text-placeholder: rgba(112, 112, 144, 1);
     
-    // colours
+    // colors
     // blue
     --primary-blue: rgb(23, 106, 229);
     --blue-gradient-start: rgba(13, 59, 127, 1);
@@ -47,7 +47,7 @@ const GlobalStyle = createGlobalStyle`
 
 
     // paddings
-    --card-padding: 1.125rem 0.938rem; // 21px 15px
+    --card-content-padding: 15px;
     --padding-s: 0.5rem;
 
     // margins

@@ -3,19 +3,19 @@ import styled from 'styled-components';
 import { CardHeader, StyledCardWrapper } from '../../components/Card';
 import { Breakpoints } from '../../types/enums';
 
-interface ChartsWrapperProps {
+interface CardContentProps {
     $isOpen: boolean;
 }
 
-const ChartsWrapper = styled.div<ChartsWrapperProps>`
-    display: grid;
-    grid-auto-flow: row;
-    padding: 0 40px;
-    grid-template-rows: ${({ $isOpen }) => ($isOpen ? '1fr' : '0fr')};
-    transition: grid-template-rows 0.3s;
+const CardContent = styled.div<CardContentProps>`
+    padding: var(--card-content-padding);
+    padding-top: 0;
+
+    display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
     gap: 25px;
 
     @media ${Breakpoints.MediumLarge} {
+        display: ${({ $isOpen }) => ($isOpen ? 'grid' : 'none')};
         grid-auto-flow: column;
     }
 `;
@@ -34,7 +34,7 @@ function StatisticsComponent({ children }: StatisticsComponentProps) {
     return (
         <StyledCardWrapper>
             <CardHeader cardHeaderText='Statistics' toggleOpenHandler={handleSetOpen} isOpen={isOpen} />
-            <ChartsWrapper $isOpen={isOpen}>{children}</ChartsWrapper>
+            <CardContent $isOpen={isOpen}>{children}</CardContent>
         </StyledCardWrapper>
     );
 }
