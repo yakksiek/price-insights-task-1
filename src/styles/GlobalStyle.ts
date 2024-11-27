@@ -24,6 +24,9 @@ const GlobalStyle = createGlobalStyle`
     --blue-shadow: rgba(87, 137, 213, 0.787);
     --blue-drop-shadow: rgba(24, 102, 219, 0.7);
 
+    background: radial-gradient(50% 50% at 50% 50%, #0D3B7F 0%, #176AE5 100%);
+
+
     // orange
     --primary-orange: rgb(234, 84, 0);
     --orange-gradient-start: rgba(229, 78, 23, 1);

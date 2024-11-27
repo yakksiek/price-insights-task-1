@@ -8,9 +8,8 @@ interface CardContentProps {
 }
 
 const CardContent = styled.div<CardContentProps>`
-    padding: var(--card-content-padding);
-    padding-top: 0;
-
+    padding: 0 var(--card-content-padding);
+    /* padding-bottom: 1rem; */
     display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
     gap: 25px;
 

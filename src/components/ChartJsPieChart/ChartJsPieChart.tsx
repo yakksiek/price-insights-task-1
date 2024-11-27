@@ -12,8 +12,9 @@ import styled from 'styled-components';
 
 const StyledChartWrapper = styled.div`
     display: flex;
-    align-items: center;
     justify-content: center;
+    width: 100%;
+    height: 100%;
 `;
 
 interface ThicknessPluginOptions {
@@ -129,6 +130,8 @@ const gradientPlugin: Plugin<'pie' | 'doughnut'> = {
         const ctx = chart.ctx;
         const chartArea = chart.chartArea;
 
+        console.log(chartArea);
+
         const xCenter = (chartArea.left + chartArea.right) / 2;
         const yCenter = (chartArea.top + chartArea.bottom) / 2;
         const innerRadius = 0;
@@ -141,8 +144,8 @@ const gradientPlugin: Plugin<'pie' | 'doughnut'> = {
         // Gradient for the blue slice
         const primaryGradientColors = gradientColors.primary as [string, string];
         const primaryGradient = ctx.createRadialGradient(xCenter, yCenter, innerRadius, xCenter, yCenter, outerRadius);
-        primaryGradient.addColorStop(0, primaryGradientColors[0]);
-        primaryGradient.addColorStop(1, primaryGradientColors[1]);
+        primaryGradient.addColorStop(0.04, primaryGradientColors[0]);
+        primaryGradient.addColorStop(0.6, primaryGradientColors[1]);
 
         // Gradient for the orange slice
         const secondaryGradientColors = gradientColors.secondary as [string, string];
@@ -202,7 +205,7 @@ const shadowPlugin = {
             arc.draw = function (...args) {
                 ctx.save();
                 ctx.shadowColor = primaryShadowColors;
-                ctx.shadowBlur = 25;
+                ctx.shadowBlur = 35;
                 ctx.shadowOffsetX = 0;
                 ctx.shadowOffsetY = 0;
 
@@ -286,16 +289,27 @@ function ChartJsPieChart({ chartData }: PieChartProps) {
             thickness: {
                 // manually setting thickness for each pie slice
                 thickness: [
-                    [0, 66], // grey circle inside
-                    [65, 90], // Blue segment - blue slice
-                    [65, 90], // Blue segment - manual gap
-                    [65, 90], // Blue segment - transparent orange
-                    [65, 90], // Blue segment - manual gap
-                    [65, 83], // Orange segment - transparent blue
-                    [65, 83], // Orange segment - manual gap
-                    [65, 83], // Orange segment - oragne slice
-                    [65, 83], // Orange segment - manual gap
-                    [65, 90], // grey background for thinner slice
+                    // [0, 66], // grey circle inside
+                    // [65, 90], // Blue segment - blue slice
+                    // [65, 90], // Blue segment - manual gap
+                    // [65, 90], // Blue segment - transparent orange
+                    // [65, 90], // Blue segment - manual gap
+                    // [65, 83], // Orange segment - transparent blue
+                    // [65, 83], // Orange segment - manual gap
+                    // [65, 83], // Orange segment - orange slice
+                    // [65, 83], // Orange segment - manual gap
+                    // [65, 90], // grey background for thinner slice
+
+                    [0, 65], // grey circle inside
+                    [64, 90], // Blue segment - blue slice
+                    [64, 90], // Blue segment - manual gap
+                    [64, 90], // Blue segment - transparent orange
+                    [64, 90], // Blue segment - manual gap
+                    [64, 83], // Orange segment - transparent blue
+                    [64, 83], // Orange segment - manual gap
+                    [64, 83], // Orange segment - orange slice
+                    [64, 83], // Orange segment - manual gap
+                    [64, 90], // grey background for thinner slice
                 ],
             },
             gradientColors: {
@@ -314,7 +328,7 @@ function ChartJsPieChart({ chartData }: PieChartProps) {
     };
 
     return (
-        <StyledChartWrapper style={{ width: '215px', height: '215px' }}>
+        <StyledChartWrapper>
             <Doughnut data={data} options={options} />
         </StyledChartWrapper>
     );

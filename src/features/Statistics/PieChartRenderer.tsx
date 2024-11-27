@@ -6,9 +6,9 @@ import { Breakpoints } from '../../types/enums';
 const StyledPieChart = styled.div`
     display: flex;
     gap: 2rem;
-    align-items: center;
-    overflow: hidden;
     justify-content: center;
+
+    min-height: 240px;
 
     @media ${Breakpoints.MediumLarge} {
         flex-direction: column;
@@ -22,13 +22,18 @@ const StyledPieChart = styled.div`
 const StyledChartContainer = styled.div`
     display: flex;
     justify-content: center;
-    align-items: center;
     flex: 1;
+
+    position: relative;
 `;
 
 const StyledLegend = styled.div`
     padding: var(--padding-s);
     flex: 2;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
     p {
         font-size: 0.813rem;
