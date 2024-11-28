@@ -6,7 +6,6 @@ import { Breakpoints } from '../../types/enums';
 const StyledPieChart = styled.div`
     display: flex;
     justify-content: center;
-    min-height: 240px;
 
     @media ${Breakpoints.MediumLarge} {
         flex-direction: column;

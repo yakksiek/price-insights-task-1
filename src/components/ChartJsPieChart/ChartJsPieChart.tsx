@@ -13,8 +13,8 @@ import styled from 'styled-components';
 const StyledChartWrapper = styled.div`
     display: flex;
     justify-content: center;
-    width: 100%;
-    height: 100%;
+    width: 250px;
+    height: 250px;
 `;
 
 interface ThicknessPluginOptions {
