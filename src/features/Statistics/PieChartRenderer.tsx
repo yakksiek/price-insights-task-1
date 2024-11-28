@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { HideVisibilityIcon, VisibilityIcon } from '../../assets/icons';
 import * as t from '../../types';
 import { Breakpoints } from '../../types/enums';
+import { useVisibilityContext } from './contexts/VisibilityContext';
 
 const StyledPieChart = styled.div`
     display: flex;
@@ -89,6 +90,11 @@ const StyledRow = styled.div`
 
     .icon {
         cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+        }
     }
 
     .data {
@@ -131,7 +137,12 @@ interface PieChartRendererProps {
 }
 
 function PieChartRenderer({ configData, chart }: PieChartRendererProps) {
-    const { data: configPrimaryData, labelPrimary, labelSecondary, header, subheader } = configData;
+    const { data: configPrimaryData, labelPrimary, labelSecondary, header, subheader, id: chartId } = configData;
+    const { state: iconsState, toggleVisibility } = useVisibilityContext();
+    const iconCoveredDataId = `${chartId}-covered`;
+    const iconNotCoveredDataId = `${chartId}--not-covered`;
+    const iconCoveredState = iconsState[iconCoveredDataId];
+    const iconNotCoveredState = iconsState[iconNotCoveredDataId];
 
     return (
         <StyledPieChart>
@@ -144,7 +155,9 @@ function PieChartRenderer({ configData, chart }: PieChartRendererProps) {
                 <StyledDivider />
                 <StyledLegendContent>
                     <StyledRow>
-                        <VisibilityIcon />
+                        <div onClick={() => toggleVisibility(iconCoveredDataId)} className='icon'>
+                            {iconCoveredState ? <VisibilityIcon /> : <HideVisibilityIcon />}
+                        </div>
                         <span className='data'>{configPrimaryData}%</span>
                         <span className='divider'></span>
 
@@ -154,7 +167,9 @@ function PieChartRenderer({ configData, chart }: PieChartRendererProps) {
                         </p>
                     </StyledRow>
                     <StyledRow>
-                        <HideVisibilityIcon />
+                        <div onClick={() => toggleVisibility(iconNotCoveredDataId)} className='icon'>
+                            {iconNotCoveredState ? <VisibilityIcon /> : <HideVisibilityIcon />}
+                        </div>
                         <span className='data'>{100 - configPrimaryData}%</span>
                         <span className='divider'></span>
 
