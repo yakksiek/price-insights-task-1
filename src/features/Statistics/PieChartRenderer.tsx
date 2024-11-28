@@ -7,7 +7,7 @@ import { useVisibilityContext } from './contexts/VisibilityContext';
 const StyledPieChart = styled.div`
     display: flex;
     justify-content: center;
-    padding: 0 var(--padding-m);
+    padding: 0 var(--padding-s);
 
     @media ${Breakpoints.MediumLarge} {
         flex-direction: column;
