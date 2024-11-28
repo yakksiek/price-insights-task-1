@@ -92,11 +92,11 @@ const innerTextPlugin: Plugin<'pie' | 'doughnut'> = {
         const styles = {
             mainFontSize: 2,
             percentFontSize: 1,
-            fontFamily: 'sans-serif',
+            fontFamily: 'system-ui',
         };
 
         const setFontStyle = (fontSize: number) => {
-            ctx.font = `${fontSize}em ${styles.fontFamily}`;
+            ctx.font = `300 ${fontSize}em ${styles.fontFamily}`;
         };
 
         setFontStyle(styles.mainFontSize);
@@ -114,7 +114,7 @@ const innerTextPlugin: Plugin<'pie' | 'doughnut'> = {
         ctx.fillText(text, centerX, centerY);
 
         setFontStyle(styles.percentFontSize);
-        ctx.fillText('%', centerX + mainValueWidth, centerY);
+        ctx.fillText(' %', centerX + mainValueWidth, centerY);
 
         ctx.save();
     },
@@ -289,17 +289,6 @@ function ChartJsPieChart({ chartData }: PieChartProps) {
             thickness: {
                 // manually setting thickness for each pie slice
                 thickness: [
-                    // [0, 66], // grey circle inside
-                    // [65, 90], // Blue segment - blue slice
-                    // [65, 90], // Blue segment - manual gap
-                    // [65, 90], // Blue segment - transparent orange
-                    // [65, 90], // Blue segment - manual gap
-                    // [65, 83], // Orange segment - transparent blue
-                    // [65, 83], // Orange segment - manual gap
-                    // [65, 83], // Orange segment - orange slice
-                    // [65, 83], // Orange segment - manual gap
-                    // [65, 90], // grey background for thinner slice
-
                     [0, 65], // grey circle inside
                     [64, 90], // Blue segment - blue slice
                     [64, 90], // Blue segment - manual gap
