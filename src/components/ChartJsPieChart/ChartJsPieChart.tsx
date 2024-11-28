@@ -130,8 +130,6 @@ const gradientPlugin: Plugin<'pie' | 'doughnut'> = {
         const ctx = chart.ctx;
         const chartArea = chart.chartArea;
 
-        console.log(chartArea);
-
         const xCenter = (chartArea.left + chartArea.right) / 2;
         const yCenter = (chartArea.top + chartArea.bottom) / 2;
         const innerRadius = 0;
