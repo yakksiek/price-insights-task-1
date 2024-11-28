@@ -40,7 +40,7 @@ function Header() {
             <LogoIcon />
             <NavLinks>
                 <StyledNavLink to='/reports'>Reports</StyledNavLink>
-                <StyledNavLink to='/repricing'>Repricing</StyledNavLink>
+                {/* <StyledNavLink to='/repricing'>Repricing</StyledNavLink> */}
             </NavLinks>
         </StyledHeader>
     );

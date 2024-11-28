@@ -7,9 +7,7 @@ const StyledAppLayout = styled.div``;
 const StyledMainContent = styled.main`
     padding: 70px 75px 80px 75px;
     background-color: transparent;
-    // minus padding left & right
-    /* width: 1770px - 150px;
-    overflow-x: auto; */
+    height: 100vh;
 `;
 
 function AppLayout() {

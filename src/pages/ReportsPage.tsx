@@ -2,7 +2,7 @@ import { extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/clo
 import { getReorderDestinationIndex } from '@atlaskit/pragmatic-drag-and-drop-hitbox/util/get-reorder-destination-index';
 import { BaseEventPayload, ElementDragType } from '@atlaskit/pragmatic-drag-and-drop/dist/types/internal-types';
 import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import ChartJsPieChart from '../components/ChartJsPieChart';
 import StyledPageWrapper from '../components/PageWrapper';
@@ -13,16 +13,16 @@ import {
     pricingMonitoringData,
     reportsBlockData,
 } from '../db';
-import PragmaticBlock from '../features/PragmaticDndBlock/PragmaticBlock';
+// import PragmaticBlock from '../features/PragmaticDndBlock/PragmaticBlock';
 import PieChartRenderer from '../features/Statistics/PieChartRenderer';
 import StatisticsComponent from '../features/Statistics/StatisticsComponent';
-import useReorder from '../hooks/useReorder';
+// import useReorder from '../hooks/useReorder';
 import * as u from '../utils';
 
 function ReportsPage() {
     const [blocks, setBlocks] = useState(reportsBlockData);
-    const { handleMoveDown, handleMoveUp } = useReorder({ initialItems: blocks });
-    const blockWrapperRef = useRef<HTMLDivElement | null>(null);
+    // const { handleMoveDown, handleMoveUp } = useReorder({ initialItems: blocks });
+    // const blockWrapperRef = useRef<HTMLDivElement | null>(null);
 
     // I created usePragmaticDndTarget for setting files draggable or droppable
     // but this is a simple function, no hook needed, where is the best place for it?
@@ -122,21 +122,21 @@ function ReportsPage() {
         });
     }, [handleDrop]);
 
-    const renderedBlocks = blocks.map((block, index) => {
-        const isFirst = index === 0;
-        const isLast = index === blocks.length - 1;
+    // const renderedBlocks = blocks.map((block, index) => {
+    //     const isFirst = index === 0;
+    //     const isLast = index === blocks.length - 1;
 
-        return (
-            <PragmaticBlock
-                blockData={block}
-                key={block.id}
-                onMoveUp={() => handleMoveUp(index, setBlocks)}
-                onMoveDown={() => handleMoveDown(index, setBlocks)}
-                isFirst={isFirst}
-                isLast={isLast}
-            />
-        );
-    });
+    //     return (
+    //         <PragmaticBlock
+    //             blockData={block}
+    //             key={block.id}
+    //             onMoveUp={() => handleMoveUp(index, setBlocks)}
+    //             onMoveDown={() => handleMoveDown(index, setBlocks)}
+    //             isFirst={isFirst}
+    //             isLast={isLast}
+    //         />
+    //     );
+    // });
 
     return (
         <StyledPageWrapper>
@@ -150,7 +150,7 @@ function ReportsPage() {
                     chart={<ChartJsPieChart chartData={chartJsDataMonitoring} />}
                 />
             </StatisticsComponent>
-            <div ref={blockWrapperRef}>{renderedBlocks}</div>
+            {/* <div ref={blockWrapperRef}>{renderedBlocks}</div> */}
         </StyledPageWrapper>
     );
 }
