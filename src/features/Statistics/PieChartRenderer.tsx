@@ -6,6 +6,7 @@ import { Breakpoints } from '../../types/enums';
 const StyledPieChart = styled.div`
     display: flex;
     justify-content: center;
+    padding: 0 var(--padding-m);
 
     @media ${Breakpoints.MediumLarge} {
         flex-direction: column;
@@ -18,20 +19,21 @@ const StyledPieChart = styled.div`
 
 const StyledChartContainer = styled.div`
     display: flex;
-    justify-content: center;
-    flex: 1;
+    justify-content: end;
+    flex: 1.25;
 
-    position: relative;
+    @media ${Breakpoints.MediumLarge} {
+        justify-content: center;
+        flex: 1;
+    }
 `;
 
 const StyledLegend = styled.div`
     padding: var(--padding-s);
     flex: 2;
-
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    /* align-items: center; */
+    flex-direction: column;
 
     p {
         font-size: 0.813rem;
@@ -54,15 +56,15 @@ const StyledHeader = styled.header`
 
 const StyledDivider = styled.hr`
     border: 1px solid rgba(224, 224, 237, 1);
-    margin-top: 1.375rem;
-    width: 400px;
+    margin: var(--margin-l) 0;
+    width: 394px;
 
     @media ${Breakpoints.MediumLarge} {
-        margin: 1rem auto;
+        margin: var(--margin-l) auto;
     }
 
     @media ${Breakpoints.ExtraLarge} {
-        margin: 1rem 0;
+        margin: var(--margin-l) 0;
     }
 `;
 
@@ -77,7 +79,7 @@ const StyledLegendContent = styled.div`
 `;
 
 const StyledRow = styled.div`
-    margin: 1.375rem 0;
+    margin-bottom: var(--margin-l);
     display: flex;
     align-items: center;
 

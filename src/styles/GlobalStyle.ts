@@ -52,13 +52,14 @@ const GlobalStyle = createGlobalStyle`
     // paddings
     --card-content-padding: 15px;
     --padding-s: 0.5rem;
+    --padding-m: 40px;
 
     // margins
     --header-margin-bottom: 23px;
     --header-icon-mr: 1rem;
     --margin-s: 0.5rem; 
     --margin-m: 1rem;
-    --margin-l: 1.5rem;
+    --margin-l: 22px;
     --margin-x: 2rem;
 
 
