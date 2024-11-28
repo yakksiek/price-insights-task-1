@@ -24,7 +24,7 @@ function ReportsPage() {
     const { handleMoveDown, handleMoveUp } = useReorder({ initialItems: blocks });
     const blockWrapperRef = useRef<HTMLDivElement | null>(null);
 
-    // I created usePragramticDndTarget for setting files draggable or droppable
+    // I created usePragmaticDndTarget for setting files draggable or droppable
     // but this is a simple function, no hook needed, where is the best place for it?
     const handleDrop = useCallback(
         (args: BaseEventPayload<ElementDragType>) => {
@@ -69,7 +69,7 @@ function ReportsPage() {
                     axis: 'vertical',
                 });
 
-                const reorderdBlocks = u.reorderCard({
+                const reorderedBlocks = u.reorderCard({
                     blockId: sourceBlockId,
                     blockData: sourceBlockData,
                     startIndex: draggedCardIndex,
@@ -77,7 +77,7 @@ function ReportsPage() {
                     blocks: blocks,
                 });
 
-                setBlocks(reorderdBlocks);
+                setBlocks(reorderedBlocks);
             }
 
             if (draggableSourceType === 'block') {
@@ -89,7 +89,7 @@ function ReportsPage() {
                 // wonky solution?
                 // because of propagation first we catch listItem(card) and then block
                 // so in drop targets array block will always be second/last
-                // so we take/taget only the last element from the drop targets array
+                // so we take/target only the last element from the drop targets array
                 const destinationBlockRecord = dropTargets[dropTargets.length - 1];
                 const destinationBlockId = destinationBlockRecord.data.blockId;
 

@@ -5,9 +5,7 @@ import { Breakpoints } from '../../types/enums';
 
 const StyledPieChart = styled.div`
     display: flex;
-    gap: 2rem;
     justify-content: center;
-
     min-height: 240px;
 
     @media ${Breakpoints.MediumLarge} {
@@ -34,10 +32,18 @@ const StyledLegend = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    /* align-items: center; */
 
     p {
         font-size: 0.813rem;
         color: var(--text-placeholder);
+    }
+
+    @media ${Breakpoints.MediumLarge} {
+        text-align: center;
+    }
+    @media ${Breakpoints.ExtraLarge} {
+        text-align: left;
     }
 `;
 
@@ -50,7 +56,25 @@ const StyledHeader = styled.header`
 const StyledDivider = styled.hr`
     border: 1px solid rgba(224, 224, 237, 1);
     margin-top: 1.375rem;
-    max-width: 400px;
+    width: 400px;
+
+    @media ${Breakpoints.MediumLarge} {
+        margin: 1rem auto;
+    }
+
+    @media ${Breakpoints.ExtraLarge} {
+        margin: 1rem 0;
+    }
+`;
+
+const StyledLegendContent = styled.div`
+    @media ${Breakpoints.MediumLarge} {
+        margin: 0 auto;
+    }
+
+    @media ${Breakpoints.ExtraLarge} {
+        margin: 0;
+    }
 `;
 
 const StyledRow = styled.div`
@@ -117,7 +141,7 @@ function PieChartRenderer({ configData, chart }: PieChartRendererProps) {
                     <p>{subheader}</p>
                 </StyledHeader>
                 <StyledDivider />
-                <div>
+                <StyledLegendContent>
                     <StyledRow>
                         <VisibilityIcon />
                         <span className='data'>{configPrimaryData}%</span>
@@ -138,7 +162,7 @@ function PieChartRenderer({ configData, chart }: PieChartRendererProps) {
                             {labelSecondary}
                         </p>
                     </StyledRow>
-                </div>
+                </StyledLegendContent>
             </StyledLegend>
         </StyledPieChart>
     );
