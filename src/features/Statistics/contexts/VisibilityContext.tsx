@@ -1,18 +1,15 @@
 import React, { createContext, useContext, useReducer } from 'react';
-
-interface VisibilityState {
-    [key: string]: boolean;
-}
+import { VisibilityKey, VisibilityState } from '../types/types';
 
 interface VisibilityAction {
     type: 'TOGGLE_VISIBILITY';
-    payload: string;
+    payload: VisibilityKey;
 }
 
 const VisibilityContext = createContext<
     | {
           state: VisibilityState;
-          toggleVisibility: (id: string) => void;
+          toggleVisibility: (id: VisibilityKey) => void;
       }
     | undefined
 >(undefined);
@@ -39,7 +36,7 @@ const visibilityReducer = (state: VisibilityState, action: VisibilityAction) => 
 export const VisibilityProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [state, dispatch] = useReducer(visibilityReducer, initialState);
 
-    const toggleVisibility = (id: string) => {
+    const toggleVisibility = (id: VisibilityKey) => {
         dispatch({ type: 'TOGGLE_VISIBILITY', payload: id });
     };
 

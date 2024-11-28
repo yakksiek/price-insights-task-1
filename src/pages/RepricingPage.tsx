@@ -10,7 +10,7 @@ import {
     repricingBlockData,
 } from '../db';
 import BlockComponent from '../features/BeautifulDnbBlock/BlockComponent';
-import PieChartRenderer from '../features/Statistics/PieChartRenderer';
+import PieChartRenderer from '../features/Statistics/components/PieChartRenderer/PieChartRenderer';
 import StatisticsComponent from '../features/Statistics/StatisticsComponent';
 import usePangeaDnd from '../hooks/usePangeaDnd';
 import useReorder from '../hooks/useReorder';
