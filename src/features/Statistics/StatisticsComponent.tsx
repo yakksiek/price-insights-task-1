@@ -2,6 +2,9 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { CardHeader, StyledCardWrapper } from '../../components/Card';
 import { Breakpoints } from '../../types/enums';
+import ChartJsPieChart from '../../components/ChartJsPieChart';
+import { pricingCampaignsData, chartJDataCampaigns, pricingMonitoringData, chartJsDataMonitoring } from '../../db';
+import PieChartRenderer from './PieChartRenderer';
 
 interface CardContentProps {
     $isOpen: boolean;
@@ -18,11 +21,7 @@ const CardContent = styled.div<CardContentProps>`
     }
 `;
 
-interface StatisticsComponentProps {
-    children: React.ReactNode;
-}
-
-function StatisticsComponent({ children }: StatisticsComponentProps) {
+function StatisticsComponent() {
     const [isOpen, setIsOpen] = useState(true);
 
     const handleSetOpen = () => {
@@ -32,7 +31,16 @@ function StatisticsComponent({ children }: StatisticsComponentProps) {
     return (
         <StyledCardWrapper>
             <CardHeader cardHeaderText='Statistics' toggleOpenHandler={handleSetOpen} isOpen={isOpen} />
-            <CardContent $isOpen={isOpen}>{children}</CardContent>
+            <CardContent $isOpen={isOpen}>
+                <PieChartRenderer
+                    configData={pricingCampaignsData}
+                    chart={<ChartJsPieChart chartData={chartJDataCampaigns} />}
+                />
+                <PieChartRenderer
+                    configData={pricingMonitoringData}
+                    chart={<ChartJsPieChart chartData={chartJsDataMonitoring} />}
+                />
+            </CardContent>
         </StyledCardWrapper>
     );
 }

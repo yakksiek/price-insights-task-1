@@ -4,17 +4,10 @@ import { BaseEventPayload, ElementDragType } from '@atlaskit/pragmatic-drag-and-
 import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import { useCallback, useEffect, useState } from 'react';
 
-import ChartJsPieChart from '../components/ChartJsPieChart';
 import StyledPageWrapper from '../components/PageWrapper';
-import {
-    chartJDataCampaigns,
-    chartJsDataMonitoring,
-    pricingCampaignsData,
-    pricingMonitoringData,
-    reportsBlockData,
-} from '../db';
+import { reportsBlockData } from '../db';
 // import PragmaticBlock from '../features/PragmaticDndBlock/PragmaticBlock';
-import PieChartRenderer from '../features/Statistics/PieChartRenderer';
+
 import StatisticsComponent from '../features/Statistics/StatisticsComponent';
 // import useReorder from '../hooks/useReorder';
 import * as u from '../utils';
@@ -140,16 +133,7 @@ function ReportsPage() {
 
     return (
         <StyledPageWrapper>
-            <StatisticsComponent>
-                <PieChartRenderer
-                    configData={pricingCampaignsData}
-                    chart={<ChartJsPieChart chartData={chartJDataCampaigns} />}
-                />
-                <PieChartRenderer
-                    configData={pricingMonitoringData}
-                    chart={<ChartJsPieChart chartData={chartJsDataMonitoring} />}
-                />
-            </StatisticsComponent>
+            <StatisticsComponent />
             {/* <div ref={blockWrapperRef}>{renderedBlocks}</div> */}
         </StyledPageWrapper>
     );

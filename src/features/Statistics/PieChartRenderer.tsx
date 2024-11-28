@@ -141,7 +141,7 @@ interface PieChartRendererProps {
 function PieChartRenderer({ configData, chart }: PieChartRendererProps) {
     const { data: configPrimaryData, labelPrimary, labelSecondary, header, subheader, id: chartId } = configData;
     const { state: iconsState, toggleVisibility } = useVisibilityContext();
-    const iconCoveredDataId = `${chartId}-covered`;
+    const iconCoveredDataId = `${chartId}--covered`;
     const iconNotCoveredDataId = `${chartId}--not-covered`;
     const iconCoveredState = iconsState[iconCoveredDataId];
     const iconNotCoveredState = iconsState[iconNotCoveredDataId];
@@ -164,7 +164,7 @@ function PieChartRenderer({ configData, chart }: PieChartRendererProps) {
                         <span className='divider'></span>
 
                         <p className='description'>
-                            <StyledDot className='dot' $color={configData.primaryColor || 'blue'} />
+                            <StyledDot className='dot' $color={configData.primaryColor} />
                             {labelPrimary}
                         </p>
                     </StyledRow>
