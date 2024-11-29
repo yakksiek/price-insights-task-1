@@ -12,14 +12,6 @@ import {
 import { Doughnut } from 'react-chartjs-2';
 import styled from 'styled-components';
 
-// THINGS TO CONSIDER:
-// 1. general spacing/gap cannot be applied across all slices as grey fill
-// in the middle of pie won't form closed circle, that's why orange and blue slices have manual dividers
-// 2. Since 'labels' are not used visually, they are leveraged as IDs to find datasets in plugins,
-// avoiding the need to manually specify indexes.
-// 3. changing the size of chart creates a shift in colors because of the gradient fill, so I had to alter a bit original gradient colors
-// 4. should plugins be kept in a separate file?
-
 const StyledChartWrapper = styled.div`
     display: flex;
     justify-content: center;
