@@ -296,6 +296,7 @@ function ChartJsPieChart({ chartData, coveredState, notCoveredState }: PieChartP
     const secondarySliceColor = notCoveredState ? secondaryColor : 'transparent';
     const secondaryBorderColor = notCoveredState ? 'rgba(246, 246, 248, 1)' : '';
     const secondaryBorderThickness = notCoveredState ? 1 : 0;
+    const dataToRender = coveredState ? primaryData : 0;
 
     const handleSliceClick = (sliceIndex: number, datasetLabel: string | undefined) => {
         console.log(`Clicked slice in '${datasetLabel}' dataset at index ${sliceIndex}`);
@@ -306,7 +307,7 @@ function ChartJsPieChart({ chartData, coveredState, notCoveredState }: PieChartP
         datasets: [
             {
                 label: 'primary',
-                data: [100 - primaryData, primaryData],
+                data: [100 - dataToRender, dataToRender],
                 backgroundColor: [secondarySliceColor, primarySliceColor],
                 borderColor: [secondaryBorderColor, primaryBorderColor],
                 borderWidth: [secondaryBorderThickness, primaryBorderThickness],
@@ -336,7 +337,7 @@ function ChartJsPieChart({ chartData, coveredState, notCoveredState }: PieChartP
             shadowColors: {
                 primary: primaryColorShadow,
             },
-            text: primaryData.toString(),
+            text: dataToRender.toString(),
         },
         events: ['click' as const],
         onClick: (event: ChartEvent, elements: ActiveElement[], chart: Chart) => {

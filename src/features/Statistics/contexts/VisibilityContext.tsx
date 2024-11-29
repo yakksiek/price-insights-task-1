@@ -6,13 +6,12 @@ interface VisibilityAction {
     payload: VisibilityKey;
 }
 
-const VisibilityContext = createContext<
-    | {
-          state: VisibilityState;
-          toggleVisibility: (id: VisibilityKey) => void;
-      }
-    | undefined
->(undefined);
+interface VisibilityContextType {
+    state: VisibilityState;
+    toggleVisibility: (id: VisibilityKey) => void;
+}
+
+const VisibilityContext = createContext<VisibilityContextType | undefined>(undefined);
 
 const initialState = {
     campaignCovered: true,
