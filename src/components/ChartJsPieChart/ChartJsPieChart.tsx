@@ -200,7 +200,7 @@ const shadowPlugin = {
         const datasetPrimary = chart.data.datasets.find(dataset => dataset.label === 'primary');
         if (!datasetPrimary) return;
         const datasetPrimaryIndex = chart.data.datasets.indexOf(datasetPrimary);
-        const blueSegmentIndex = 2; // Index of the blue slice within the dataset
+        const blueSegmentIndex = 1; // Index of the blue slice within the dataset
 
         const meta = chart.getDatasetMeta(datasetPrimaryIndex);
         if (meta && meta.data) {
@@ -306,11 +306,7 @@ function ChartJsPieChart({ chartData, coveredState, notCoveredState }: PieChartP
     const secondaryBorderThickness = notCoveredState ? 1 : 0;
 
     const handleSliceClick = (sliceIndex: number, datasetLabel: string | undefined) => {
-        // console.log(datasetLabel);
-        // console.log(sliceIndex);
-
         console.log(`Clicked slice in '${datasetLabel}' dataset at index ${sliceIndex}`);
-        // Add logic for primary slices
     };
 
     const data = {
@@ -318,18 +314,10 @@ function ChartJsPieChart({ chartData, coveredState, notCoveredState }: PieChartP
         datasets: [
             {
                 label: 'primary',
-                data: [100 - primaryData, 0.25, primaryData, 0.25],
-                backgroundColor: ['transparent', 'transparent', primarySliceColor, 'transparent'],
-                borderColor: ['', '', primaryBorderColor, ''],
-                borderWidth: [0, 0, primaryBorderThickness, 0],
-                borderRadius: 2,
-            },
-            {
-                label: 'secondary',
-                data: [100 - primaryData, 0.25, primaryData, 0.25],
-                backgroundColor: [secondarySliceColor, 'transparent', 'transparent', 'transparent'],
-                borderColor: [secondaryBorderColor, '', '', ''],
-                borderWidth: [secondaryBorderThickness, 0, 0, 0],
+                data: [100 - primaryData, primaryData],
+                backgroundColor: [secondarySliceColor, primarySliceColor],
+                borderColor: [secondaryBorderColor, primaryBorderColor],
+                borderWidth: [secondaryBorderThickness, primaryBorderThickness],
                 borderRadius: 2,
             },
         ],
@@ -337,6 +325,7 @@ function ChartJsPieChart({ chartData, coveredState, notCoveredState }: PieChartP
 
     const options = {
         cutout: '50%',
+        spacing: 0.5,
         plugins: {
             tooltip: {
                 enabled: false,
@@ -344,14 +333,8 @@ function ChartJsPieChart({ chartData, coveredState, notCoveredState }: PieChartP
             thickness: {
                 // manually setting thickness for each pie slice
                 thickness: [
+                    [64, 83], // Orange segment - manual gap
                     [64, 90], // Blue segment - blue slice
-                    [64, 90], // Blue segment - manual gap
-                    [64, 90], // Blue segment - transparent orange
-                    [64, 90], // Blue segment - manual gap
-                    [64, 83], // Orange segment - transparent blue
-                    [64, 83], // Orange segment - manual gap
-                    [64, 83], // Orange segment - orange slice
-                    [64, 83], // Orange segment - manual gap
                 ],
             },
             gradientColors: {
