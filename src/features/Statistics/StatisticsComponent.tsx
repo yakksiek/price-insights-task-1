@@ -5,7 +5,7 @@ import { Breakpoints } from '../../types/enums';
 import ChartJsPieChart from '../../components/ChartJsPieChart';
 import { pricingCampaignsData, chartJDataCampaigns, pricingMonitoringData, chartJsDataMonitoring } from '../../db';
 import PieChartRenderer from './components/PieChartRenderer/PieChartRenderer';
-// import { useVisibilityContext } from './contexts/VisibilityContext';
+import { useVisibilityContext } from './contexts/VisibilityContext';
 
 interface CardContentProps {
     $isOpen: boolean;
@@ -24,7 +24,8 @@ const CardContent = styled.div<CardContentProps>`
 
 function StatisticsComponent() {
     const [isOpen, setIsOpen] = useState(true);
-    // const { state: visibilityState } = useVisibilityContext();
+    const { state: visibilityState } = useVisibilityContext();
+    const { monitoringCovered, monitoringNotCovered, campaignCovered, campaignNotCovered } = visibilityState;
 
     const handleSetOpen = () => {
         setIsOpen(prevState => !prevState);
@@ -36,11 +37,23 @@ function StatisticsComponent() {
             <CardContent $isOpen={isOpen}>
                 <PieChartRenderer
                     configData={pricingCampaignsData}
-                    chart={<ChartJsPieChart chartData={chartJDataCampaigns} />}
+                    chart={
+                        <ChartJsPieChart
+                            chartData={chartJDataCampaigns}
+                            coveredState={campaignCovered}
+                            notCoveredState={campaignNotCovered}
+                        />
+                    }
                 />
                 <PieChartRenderer
                     configData={pricingMonitoringData}
-                    chart={<ChartJsPieChart chartData={chartJsDataMonitoring} />}
+                    chart={
+                        <ChartJsPieChart
+                            chartData={chartJsDataMonitoring}
+                            coveredState={monitoringCovered}
+                            notCoveredState={monitoringNotCovered}
+                        />
+                    }
                 />
             </CardContent>
         </StyledCardWrapper>

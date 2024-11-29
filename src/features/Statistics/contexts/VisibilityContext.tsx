@@ -15,10 +15,10 @@ const VisibilityContext = createContext<
 >(undefined);
 
 const initialState = {
-    ['campaign--covered']: true,
-    ['campaign--not-covered']: true,
-    ['monitoring--covered']: true,
-    ['monitoring--not-covered']: true,
+    campaignCovered: true,
+    campaignNotCovered: true,
+    monitoringCovered: true,
+    monitoringNotCovered: true,
 };
 
 const visibilityReducer = (state: VisibilityState, action: VisibilityAction) => {

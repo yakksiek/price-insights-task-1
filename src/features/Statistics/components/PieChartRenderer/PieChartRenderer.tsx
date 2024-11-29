@@ -21,8 +21,8 @@ interface PieChartRendererProps {
 function PieChartRenderer({ configData, chart }: PieChartRendererProps) {
     const { data: configPrimaryData, labelPrimary, labelSecondary, header, subheader, id: chartId } = configData;
     const { state: iconsState, toggleVisibility } = useVisibilityContext();
-    const iconCoveredDataId = `${chartId}--covered` as VisibilityKey;
-    const iconNotCoveredDataId = `${chartId}--not-covered` as VisibilityKey;
+    const iconCoveredDataId = `${chartId}Covered` as VisibilityKey;
+    const iconNotCoveredDataId = `${chartId}NotCovered` as VisibilityKey;
     const iconCoveredState = iconsState[iconCoveredDataId];
     const iconNotCoveredState = iconsState[iconNotCoveredDataId];
 

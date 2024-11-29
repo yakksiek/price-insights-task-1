@@ -1,4 +1,14 @@
-import { ArcElement, Chart, Chart as ChartJS, ChartType, Legend, Plugin, Tooltip } from 'chart.js';
+import {
+    ActiveElement,
+    ArcElement,
+    Chart,
+    ChartEvent,
+    Chart as ChartJS,
+    ChartType,
+    Legend,
+    Plugin,
+    Tooltip,
+} from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import styled from 'styled-components';
 
@@ -216,7 +226,52 @@ const shadowPlugin = {
     },
 };
 
-ChartJS.register(ArcElement, Tooltip, Legend, thicknessPlugin, innerTextPlugin, gradientPlugin, shadowPlugin);
+const backgroundPlugin: Plugin<'pie' | 'doughnut'> = {
+    id: 'background',
+    beforeDatasetsDraw(chart) {
+        const { ctx, chartArea } = chart;
+        const xCenter = (chartArea.left + chartArea.right) / 2;
+        const yCenter = (chartArea.top + chartArea.bottom) / 2;
+
+        // Use the outermost radius from your thickness settings
+        const outerRadius = 90; // Adjust this value to match your outermost arc's outerRadius
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(xCenter, yCenter, outerRadius, 0, 2 * Math.PI);
+        ctx.fillStyle = 'rgba(238, 238, 242,1)'; // The grey background color
+        ctx.fill();
+        ctx.restore();
+    },
+    afterDatasetsDraw(chart, _, options) {
+        // Drawing the inner circle on top of the datasets
+        const { ctx, chartArea } = chart;
+        const xCenter = (chartArea.left + chartArea.right) / 2;
+        const yCenter = (chartArea.top + chartArea.bottom) / 2;
+
+        const backgroundOptions = options.plugins?.background ?? {};
+        const innerRadius = backgroundOptions.innerRadius ?? 65;
+        const innerColor = backgroundOptions.innerColor ?? 'rgba(235, 235, 242,1)';
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(xCenter, yCenter, innerRadius, 0, 2 * Math.PI);
+        ctx.fillStyle = innerColor;
+        ctx.fill();
+        ctx.restore();
+    },
+};
+
+ChartJS.register(
+    ArcElement,
+    Tooltip,
+    Legend,
+    thicknessPlugin,
+    innerTextPlugin,
+    gradientPlugin,
+    shadowPlugin,
+    backgroundPlugin,
+);
 
 export interface ChartData {
     primaryData: number;
@@ -229,9 +284,11 @@ export interface ChartData {
 
 interface PieChartProps {
     chartData: ChartData;
+    coveredState: boolean;
+    notCoveredState: boolean;
 }
 
-function ChartJsPieChart({ chartData }: PieChartProps) {
+function ChartJsPieChart({ chartData, coveredState, notCoveredState }: PieChartProps) {
     const {
         primaryData,
         primaryColor,
@@ -241,39 +298,39 @@ function ChartJsPieChart({ chartData }: PieChartProps) {
         primaryColorShadow,
     } = chartData;
 
+    const primarySliceColor = coveredState ? primaryColor : 'transparent';
+    const primaryBorderColor = coveredState ? 'rgba(246, 246, 248, 1)' : '';
+    const primaryBorderThickness = coveredState ? 1 : 0;
+    const secondarySliceColor = notCoveredState ? secondaryColor : 'transparent';
+    const secondaryBorderColor = notCoveredState ? 'rgba(246, 246, 248, 1)' : '';
+    const secondaryBorderThickness = notCoveredState ? 1 : 0;
+
+    const handleSliceClick = (sliceIndex: number, datasetLabel: string | undefined) => {
+        // console.log(datasetLabel);
+        // console.log(sliceIndex);
+
+        console.log(`Clicked slice in '${datasetLabel}' dataset at index ${sliceIndex}`);
+        // Add logic for primary slices
+    };
+
     const data = {
         labels: [],
         datasets: [
             {
-                // dummy dataset to fill middle.
-                label: 'inner',
-                data: [1],
-                backgroundColor: 'rgba(235, 235, 242,1',
-                weight: 3,
-                borderWidth: 0,
-            },
-            {
                 label: 'primary',
                 data: [100 - primaryData, 0.25, primaryData, 0.25],
-                backgroundColor: ['transparent', 'transparent', primaryColor, 'transparent'],
-                borderColor: ['', '', 'rgba(246, 246, 248, 1)', ''],
-                borderWidth: [0, 0, 1, 0],
+                backgroundColor: ['transparent', 'transparent', primarySliceColor, 'transparent'],
+                borderColor: ['', '', primaryBorderColor, ''],
+                borderWidth: [0, 0, primaryBorderThickness, 0],
                 borderRadius: 2,
             },
             {
                 label: 'secondary',
                 data: [100 - primaryData, 0.25, primaryData, 0.25],
-                backgroundColor: [secondaryColor, 'transparent', 'transparent', 'transparent'],
-                borderColor: ['rgba(246, 246, 248, 1)', '', '', ''],
-                borderWidth: [1, 0, 0, 0],
+                backgroundColor: [secondarySliceColor, 'transparent', 'transparent', 'transparent'],
+                borderColor: [secondaryBorderColor, '', '', ''],
+                borderWidth: [secondaryBorderThickness, 0, 0, 0],
                 borderRadius: 2,
-            },
-            {
-                label: 'grey background',
-                data: [100],
-                backgroundColor: ['rgba(238, 238, 242,1)'],
-                borderColor: [''],
-                borderWidth: [0],
             },
         ],
     };
@@ -287,7 +344,6 @@ function ChartJsPieChart({ chartData }: PieChartProps) {
             thickness: {
                 // manually setting thickness for each pie slice
                 thickness: [
-                    [0, 65], // grey circle inside
                     [64, 90], // Blue segment - blue slice
                     [64, 90], // Blue segment - manual gap
                     [64, 90], // Blue segment - transparent orange
@@ -296,7 +352,6 @@ function ChartJsPieChart({ chartData }: PieChartProps) {
                     [64, 83], // Orange segment - manual gap
                     [64, 83], // Orange segment - orange slice
                     [64, 83], // Orange segment - manual gap
-                    [64, 90], // grey background for thinner slice
                 ],
             },
             gradientColors: {
@@ -308,9 +363,21 @@ function ChartJsPieChart({ chartData }: PieChartProps) {
             },
             text: primaryData.toString(),
         },
-        events: [],
-        animation: {
-            duration: 0, // Disable all animations, including hover
+        events: ['click' as const],
+        onClick: (event: ChartEvent, elements: ActiveElement[], chart: Chart) => {
+            if (elements.length === 0) return;
+
+            // Get the dataset label and clicked element index
+            const clickedElementIndex = elements[0].index;
+            const datasetIndex = elements[0].datasetIndex;
+            const datasetLabel = chart.data.datasets[datasetIndex]?.label;
+
+            // Only process clicks on the 'primary' dataset
+            if (datasetLabel === 'secondary' || datasetLabel === 'primary') {
+                handleSliceClick(clickedElementIndex, datasetLabel);
+            } else {
+                console.log('Click ignored for dataset:', datasetLabel);
+            }
         },
     };
 
