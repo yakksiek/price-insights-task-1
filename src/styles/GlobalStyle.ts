@@ -29,15 +29,9 @@ const GlobalStyle = createGlobalStyle`
 
     // orange
     --primary-orange: rgb(234, 84, 0);
-    --orange-gradient-start: rgba(229, 78, 23, 1);
+    --orange-gradient-start: rgba(229, 23, 147, 1);
 
-    // purple
-    --primary-purple: rgb(113, 7, 226);
-    --purple-gradient-start: rgba(66, 10, 126, 1);
-    --purple-shadow: rgba(113, 7, 226, 0.2);
-    --purple-drop-shadow: rgba(113, 7, 226, 0.5);
-
-
+    // various
     --background-color: rgba(238, 238, 242, 1);
     --background-color-section: rgba(246, 246, 248, 1); 
     --icon-background-transparent: rgba(255, 255, 255, 0.6);

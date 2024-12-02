@@ -11,6 +11,22 @@ import {
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import styled from 'styled-components';
+import { PieChartType } from '../../features/Statistics/types/types';
+
+const chartSettings = {
+    OUTER_RADIUS_BLUE: 90,
+    OUTER_RADIUS_ORANGE: 83,
+    INNER_RADIUS_GENERAL: 64,
+    DATA_SET_NAME: 'primary',
+    GREY_BACKGROUND_COLOR: 'rgba(238, 238, 242,1)',
+};
+
+const CHART_SLICES_THICKNESS_SETTINGS = [
+    // orange
+    [chartSettings.INNER_RADIUS_GENERAL, chartSettings.OUTER_RADIUS_ORANGE],
+    // blue
+    [chartSettings.INNER_RADIUS_GENERAL, chartSettings.OUTER_RADIUS_BLUE],
+];
 
 const StyledChartWrapper = styled.div`
     display: flex;
@@ -95,10 +111,11 @@ const innerTextPlugin: Plugin<'pie' | 'doughnut'> = {
             mainFontSize: 2,
             percentFontSize: 1,
             fontFamily: 'system-ui',
+            fontWeight: 300,
         };
 
         const setFontStyle = (fontSize: number) => {
-            ctx.font = `300 ${fontSize}em ${styles.fontFamily}`;
+            ctx.font = `${styles.fontWeight} ${fontSize}em ${styles.fontFamily}`;
         };
 
         setFontStyle(styles.mainFontSize);
@@ -144,8 +161,8 @@ const gradientPlugin: Plugin<'pie' | 'doughnut'> = {
         // Gradient for the blue slice
         const primaryGradientColors = gradientColors.primary as [string, string];
         const primaryGradient = ctx.createRadialGradient(xCenter, yCenter, innerRadius, xCenter, yCenter, outerRadius);
-        primaryGradient.addColorStop(0.04, primaryGradientColors[0]);
-        primaryGradient.addColorStop(0.6, primaryGradientColors[1]);
+        primaryGradient.addColorStop(0, primaryGradientColors[0]);
+        primaryGradient.addColorStop(0.7, primaryGradientColors[1]);
 
         // Gradient for the orange slice
         const secondaryGradientColors = gradientColors.secondary as [string, string];
@@ -158,24 +175,21 @@ const gradientPlugin: Plugin<'pie' | 'doughnut'> = {
             outerRadius,
         );
         secondaryGradient.addColorStop(0, secondaryGradientColors[0]);
-        secondaryGradient.addColorStop(1, secondaryGradientColors[1]);
+        secondaryGradient.addColorStop(0.7, secondaryGradientColors[1]);
 
         // Apply gradients to the respective segments
-        const datasetBlue = chart.data.datasets.find(dataset => dataset.label === 'primary');
-        const datasetOrange = chart.data.datasets.find(dataset => dataset.label === 'secondary');
+        const datasetPrimary = chart.data.datasets.find(dataset => dataset.label === chartSettings.DATA_SET_NAME);
 
-        if (Array.isArray(datasetBlue?.backgroundColor) && Array.isArray(datasetOrange?.backgroundColor)) {
-            const blueSegmentIndex = 2; // Index of the blue slice
+        if (Array.isArray(datasetPrimary?.backgroundColor)) {
+            const blueSegmentIndex = 1; // Index of the blue slice
             const orangeSegmentIndex = 0; // Index of the orange slice
 
             // Replace plain colors with gradients
-            datasetBlue.backgroundColor[blueSegmentIndex] = primaryGradient;
-            datasetOrange.backgroundColor[orangeSegmentIndex] = secondaryGradient;
+            datasetPrimary.backgroundColor[blueSegmentIndex] = primaryGradient;
+            datasetPrimary.backgroundColor[orangeSegmentIndex] = secondaryGradient;
         }
 
         chart.$gradientApplied = true; // Set flag to avoid redundant updates
-        // Triggering chart update so it applies immediately
-        // without it only on some action with chart the gradient applies
         chart.update();
     },
 };
@@ -187,9 +201,9 @@ const shadowPlugin = {
 
         const shadowColors = chart.options.plugins?.shadowColors;
         if (!shadowColors) return;
-        const primaryShadowColors = shadowColors.primary as string;
+        const primaryShadowColors = shadowColors.primary;
 
-        const datasetPrimary = chart.data.datasets.find(dataset => dataset.label === 'primary');
+        const datasetPrimary = chart.data.datasets.find(dataset => dataset.label === chartSettings.DATA_SET_NAME);
         if (!datasetPrimary) return;
         const datasetPrimaryIndex = chart.data.datasets.indexOf(datasetPrimary);
         const blueSegmentIndex = 1; // Index of the blue slice within the dataset
@@ -204,7 +218,7 @@ const shadowPlugin = {
             // Override the draw method
             arc.draw = function (...args) {
                 ctx.save();
-                ctx.shadowColor = primaryShadowColors;
+                ctx.shadowColor = primaryShadowColors || 'rgba(87, 137, 213, 0.787)';
                 ctx.shadowBlur = 35;
                 ctx.shadowOffsetX = 0;
                 ctx.shadowOffsetY = 0;
@@ -231,19 +245,20 @@ const backgroundPlugin: Plugin<'pie' | 'doughnut'> = {
         ctx.save();
         ctx.beginPath();
         ctx.arc(xCenter, yCenter, outerRadius, 0, 2 * Math.PI);
-        ctx.fillStyle = 'rgba(238, 238, 242,1)'; // The grey background color
+        ctx.fillStyle = chartSettings.GREY_BACKGROUND_COLOR; // The grey background color
         ctx.fill();
         ctx.restore();
     },
     afterDatasetsDraw(chart, _, options) {
-        // Drawing the inner circle on top of the datasets
+        // Drawing the inner fill circle on top of the datasets
         const { ctx, chartArea } = chart;
         const xCenter = (chartArea.left + chartArea.right) / 2;
         const yCenter = (chartArea.top + chartArea.bottom) / 2;
 
         const backgroundOptions = options.plugins?.background ?? {};
-        const innerRadius = backgroundOptions.innerRadius ?? 65;
-        const innerColor = backgroundOptions.innerColor ?? 'rgba(235, 235, 242,1)';
+        // + 1 to cover the inner white border of the slices
+        const innerRadius = backgroundOptions.innerRadius ?? chartSettings.INNER_RADIUS_GENERAL + 1;
+        const innerColor = backgroundOptions.innerColor ?? chartSettings.GREY_BACKGROUND_COLOR;
 
         ctx.save();
         ctx.beginPath();
@@ -266,7 +281,7 @@ ChartJS.register(
 );
 
 export interface ChartData {
-    primaryData: number;
+    id: PieChartType;
     primaryColor: string;
     primaryGradientColors: [string, string];
     primaryColorShadow: string;
@@ -278,17 +293,21 @@ interface PieChartProps {
     chartData: ChartData;
     coveredState: boolean;
     notCoveredState: boolean;
+    value: number;
+    primaryValueHandler: () => void;
+    secondaryValueHandler: () => void;
 }
 
-function ChartJsPieChart({ chartData, coveredState, notCoveredState }: PieChartProps) {
-    const {
-        primaryData,
-        primaryColor,
-        primaryGradientColors,
-        secondaryColor,
-        secondaryGradientColors,
-        primaryColorShadow,
-    } = chartData;
+function ChartJsPieChart({
+    chartData,
+    coveredState,
+    notCoveredState,
+    value,
+    primaryValueHandler,
+    secondaryValueHandler,
+}: PieChartProps) {
+    const { primaryColor, primaryGradientColors, secondaryColor, secondaryGradientColors, primaryColorShadow } =
+        chartData;
 
     const primarySliceColor = coveredState ? primaryColor : 'transparent';
     const primaryBorderColor = coveredState ? 'rgba(246, 246, 248, 1)' : '';
@@ -296,17 +315,25 @@ function ChartJsPieChart({ chartData, coveredState, notCoveredState }: PieChartP
     const secondarySliceColor = notCoveredState ? secondaryColor : 'transparent';
     const secondaryBorderColor = notCoveredState ? 'rgba(246, 246, 248, 1)' : '';
     const secondaryBorderThickness = notCoveredState ? 1 : 0;
-    const dataToRender = coveredState ? primaryData : 0;
+    const dataToRender = !coveredState ? 0 : !notCoveredState ? 100 : value;
 
     const handleSliceClick = (sliceIndex: number, datasetLabel: string | undefined) => {
         console.log(`Clicked slice in '${datasetLabel}' dataset at index ${sliceIndex}`);
+
+        if (sliceIndex === 0) {
+            secondaryValueHandler();
+        }
+
+        if (sliceIndex === 1) {
+            primaryValueHandler();
+        }
     };
 
     const data = {
         labels: [],
         datasets: [
             {
-                label: 'primary',
+                label: chartSettings.DATA_SET_NAME,
                 data: [100 - dataToRender, dataToRender],
                 backgroundColor: [secondarySliceColor, primarySliceColor],
                 borderColor: [secondaryBorderColor, primaryBorderColor],
@@ -317,7 +344,7 @@ function ChartJsPieChart({ chartData, coveredState, notCoveredState }: PieChartP
     };
 
     const options = {
-        cutout: '50%',
+        // cutout: '50%',
         spacing: 0.5,
         plugins: {
             tooltip: {
@@ -325,10 +352,7 @@ function ChartJsPieChart({ chartData, coveredState, notCoveredState }: PieChartP
             },
             thickness: {
                 // manually setting thickness for each pie slice
-                thickness: [
-                    [64, 83], // Orange segment - manual gap
-                    [64, 90], // Blue segment - blue slice
-                ],
+                thickness: CHART_SLICES_THICKNESS_SETTINGS,
             },
             gradientColors: {
                 primary: primaryGradientColors,
@@ -340,7 +364,7 @@ function ChartJsPieChart({ chartData, coveredState, notCoveredState }: PieChartP
             text: dataToRender.toString(),
         },
         events: ['click' as const],
-        onClick: (event: ChartEvent, elements: ActiveElement[], chart: Chart) => {
+        onClick: (_event: ChartEvent, elements: ActiveElement[], chart: Chart) => {
             if (elements.length === 0) return;
 
             // Get the dataset label and clicked element index
@@ -349,7 +373,7 @@ function ChartJsPieChart({ chartData, coveredState, notCoveredState }: PieChartP
             const datasetLabel = chart.data.datasets[datasetIndex]?.label;
 
             // Only process clicks on the 'primary' dataset
-            if (datasetLabel === 'secondary' || datasetLabel === 'primary') {
+            if (datasetLabel === chartSettings.DATA_SET_NAME) {
                 handleSliceClick(clickedElementIndex, datasetLabel);
             } else {
                 console.log('Click ignored for dataset:', datasetLabel);

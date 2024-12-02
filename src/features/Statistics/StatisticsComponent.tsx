@@ -6,6 +6,7 @@ import ChartJsPieChart from '../../components/ChartJsPieChart';
 import { pricingCampaignsData, chartJDataCampaigns, pricingMonitoringData, chartJsDataMonitoring } from '../../db';
 import PieChartRenderer from './components/PieChartRenderer/PieChartRenderer';
 import { useVisibilityContext } from './contexts/VisibilityContext';
+import { usePieChartContext } from './contexts/PieChartContext';
 
 interface CardContentProps {
     $isOpen: boolean;
@@ -24,12 +25,16 @@ const CardContent = styled.div<CardContentProps>`
 
 function StatisticsComponent() {
     const [isOpen, setIsOpen] = useState(true);
-    const { state: visibilityState } = useVisibilityContext();
+    const { state: visibilityState, toggleVisibility } = useVisibilityContext();
+    const { chartState, setChartStateHandler } = usePieChartContext();
     const { monitoringCovered, monitoringNotCovered, campaignCovered, campaignNotCovered } = visibilityState;
 
     const handleSetOpen = () => {
         setIsOpen(prevState => !prevState);
     };
+
+    const campaignDataValue = visibilityState.campaignCovered ? chartState.campaigns : 0;
+    const monitoringDataValue = visibilityState.monitoringCovered ? chartState.monitoring : 0;
 
     return (
         <StyledCardWrapper>
@@ -37,21 +42,29 @@ function StatisticsComponent() {
             <CardContent $isOpen={isOpen}>
                 <PieChartRenderer
                     configData={pricingCampaignsData}
+                    primaryValue={campaignDataValue}
                     chart={
                         <ChartJsPieChart
                             chartData={chartJDataCampaigns}
                             coveredState={campaignCovered}
                             notCoveredState={campaignNotCovered}
+                            value={campaignDataValue}
+                            primaryValueHandler={() => toggleVisibility('campaignCovered')}
+                            secondaryValueHandler={() => toggleVisibility('campaignNotCovered')}
                         />
                     }
                 />
                 <PieChartRenderer
                     configData={pricingMonitoringData}
+                    primaryValue={monitoringDataValue}
                     chart={
                         <ChartJsPieChart
                             chartData={chartJsDataMonitoring}
                             coveredState={monitoringCovered}
                             notCoveredState={monitoringNotCovered}
+                            value={monitoringDataValue}
+                            primaryValueHandler={() => toggleVisibility('monitoringCovered')}
+                            secondaryValueHandler={() => toggleVisibility('monitoringNotCovered')}
                         />
                     }
                 />

@@ -1,10 +1,9 @@
 import { createContext, useContext, useState } from 'react';
-
-type ChartType = 'campaigns' | 'monitoring';
+import { PieChartType, SetChartStateHandlerType } from '../types/types';
 
 interface PieChartContextType {
-    chartState: Record<ChartType, number>;
-    setChartStateHandler: (chartType: ChartType, value: number) => void;
+    chartState: Record<PieChartType, number>;
+    setChartStateHandler: SetChartStateHandlerType;
 }
 
 const PieChartContext = createContext<PieChartContextType | null>(null);
@@ -12,7 +11,7 @@ const PieChartContext = createContext<PieChartContextType | null>(null);
 export const PieChartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [chartState, setChartState] = useState({ campaigns: 63.5, monitoring: 23.5 });
 
-    const setChartStateHandler = (chartType: ChartType, value: number) => {
+    const setChartStateHandler = (chartType: PieChartType, value: number) => {
         setChartState(prevState => ({ ...prevState, [chartType]: value }));
     };
 

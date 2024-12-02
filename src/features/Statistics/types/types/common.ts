@@ -3,3 +3,7 @@ export type VisibilityKey = 'campaignCovered' | 'campaignNotCovered' | 'monitori
 export type VisibilityState = {
     [key in VisibilityKey]: boolean;
 };
+
+export type PieChartType = 'campaigns' | 'monitoring';
+
+export type SetChartStateHandlerType = (chartType: PieChartType, value: number) => void;

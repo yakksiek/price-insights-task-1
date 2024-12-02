@@ -1,6 +1,5 @@
 interface ChartMetadata {
     id: 'campaign' | 'monitoring';
-    data: number;
     labelPrimary: string;
     labelSecondary: string;
     header: string;
