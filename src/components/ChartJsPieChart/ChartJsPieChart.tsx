@@ -181,12 +181,12 @@ const gradientPlugin: Plugin<'pie' | 'doughnut'> = {
         const datasetPrimary = chart.data.datasets.find(dataset => dataset.label === chartSettings.DATA_SET_NAME);
 
         if (Array.isArray(datasetPrimary?.backgroundColor)) {
-            const blueSegmentIndex = 1; // Index of the blue slice
-            const orangeSegmentIndex = 0; // Index of the orange slice
+            const primarySegmentIndex = 1; // Index of the blue slice
+            const secondarySegmentIndex = 0; // Index of the orange slice
 
             // Replace plain colors with gradients
-            datasetPrimary.backgroundColor[blueSegmentIndex] = primaryGradient;
-            datasetPrimary.backgroundColor[orangeSegmentIndex] = secondaryGradient;
+            datasetPrimary.backgroundColor[primarySegmentIndex] = primaryGradient;
+            datasetPrimary.backgroundColor[secondarySegmentIndex] = secondaryGradient;
         }
 
         chart.$gradientApplied = true; // Set flag to avoid redundant updates
@@ -206,11 +206,11 @@ const shadowPlugin = {
         const datasetPrimary = chart.data.datasets.find(dataset => dataset.label === chartSettings.DATA_SET_NAME);
         if (!datasetPrimary) return;
         const datasetPrimaryIndex = chart.data.datasets.indexOf(datasetPrimary);
-        const blueSegmentIndex = 1; // Index of the blue slice within the dataset
+        const primarySegmentIndex = 1; // Index of the blue slice within the dataset
 
         const meta = chart.getDatasetMeta(datasetPrimaryIndex);
         if (meta && meta.data) {
-            const arc = meta.data[blueSegmentIndex] as ArcElement;
+            const arc = meta.data[primarySegmentIndex] as ArcElement;
 
             // Save the original draw method
             const originalDraw = arc.draw;
@@ -320,12 +320,22 @@ function ChartJsPieChart({
     const handleSliceClick = (sliceIndex: number, datasetLabel: string | undefined) => {
         console.log(`Clicked slice in '${datasetLabel}' dataset at index ${sliceIndex}`);
 
-        if (sliceIndex === 0) {
-            secondaryValueHandler();
+        // CASE 1
+        // when BOTH slices are active
+        // a click on blue turns off orange
+
+        // CASE 2
+        // when ONLY one slice is active
+        // then the active slice becomes index 0
+        // and by click on it, it restores state to both active
+        const isSecondarySliceClicked = sliceIndex === 0; // orange slice
+        if (isSecondarySliceClicked) {
+            primaryValueHandler();
         }
 
-        if (sliceIndex === 1) {
-            primaryValueHandler();
+        const isPrimarySliceClicked = sliceIndex === 1; // blue slice
+        if (isPrimarySliceClicked) {
+            secondaryValueHandler();
         }
     };
 
@@ -339,13 +349,19 @@ function ChartJsPieChart({
                 borderColor: [secondaryBorderColor, primaryBorderColor],
                 borderWidth: [secondaryBorderThickness, primaryBorderThickness],
                 borderRadius: 2,
+                // hoverBackgroundColor: [secondarySliceColor, primarySliceColor],
             },
         ],
     };
 
     const options = {
-        // cutout: '50%',
         spacing: 0.5,
+        onHover: (event: ChartEvent, elements: ActiveElement[]) => {
+            const chartCanvas = event.native?.target as HTMLCanvasElement;
+            if (!chartCanvas) return;
+
+            chartCanvas.style.cursor = elements.length ? 'pointer' : 'default';
+        },
         plugins: {
             tooltip: {
                 enabled: false,
@@ -363,7 +379,7 @@ function ChartJsPieChart({
             },
             text: dataToRender.toString(),
         },
-        events: ['click' as const],
+        // events: ['click' as const, 'hover' as const],
         onClick: (_event: ChartEvent, elements: ActiveElement[], chart: Chart) => {
             if (elements.length === 0) return;
 
@@ -372,6 +388,7 @@ function ChartJsPieChart({
             const datasetIndex = elements[0].datasetIndex;
             const datasetLabel = chart.data.datasets[datasetIndex]?.label;
 
+            console.log(chart.data.datasets);
             // Only process clicks on the 'primary' dataset
             if (datasetLabel === chartSettings.DATA_SET_NAME) {
                 handleSliceClick(clickedElementIndex, datasetLabel);
