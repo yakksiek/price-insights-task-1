@@ -309,11 +309,12 @@ function ChartJsPieChart({
     const { primaryColor, primaryGradientColors, secondaryColor, secondaryGradientColors, primaryColorShadow } =
         chartData;
 
+    // to refactor once final decision on logic made
     const primarySliceColor = coveredState ? primaryColor : 'transparent';
-    const primaryBorderColor = coveredState ? 'rgba(246, 246, 248, 1)' : '';
+    const primaryBorderColor = coveredState ? chartSettings.GREY_BACKGROUND_COLOR : '';
     const primaryBorderThickness = coveredState ? 1 : 0;
     const secondarySliceColor = notCoveredState ? secondaryColor : 'transparent';
-    const secondaryBorderColor = notCoveredState ? 'rgba(246, 246, 248, 1)' : '';
+    const secondaryBorderColor = notCoveredState ? chartSettings.GREY_BACKGROUND_COLOR : '';
     const secondaryBorderThickness = notCoveredState ? 1 : 0;
     const dataToRender = !coveredState ? 0 : !notCoveredState ? 100 : value;
 
