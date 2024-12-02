@@ -1,17 +1,8 @@
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 
 import StyledPageWrapper from '../components/PageWrapper';
-import PlotlyPieChart from '../components/PlotlyPieChart';
-import {
-    plotlyChartConfigMonitoringData,
-    plotlyChartConfigPricingCampaigns,
-    pricingCampaignsData,
-    pricingMonitoringData,
-    repricingBlockData,
-} from '../db';
+import { repricingBlockData } from '../db';
 import BlockComponent from '../features/BeautifulDnbBlock/BlockComponent';
-import PieChartRenderer from '../features/Statistics/components/PieChartRenderer/PieChartRenderer';
-import StatisticsComponent from '../features/Statistics/StatisticsComponent';
 import usePangeaDnd from '../hooks/usePangeaDnd';
 import useReorder from '../hooks/useReorder';
 
@@ -52,16 +43,6 @@ function RepricingPage() {
 
     return (
         <StyledPageWrapper>
-            <StatisticsComponent>
-                <PieChartRenderer
-                    configData={pricingCampaignsData}
-                    chart={<PlotlyPieChart chartConfig={plotlyChartConfigPricingCampaigns} />}
-                />
-                <PieChartRenderer
-                    configData={pricingMonitoringData}
-                    chart={<PlotlyPieChart chartConfig={plotlyChartConfigMonitoringData} />}
-                />
-            </StatisticsComponent>
             <DragDropContext onDragEnd={handleOnDragEnd}>
                 <Droppable droppableId='droppable-blocks' direction='vertical'>
                     {provided => (

@@ -1,6 +1,4 @@
 import { HideVisibilityIcon, VisibilityIcon } from '../../../../assets/icons';
-import ChartJsPieChart from '../../../../components/ChartJsPieChart';
-import { chartJDataCampaigns } from '../../../../db';
 import * as t from '../../../../types';
 import { useVisibilityContext } from '../../contexts/VisibilityContext';
 import { VisibilityKey } from '../../types/types';

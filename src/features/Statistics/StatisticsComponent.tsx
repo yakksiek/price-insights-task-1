@@ -26,7 +26,7 @@ const CardContent = styled.div<CardContentProps>`
 function StatisticsComponent() {
     const [isOpen, setIsOpen] = useState(true);
     const { state: visibilityState, toggleVisibility } = useVisibilityContext();
-    const { chartState, setChartStateHandler } = usePieChartContext();
+    const { chartState } = usePieChartContext();
     const { monitoringCovered, monitoringNotCovered, campaignCovered, campaignNotCovered } = visibilityState;
 
     const handleSetOpen = () => {
