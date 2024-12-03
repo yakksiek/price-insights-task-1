@@ -8,7 +8,7 @@ import { PieChartRenderer } from '../../components/PieChartRenderer';
 import { useChartRendererContext } from '../../components/PieChartRenderer/context';
 import { IChartData, PieChartType } from '../../components/PieChart/types';
 
-interface CardContentProps {
+interface ICardContentProps {
     $isOpen: boolean;
 }
 
@@ -27,7 +27,7 @@ const createChartData = (id: PieChartType): IChartData => ({
 const chartJDataCampaigns = createChartData('campaigns');
 const chartJsDataMonitoring = createChartData('monitoring');
 
-const CardContent = styled.div<CardContentProps>`
+const CardContent = styled.div<ICardContentProps>`
     padding: 0 var(--card-content-padding);
     display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
     gap: 25px;

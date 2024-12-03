@@ -1,17 +1,18 @@
 import styled from 'styled-components';
-import { centerContentWithFlex } from '../../styles/shared';
-import { Breakpoints } from '../../types/enums';
 
 export const Wrapper = styled.div`
+    --padding-s: 8px;
+    --margin-l: 22px;
+    --color-text-placeholder: #707090;
     display: flex;
     justify-content: center;
     padding: 0 var(--padding-s);
 
-    @media ${Breakpoints.MediumLarge} {
+    @media (min-width: 1366px) {
         flex-direction: column;
     }
 
-    @media ${Breakpoints.ExtraLarge} {
+    @media (min-width: 1770px) {
         flex-direction: row;
     }
 `;
@@ -21,7 +22,7 @@ export const ChartContainer = styled.div`
     justify-content: end;
     flex: 1.25;
 
-    @media ${Breakpoints.MediumLarge} {
+    @media (min-width: 1366px) {
         justify-content: center;
         flex: 1;
     }
@@ -35,14 +36,14 @@ export const Legend = styled.div`
     flex-direction: column;
 
     p {
-        font-size: 0.813rem;
-        color: var(--text-placeholder);
+        font-size: 13px;
+        color: var(--color-text-placeholder);
     }
 
-    @media ${Breakpoints.MediumLarge} {
+    @media (min-width: 1366px) {
         text-align: center;
     }
-    @media ${Breakpoints.ExtraLarge} {
+    @media (min-width: 1770px) {
         text-align: left;
     }
 `;
@@ -54,25 +55,21 @@ export const Header = styled.header`
 `;
 
 export const Divider = styled.hr`
-    border: 1px solid rgba(224, 224, 237, 1);
+    border: 1px solid #e0e0ed;
     margin: var(--margin-l) 0;
     width: 394px;
 
-    @media ${Breakpoints.MediumLarge} {
+    @media (min-width: 1366px) and (max-width: 1769px) {
         margin: var(--margin-l) auto;
-    }
-
-    @media ${Breakpoints.ExtraLarge} {
-        margin: var(--margin-l) 0;
     }
 `;
 
 export const LegendContent = styled.div`
-    @media ${Breakpoints.MediumLarge} {
+    @media (min-width: 1366px) {
         margin: 0 auto;
     }
 
-    @media ${Breakpoints.ExtraLarge} {
+    @media (min-width: 1770px) {
         margin: 0;
     }
 `;
@@ -89,7 +86,9 @@ export const Row = styled.div`
     .icon-wrapper {
         cursor: pointer;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
-        ${centerContentWithFlex}
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         &:hover {
             transform: translateY(-2px);
@@ -113,19 +112,21 @@ export const Row = styled.div`
 
     .description {
         font-weight: 600;
-        color: var(--font-color);
-        font-size: 0.875rem;
+        color: #111119;
+        font-size: 14px;
         display: flex;
     }
 `;
 
 type AccentColors = 'blue' | 'orange';
 
-export const Dot = styled.span<{ $color?: AccentColors }>`
+export const Dot = styled.span<{ $color: AccentColors }>`
+    --color-orange: '#EA5400';
+    --color-blue: '#176AE5';
     display: inline-block;
-    margin-right: 0.5rem;
-    width: 1rem;
-    height: 1rem;
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
-    background: ${({ $color }) => ($color ? `var(--primary-${$color})` : 'var(--primary-blue)')};
+    background: var(--color-${props => props.$color});
 `;
