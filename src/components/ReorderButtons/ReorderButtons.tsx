@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ArrowDownIcon, ArrowUpIcon } from '../../assets/icons';
+import { ArrowDownIcon, ArrowUpIcon } from '../../assets/svg';
 
 const StyledActionButtonsWrapper = styled.div`
     display: flex;

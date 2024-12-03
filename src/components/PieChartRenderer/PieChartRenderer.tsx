@@ -1,10 +1,9 @@
 import { FC } from 'react';
-import { HideVisibilityIcon, VisibilityIcon } from '../../assets/icons';
-
 import * as t from '../../types';
 import * as S from './styled';
-import { IVisibilityKey } from './types';
+import { EyeSVG, SlashEyeSVG } from '../../assets/svg';
 import { useChartRendererContext } from './context';
+import { IVisibilityKey } from './types';
 
 interface IProps {
     configData: t.ChartMetadata;
@@ -36,7 +35,7 @@ export const PieChartRenderer: FC<IProps> = ({ configData, chart, primaryValue }
                 <S.LegendContent>
                     <S.Row>
                         <div onClick={() => toggleVisibility(iconCoveredDataId)} className='icon-wrapper'>
-                            {iconCoveredState ? <VisibilityIcon /> : <HideVisibilityIcon />}
+                            {iconCoveredState ? <EyeSVG /> : <SlashEyeSVG />}
                         </div>
                         <span className='data'>{coveredValue}%</span>
                         <span className='divider'></span>
@@ -48,7 +47,7 @@ export const PieChartRenderer: FC<IProps> = ({ configData, chart, primaryValue }
                     </S.Row>
                     <S.Row>
                         <div onClick={() => toggleVisibility(iconNotCoveredDataId)} className='icon-wrapper'>
-                            {iconNotCoveredState ? <VisibilityIcon /> : <HideVisibilityIcon />}
+                            {iconNotCoveredState ? <EyeSVG /> : <SlashEyeSVG />}
                         </div>
                         <span className='data'>{notCoveredValue}%</span>
                         <span className='divider'></span>

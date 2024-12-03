@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { DragHandleIcon } from '../assets/icons';
+import { DragHandleIcon } from '../assets/svg';
 
 interface StyledWrapperProps {
     $color: string;

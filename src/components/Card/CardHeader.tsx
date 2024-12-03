@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { DoubleChevronUpIcon } from '../../assets/icons';
+import { DoubleChevronUpIcon } from '../../assets/svg';
 
 const StyledCardHeader = styled.div`
     height: 66px;

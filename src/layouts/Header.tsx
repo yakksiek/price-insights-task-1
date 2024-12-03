@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { LogoIcon } from '../assets/icons';
 import { NavLink } from 'react-router-dom';
+import { LogoIcon } from '../assets/svg';
 
 const StyledHeader = styled.header`
     height: var(--header-height);
