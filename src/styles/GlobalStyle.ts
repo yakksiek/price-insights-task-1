@@ -18,13 +18,16 @@ const GlobalStyle = createGlobalStyle`
     --text-placeholder: rgba(112, 112, 144, 1);
     
     // colors
+    // gray_background
+    /* rgba(238, 238, 242,1) */
+
+
     // blue
     --primary-blue: rgb(23, 106, 229);
     --blue-gradient-start: rgba(13, 59, 127, 1);
     --blue-shadow: rgba(87, 137, 213, 0.787);
     --blue-drop-shadow: rgba(24, 102, 219, 0.7);
-
-    background: radial-gradient(50% 50% at 50% 50%, #0D3B7F 0%, #176AE5 100%);
+/* background: radial-gradient(50% 50% at 50% 50%, #0D3B7F 0%, #176AE5 100%); */
 
 
     // orange
@@ -32,7 +35,7 @@ const GlobalStyle = createGlobalStyle`
     --orange-gradient-start: rgba(229, 23, 147, 1);
 
     // various
-    --background-color: rgba(238, 238, 242, 1);
+    --background-color: rgba(238, 238, 242, 1); // #EEEEF2
     --background-color-section: rgba(246, 246, 248, 1); 
     --icon-background-transparent: rgba(255, 255, 255, 0.6);
     --icon-border-color: rgba(235, 235, 242, 1);
