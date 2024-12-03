@@ -1,4 +1,4 @@
-import { ChartData, PieChartType } from '../components/PieChart/types';
+import { IChartData, PieChartType } from '../components/PieChart/types';
 import * as u from '../utils';
 
 // yes, a theme would be a better solution
@@ -8,7 +8,7 @@ const blueShadow = u.getCssVariable('--blue-shadow') || 'rgba(87, 137, 213, 0.78
 const primaryOrangeColor = u.getCssVariable('--primary-orange') || 'rgb(234, 84, 0)';
 const orangeGradientStart = u.getCssVariable('--orange-gradient-start') || 'rgba(229, 23, 147, 1)';
 
-const createChartData = (id: PieChartType): ChartData => ({
+const createChartData = (id: PieChartType): IChartData => ({
     id,
     primaryColor: primaryBlueColor,
     primaryGradientColors: [blueGradientStart, primaryBlueColor],

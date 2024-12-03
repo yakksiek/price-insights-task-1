@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { ActiveElement, ArcElement, Chart, ChartEvent, Chart as ChartJS, ChartType, Legend, Tooltip } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import * as S from './styled';
-import { ChartData, GradientColorsOptions, ShadowColorsOptions, ThicknessPluginOptions } from './types';
+import { IChartData, IGradientColorsOptions, IShadowColorsOptions, IThicknessPluginOptions } from './types';
 import { thicknessPlugin, innerTextPlugin, gradientPlugin, shadowPlugin, backgroundPlugin } from './plugins';
 import { CHART_SETTINGS } from './constants';
 
@@ -16,9 +16,9 @@ const CHART_SLICES_THICKNESS_SETTINGS = [
 declare module 'chart.js' {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface PluginOptionsByType<TType extends ChartType> {
-        thickness?: ThicknessPluginOptions;
-        gradientColors?: GradientColorsOptions;
-        shadowColors?: ShadowColorsOptions;
+        thickness?: IThicknessPluginOptions;
+        gradientColors?: IGradientColorsOptions;
+        shadowColors?: IShadowColorsOptions;
         text?: string;
     }
 
@@ -39,7 +39,7 @@ ChartJS.register(
 );
 
 interface IProps {
-    chartData: ChartData;
+    chartData: IChartData;
     coveredState: boolean;
     notCoveredState: boolean;
     value: number;

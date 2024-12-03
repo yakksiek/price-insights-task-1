@@ -1,9 +1,10 @@
 import { FC } from 'react';
 import { HideVisibilityIcon, VisibilityIcon } from '../../assets/icons';
-import { useVisibilityContext } from './context/VisibilityContext';
+
 import * as t from '../../types';
 import * as S from './styled';
 import { IVisibilityKey } from './types';
+import { useChartRendererContext } from './context';
 
 interface IProps {
     configData: t.ChartMetadata;
@@ -13,7 +14,7 @@ interface IProps {
 
 export const PieChartRenderer: FC<IProps> = ({ configData, chart, primaryValue }) => {
     const { labelPrimary, labelSecondary, header, subheader, id: chartId } = configData;
-    const { state: iconsState, toggleVisibility } = useVisibilityContext();
+    const { state: iconsState, toggleVisibility } = useChartRendererContext();
 
     const iconCoveredDataId = `${chartId}Covered` as IVisibilityKey;
     const iconNotCoveredDataId = `${chartId}NotCovered` as IVisibilityKey;

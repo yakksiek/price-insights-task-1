@@ -4,13 +4,15 @@ import { CardHeader, StyledCardWrapper } from '../../components/Card';
 import { Breakpoints } from '../../types/enums';
 import { PieChart } from '../../components/PieChart';
 import { pricingCampaignsData, chartJDataCampaigns, pricingMonitoringData, chartJsDataMonitoring } from '../../db';
-import { useVisibilityContext } from '../../components/PieChartRenderer/context/VisibilityContext';
 import { PieChartRenderer } from '../../components/PieChartRenderer';
-import { usePieChartContext } from '../../components/PieChartRenderer/context';
+import { useChartRendererContext } from '../../components/PieChartRenderer/context';
 
 interface CardContentProps {
     $isOpen: boolean;
 }
+
+const CAMPAIGNS_DATA = 63.5;
+const MONITORING_DATA = 23.4;
 
 const CardContent = styled.div<CardContentProps>`
     padding: 0 var(--card-content-padding);
@@ -25,16 +27,15 @@ const CardContent = styled.div<CardContentProps>`
 
 function StatisticsComponent() {
     const [isOpen, setIsOpen] = useState(true);
-    const { state: visibilityState, toggleVisibility } = useVisibilityContext();
-    const { chartState } = usePieChartContext();
+    const { state: visibilityState, toggleVisibility } = useChartRendererContext();
     const { monitoringCovered, monitoringNotCovered, campaignCovered, campaignNotCovered } = visibilityState;
 
     const handleSetOpen = () => {
         setIsOpen(prevState => !prevState);
     };
 
-    const campaignDataValue = visibilityState.campaignCovered ? chartState.campaigns : 0;
-    const monitoringDataValue = visibilityState.monitoringCovered ? chartState.monitoring : 0;
+    const campaignDataValue = visibilityState.campaignCovered ? CAMPAIGNS_DATA : 0;
+    const monitoringDataValue = visibilityState.monitoringCovered ? MONITORING_DATA : 0;
 
     return (
         <StyledCardWrapper>

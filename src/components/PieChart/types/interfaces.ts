@@ -1,6 +1,6 @@
 import { PieChartType } from './types';
 
-export interface ChartData {
+export interface IChartData {
     id: PieChartType;
     primaryColor: string;
     primaryGradientColors: [string, string];
@@ -9,15 +9,15 @@ export interface ChartData {
     secondaryGradientColors: [string, string];
 }
 
-export interface ThicknessPluginOptions {
+export interface IThicknessPluginOptions {
     thickness: Array<[number, number]>;
 }
 
-export interface GradientColorsOptions {
+export interface IGradientColorsOptions {
     primary: [string, string];
     secondary: [string, string];
 }
 
-export interface ShadowColorsOptions {
+export interface IShadowColorsOptions {
     primary: string;
 }
