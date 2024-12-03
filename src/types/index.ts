@@ -1,4 +1,3 @@
-import ChartMetadata from './ChartMetainfo';
-import { PlotlyChartConfig, ColorScheme } from './ProtlyChartConfig';
+import { PlotlyChartConfig, ColorScheme } from './PlotlyChartConfig';
 
-export type { ChartMetadata, PlotlyChartConfig, ColorScheme };
+export type { PlotlyChartConfig, ColorScheme };

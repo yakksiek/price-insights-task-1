@@ -1,4 +1,4 @@
-interface ChartMetadata {
+export interface IChartMetadata {
     id: 'campaign' | 'monitoring';
     labelPrimary: string;
     labelSecondary: string;
@@ -6,5 +6,3 @@ interface ChartMetadata {
     subheader: string;
     primaryColor?: 'blue' | 'purple';
 }
-
-export default ChartMetadata;

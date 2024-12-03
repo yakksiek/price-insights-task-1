@@ -1,6 +1,6 @@
-import * as t from '../types';
+import { IChartMetadata } from '../components/PieChartRenderer/types';
 
-export const pricingCampaignsData: t.ChartMetadata = {
+export const pricingCampaignsData: IChartMetadata = {
     id: 'campaign',
     header: 'Pricing campaigns',
     subheader: 'Ensure complete allocation of products among pricing campaigns',
@@ -8,7 +8,7 @@ export const pricingCampaignsData: t.ChartMetadata = {
     labelSecondary: 'Products without pricing campaign',
 };
 
-export const pricingMonitoringData: t.ChartMetadata = {
+export const pricingMonitoringData: IChartMetadata = {
     id: 'monitoring',
     header: 'Pricing monitoring',
     subheader: 'Ensure maximum coverage of products through monitoring',

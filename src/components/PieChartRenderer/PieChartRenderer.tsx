@@ -1,12 +1,11 @@
 import { FC } from 'react';
-import * as t from '../../types';
 import * as S from './styled';
 import { EyeSVG, SlashEyeSVG } from '../../assets/svg';
 import { useChartRendererContext } from './context';
-import { IVisibilityKey } from './types';
+import { IChartMetadata, IVisibilityKey } from './types';
 
 interface IProps {
-    configData: t.ChartMetadata;
+    configData: IChartMetadata;
     chart: React.ReactNode;
     primaryValue: number;
 }
