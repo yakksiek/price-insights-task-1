@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { centerContentWithFlex } from '../../../../styles/shared';
-import { Breakpoints } from '../../../../types/enums';
+import { centerContentWithFlex } from '../../styles/shared';
+import { Breakpoints } from '../../types/enums';
 
-export const StyledPieChart = styled.div`
+export const Wrapper = styled.div`
     display: flex;
     justify-content: center;
     padding: 0 var(--padding-s);
@@ -16,7 +16,7 @@ export const StyledPieChart = styled.div`
     }
 `;
 
-export const StyledChartContainer = styled.div`
+export const ChartContainer = styled.div`
     display: flex;
     justify-content: end;
     flex: 1.25;
@@ -27,7 +27,7 @@ export const StyledChartContainer = styled.div`
     }
 `;
 
-export const StyledLegend = styled.div`
+export const Legend = styled.div`
     padding: var(--padding-s);
     flex: 2;
     display: flex;
@@ -47,13 +47,13 @@ export const StyledLegend = styled.div`
     }
 `;
 
-export const StyledHeader = styled.header`
+export const Header = styled.header`
     h5 {
         font-size: 1rem;
     }
 `;
 
-export const StyledDivider = styled.hr`
+export const Divider = styled.hr`
     border: 1px solid rgba(224, 224, 237, 1);
     margin: var(--margin-l) 0;
     width: 394px;
@@ -67,7 +67,7 @@ export const StyledDivider = styled.hr`
     }
 `;
 
-export const StyledLegendContent = styled.div`
+export const LegendContent = styled.div`
     @media ${Breakpoints.MediumLarge} {
         margin: 0 auto;
     }
@@ -77,7 +77,7 @@ export const StyledLegendContent = styled.div`
     }
 `;
 
-export const StyledRow = styled.div`
+export const Row = styled.div`
     margin-bottom: var(--margin-l);
     display: flex;
     align-items: center;
@@ -121,7 +121,7 @@ export const StyledRow = styled.div`
 
 type AccentColors = 'blue' | 'orange';
 
-export const StyledDot = styled.span<{ $color?: AccentColors }>`
+export const Dot = styled.span<{ $color?: AccentColors }>`
     display: inline-block;
     margin-right: 0.5rem;
     width: 1rem;

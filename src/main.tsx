@@ -3,21 +3,21 @@ import { createRoot } from 'react-dom/client';
 import GlobalStyle from './styles/GlobalStyle.ts';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './routes';
-import { VisibilityProvider } from './features/Statistics/contexts/VisibilityContext.tsx';
-import { PieChartProvider } from './features/Statistics/contexts/PieChartContext.tsx';
+import { PieChartContextProvider } from './components/PieChartRenderer/context/PieChartContext.tsx';
+import { VisibilityContextProvider } from './components/PieChartRenderer/context/VisibilityContext.tsx';
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <GlobalStyle />
-        <PieChartProvider>
-            <VisibilityProvider>
+        <PieChartContextProvider>
+            <VisibilityContextProvider>
                 <RouterProvider
                     router={router}
                     future={{
                         v7_startTransition: true,
                     }}
                 />
-            </VisibilityProvider>
-        </PieChartProvider>
+            </VisibilityContextProvider>
+        </PieChartContextProvider>
     </StrictMode>,
 );

@@ -1,30 +1,22 @@
-import { HideVisibilityIcon, VisibilityIcon } from '../../../../assets/icons';
-import * as t from '../../../../types';
-import { useVisibilityContext } from '../../contexts/VisibilityContext';
-import { VisibilityKey } from '../../types/types';
-import {
-    StyledChartContainer,
-    StyledDivider,
-    StyledDot,
-    StyledHeader,
-    StyledLegend,
-    StyledLegendContent,
-    StyledPieChart,
-    StyledRow,
-} from './styled';
+import { FC } from 'react';
+import { HideVisibilityIcon, VisibilityIcon } from '../../assets/icons';
+import { useVisibilityContext } from './context/VisibilityContext';
+import * as t from '../../types';
+import * as S from './styled';
+import { IVisibilityKey } from './types';
 
-interface PieChartRendererProps {
+interface IProps {
     configData: t.ChartMetadata;
     chart: React.ReactNode;
     primaryValue: number;
 }
 
-function PieChartRenderer({ configData, chart, primaryValue }: PieChartRendererProps) {
+export const PieChartRenderer: FC<IProps> = ({ configData, chart, primaryValue }) => {
     const { labelPrimary, labelSecondary, header, subheader, id: chartId } = configData;
     const { state: iconsState, toggleVisibility } = useVisibilityContext();
 
-    const iconCoveredDataId = `${chartId}Covered` as VisibilityKey;
-    const iconNotCoveredDataId = `${chartId}NotCovered` as VisibilityKey;
+    const iconCoveredDataId = `${chartId}Covered` as IVisibilityKey;
+    const iconNotCoveredDataId = `${chartId}NotCovered` as IVisibilityKey;
     const iconCoveredState = iconsState[iconCoveredDataId];
     const iconNotCoveredState = iconsState[iconNotCoveredDataId];
 
@@ -32,16 +24,16 @@ function PieChartRenderer({ configData, chart, primaryValue }: PieChartRendererP
     const coveredValue = !iconNotCoveredState ? (!iconCoveredState ? 0 : 100) : primaryValue;
 
     return (
-        <StyledPieChart>
-            <StyledChartContainer>{chart}</StyledChartContainer>
-            <StyledLegend>
-                <StyledHeader>
+        <S.Wrapper>
+            <S.ChartContainer>{chart}</S.ChartContainer>
+            <S.Legend>
+                <S.Header>
                     <h5>{header}</h5>
                     <p>{subheader}</p>
-                </StyledHeader>
-                <StyledDivider />
-                <StyledLegendContent>
-                    <StyledRow>
+                </S.Header>
+                <S.Divider />
+                <S.LegendContent>
+                    <S.Row>
                         <div onClick={() => toggleVisibility(iconCoveredDataId)} className='icon-wrapper'>
                             {iconCoveredState ? <VisibilityIcon /> : <HideVisibilityIcon />}
                         </div>
@@ -49,11 +41,11 @@ function PieChartRenderer({ configData, chart, primaryValue }: PieChartRendererP
                         <span className='divider'></span>
 
                         <p className='description'>
-                            <StyledDot className='dot' $color='blue' />
+                            <S.Dot className='dot' $color='blue' />
                             {labelPrimary}
                         </p>
-                    </StyledRow>
-                    <StyledRow>
+                    </S.Row>
+                    <S.Row>
                         <div onClick={() => toggleVisibility(iconNotCoveredDataId)} className='icon-wrapper'>
                             {iconNotCoveredState ? <VisibilityIcon /> : <HideVisibilityIcon />}
                         </div>
@@ -61,14 +53,12 @@ function PieChartRenderer({ configData, chart, primaryValue }: PieChartRendererP
                         <span className='divider'></span>
 
                         <p className='description'>
-                            <StyledDot className='dot' $color='orange' />
+                            <S.Dot className='dot' $color='orange' />
                             {labelSecondary}
                         </p>
-                    </StyledRow>
-                </StyledLegendContent>
-            </StyledLegend>
-        </StyledPieChart>
+                    </S.Row>
+                </S.LegendContent>
+            </S.Legend>
+        </S.Wrapper>
     );
-}
-
-export default PieChartRenderer;
+};

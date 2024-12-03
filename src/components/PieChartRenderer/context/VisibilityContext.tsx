@@ -1,17 +1,21 @@
-import React, { createContext, useContext, useReducer } from 'react';
-import { VisibilityKey, VisibilityState } from '../types/types';
+import React, { createContext, ReactNode, useContext, useReducer } from 'react';
+import { IVisibilityKey, IVisibilityState } from '../types';
 
-interface VisibilityAction {
+interface IVisibilityAction {
     type: 'TOGGLE_VISIBILITY';
-    payload: VisibilityKey;
+    payload: IVisibilityKey;
 }
 
-interface VisibilityContextType {
-    state: VisibilityState;
-    toggleVisibility: (id: VisibilityKey) => void;
+interface IVisibilityContextType {
+    state: IVisibilityState;
+    toggleVisibility: (id: IVisibilityKey) => void;
 }
 
-const VisibilityContext = createContext<VisibilityContextType | undefined>(undefined);
+interface IProps {
+    children: ReactNode;
+}
+
+const VisibilityContext = createContext<IVisibilityContextType | undefined>(undefined);
 
 const initialState = {
     campaignCovered: true,
@@ -20,7 +24,7 @@ const initialState = {
     monitoringNotCovered: true,
 };
 
-const visibilityReducer = (state: VisibilityState, action: VisibilityAction) => {
+const visibilityReducer = (state: IVisibilityState, action: IVisibilityAction) => {
     switch (action.type) {
         case 'TOGGLE_VISIBILITY':
             return {
@@ -32,10 +36,10 @@ const visibilityReducer = (state: VisibilityState, action: VisibilityAction) => 
     }
 };
 
-export const VisibilityProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const VisibilityContextProvider: React.FC<IProps> = ({ children }) => {
     const [state, dispatch] = useReducer(visibilityReducer, initialState);
 
-    const toggleVisibility = (id: VisibilityKey) => {
+    const toggleVisibility = (id: IVisibilityKey) => {
         dispatch({ type: 'TOGGLE_VISIBILITY', payload: id });
     };
 

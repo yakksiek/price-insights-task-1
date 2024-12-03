@@ -4,9 +4,9 @@ import { CardHeader, StyledCardWrapper } from '../../components/Card';
 import { Breakpoints } from '../../types/enums';
 import { PieChart } from '../../components/PieChart';
 import { pricingCampaignsData, chartJDataCampaigns, pricingMonitoringData, chartJsDataMonitoring } from '../../db';
-import PieChartRenderer from './components/PieChartRenderer/PieChartRenderer';
-import { useVisibilityContext } from './contexts/VisibilityContext';
-import { usePieChartContext } from './contexts/PieChartContext';
+import { useVisibilityContext } from '../../components/PieChartRenderer/context/VisibilityContext';
+import { PieChartRenderer } from '../../components/PieChartRenderer';
+import { usePieChartContext } from '../../components/PieChartRenderer/context';
 
 interface CardContentProps {
     $isOpen: boolean;
