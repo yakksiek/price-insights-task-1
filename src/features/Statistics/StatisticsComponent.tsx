@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { CardHeader, StyledCardWrapper } from '../../components/Card';
 import { Breakpoints } from '../../types/enums';
-import ChartJsPieChart from '../../components/ChartJsPieChart';
+import { PieChart } from '../../components/PieChart';
 import { pricingCampaignsData, chartJDataCampaigns, pricingMonitoringData, chartJsDataMonitoring } from '../../db';
 import PieChartRenderer from './components/PieChartRenderer/PieChartRenderer';
 import { useVisibilityContext } from './contexts/VisibilityContext';
@@ -44,7 +44,7 @@ function StatisticsComponent() {
                     configData={pricingCampaignsData}
                     primaryValue={campaignDataValue}
                     chart={
-                        <ChartJsPieChart
+                        <PieChart
                             chartData={chartJDataCampaigns}
                             coveredState={campaignCovered}
                             notCoveredState={campaignNotCovered}
@@ -58,7 +58,7 @@ function StatisticsComponent() {
                     configData={pricingMonitoringData}
                     primaryValue={monitoringDataValue}
                     chart={
-                        <ChartJsPieChart
+                        <PieChart
                             chartData={chartJsDataMonitoring}
                             coveredState={monitoringCovered}
                             notCoveredState={monitoringNotCovered}

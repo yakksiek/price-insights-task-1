@@ -1,5 +1,4 @@
-import { ChartData } from '../components/ChartJsPieChart';
-import { PieChartType } from '../features/Statistics/types/types';
+import { ChartData, PieChartType } from '../components/PieChart/types';
 import * as u from '../utils';
 
 // yes, a theme would be a better solution
