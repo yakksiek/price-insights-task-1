@@ -1,13 +1,13 @@
 import { Config, PieData } from 'plotly.js';
 import Plot from 'react-plotly.js';
 import styled, { css } from 'styled-components';
-import { getCssVariable } from '../../utils';
-import * as t from '../../types';
+import { getCssVariable } from '../../../utils';
+import * as t from '../../../types';
 
 // PROBLEMS & QUESTIONABLE CHOICES
-// 1. no gradient on colour slices
+// 1. no gradient on color slices
 // 2. no outer white border on blue slice (visible in Figma layout not on a printscreen provided)
-// 3. not programmatically calculated the layered oranged color blow blue
+// 3. not programmatically calculated the layered orange color blow blue
 // 4. drop-shadow not working on safari
 
 interface StyledWrapperProps {

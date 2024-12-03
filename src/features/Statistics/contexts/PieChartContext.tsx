@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import { PieChartType, SetChartStateHandlerType } from '../types/types';
+import { PieChartType, SetChartStateHandlerType } from '../../../components/PieChart/types';
 
 interface PieChartContextType {
     chartState: Record<PieChartType, number>;
