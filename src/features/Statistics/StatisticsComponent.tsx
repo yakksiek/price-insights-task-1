@@ -3,9 +3,10 @@ import styled from 'styled-components';
 import { CardHeader, StyledCardWrapper } from '../../components/Card';
 import { Breakpoints } from '../../types/enums';
 import { PieChart } from '../../components/PieChart';
-import { pricingCampaignsData, chartJDataCampaigns, pricingMonitoringData, chartJsDataMonitoring } from '../../db';
+import { pricingCampaignsData, pricingMonitoringData } from '../../db';
 import { PieChartRenderer } from '../../components/PieChartRenderer';
 import { useChartRendererContext } from '../../components/PieChartRenderer/context';
+import { IChartData, PieChartType } from '../../components/PieChart/types';
 
 interface CardContentProps {
     $isOpen: boolean;
@@ -13,6 +14,18 @@ interface CardContentProps {
 
 const CAMPAIGNS_DATA = 63.5;
 const MONITORING_DATA = 23.4;
+
+const createChartData = (id: PieChartType): IChartData => ({
+    id,
+    primaryColor: '#176AE5',
+    primaryGradientColors: ['#0d3b7f', '#176AE5'],
+    primaryColorShadow: '#5789d5',
+    secondaryColor: '#EA5400',
+    secondaryGradientColors: ['#e51793', '#EA5400'],
+});
+
+const chartJDataCampaigns = createChartData('campaigns');
+const chartJsDataMonitoring = createChartData('monitoring');
 
 const CardContent = styled.div<CardContentProps>`
     padding: 0 var(--card-content-padding);

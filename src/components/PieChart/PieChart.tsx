@@ -6,6 +6,7 @@ import { IChartData, IGradientColorsOptions, IShadowColorsOptions, IThicknessPlu
 import { thicknessPlugin, innerTextPlugin, gradientPlugin, shadowPlugin, backgroundPlugin } from './plugins';
 import { CHART_SETTINGS } from './constants';
 
+// order of colors is important
 const CHART_SLICES_THICKNESS_SETTINGS = [
     // orange
     [CHART_SETTINGS.INNER_RADIUS_GENERAL, CHART_SETTINGS.OUTER_RADIUS_ORANGE],
@@ -67,9 +68,7 @@ export const PieChart: FC<IProps> = ({
     const secondaryBorderThickness = notCoveredState ? 1 : 0;
     const dataToRender = !coveredState ? 0 : !notCoveredState ? 100 : value;
 
-    const handleSliceClick = (sliceIndex: number, datasetLabel: string | undefined) => {
-        console.log(`Clicked slice in '${datasetLabel}' dataset at index ${sliceIndex}`);
-
+    const handleSliceClick = (sliceIndex: number) => {
         // CASE 1
         // when BOTH slices are active
         // a click on blue turns off orange
@@ -99,7 +98,6 @@ export const PieChart: FC<IProps> = ({
                 borderColor: [secondaryBorderColor, primaryBorderColor],
                 borderWidth: [secondaryBorderThickness, primaryBorderThickness],
                 borderRadius: 2,
-                // hoverBackgroundColor: [secondarySliceColor, primarySliceColor],
             },
         ],
     };
@@ -129,7 +127,6 @@ export const PieChart: FC<IProps> = ({
             },
             text: dataToRender.toString(),
         },
-        // events: ['click' as const, 'hover' as const],
         onClick: (_event: ChartEvent, elements: ActiveElement[], chart: Chart) => {
             if (elements.length === 0) return;
 
@@ -138,12 +135,9 @@ export const PieChart: FC<IProps> = ({
             const datasetIndex = elements[0].datasetIndex;
             const datasetLabel = chart.data.datasets[datasetIndex]?.label;
 
-            console.log(chart.data.datasets);
             // Only process clicks on the 'primary' dataset
             if (datasetLabel === CHART_SETTINGS.DATA_SET_NAME) {
-                handleSliceClick(clickedElementIndex, datasetLabel);
-            } else {
-                console.log('Click ignored for dataset:', datasetLabel);
+                handleSliceClick(clickedElementIndex);
             }
         },
     };
