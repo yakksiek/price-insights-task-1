@@ -1,3 +1,3 @@
-import { Breakpoints } from './Breakpoints';
+import { Breakpoints } from "./Breakpoints";
 
 export { Breakpoints };

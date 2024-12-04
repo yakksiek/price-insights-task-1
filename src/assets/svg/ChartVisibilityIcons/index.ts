@@ -1,2 +1,2 @@
-export * from './EyeSVG';
-export * from './SlashEyeSVG';
+export * from "./EyeSVG";
+export * from "./SlashEyeSVG";

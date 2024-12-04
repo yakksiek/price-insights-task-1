@@ -1,3 +1,3 @@
-import PlotlyPieChart from './PlotlyPieChart';
+import PlotlyPieChart from "./PlotlyPieChart";
 
 export default PlotlyPieChart;

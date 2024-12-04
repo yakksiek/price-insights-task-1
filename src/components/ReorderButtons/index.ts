@@ -1,3 +1,3 @@
-import ReorderButtons from './ReorderButtons';
+import ReorderButtons from "./ReorderButtons";
 
 export default ReorderButtons;

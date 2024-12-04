@@ -1,57 +1,63 @@
-import styled from 'styled-components';
-import { DragHandleIcon } from '../assets/svg';
+import styled from "styled-components";
+import { DragHandleIcon } from "../assets/svg";
 
 interface StyledWrapperProps {
-    $color: string;
-    $padding: boolean;
-    $marginRight: boolean;
-    $background: boolean;
+  $color: string;
+  $padding: boolean;
+  $marginRight: boolean;
+  $background: boolean;
 }
 
 const StyledWrapper = styled.div<StyledWrapperProps>`
-    color: ${({ $color }) => $color};
-    ${({ $padding }) => $padding && 'padding: 16px'};
-    ${({ $marginRight }) => $marginRight && 'margin-right: 16px'};
-    ${({ $background }) => $background && 'background: var(--icon-background-transparent)'};
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--icon-bg-radius);
-    height: 22px;
-    width: 14px;
+  color: ${({ $color }) => $color};
+  ${({ $padding }) => $padding && "padding: 16px"};
+  ${({ $marginRight }) => $marginRight && "margin-right: 16px"};
+  ${({ $background }) =>
+    $background && "background: var(--icon-background-transparent)"};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--icon-bg-radius);
+  height: 22px;
+  width: 14px;
 
-    &:hover {
-        cursor: grab;
-    }
+  &:hover {
+    cursor: grab;
+  }
 
-    &:active {
-        cursor: grabbing;
-    }
+  &:active {
+    cursor: grabbing;
+  }
 
-    svg {
-        height: 13px;
-        width: 8px;
-    }
+  svg {
+    height: 13px;
+    width: 8px;
+  }
 `;
 
 interface DraggableHandleProps {
-    color?: string;
-    padding?: boolean;
-    marginRight?: boolean;
-    background?: boolean;
+  color?: string;
+  padding?: boolean;
+  marginRight?: boolean;
+  background?: boolean;
 }
 
 function DraggableHandle({
-    color = 'var(--primary-blue)',
-    padding = false,
-    marginRight = false,
-    background = false,
+  color = "var(--primary-blue)",
+  padding = false,
+  marginRight = false,
+  background = false,
 }: DraggableHandleProps) {
-    return (
-        <StyledWrapper $color={color} $padding={padding} $marginRight={marginRight} $background={background}>
-            <DragHandleIcon />
-        </StyledWrapper>
-    );
+  return (
+    <StyledWrapper
+      $color={color}
+      $padding={padding}
+      $marginRight={marginRight}
+      $background={background}
+    >
+      <DragHandleIcon />
+    </StyledWrapper>
+  );
 }
 
 export default DraggableHandle;

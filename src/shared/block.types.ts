@@ -1,10 +1,10 @@
 export interface ListItem {
-    id: string;
-    name: string;
+  id: string;
+  name: string;
 }
 
 export interface BlockData {
-    items: ListItem[];
-    name: string;
-    id: string;
+  items: ListItem[];
+  name: string;
+  id: string;
 }

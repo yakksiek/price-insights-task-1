@@ -1,3 +1,3 @@
-import DropIndicator from './DropIndicator';
+import DropIndicator from "./DropIndicator";
 
 export default DropIndicator;

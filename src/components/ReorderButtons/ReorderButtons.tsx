@@ -1,41 +1,46 @@
-import styled from 'styled-components';
-import { ArrowDownIcon, ArrowUpIcon } from '../../assets/svg';
+import styled from "styled-components";
+import { ArrowDownIcon, ArrowUpIcon } from "../../assets/svg";
 
 const StyledActionButtonsWrapper = styled.div`
-    display: flex;
-    gap: 1rem;
+  display: flex;
+  gap: 1rem;
 
-    button {
-        cursor: pointer;
-        padding: 1rem;
-        border-radius: var(--card-radius);
-        color: var(--primary-blue);
+  button {
+    cursor: pointer;
+    padding: 1rem;
+    border-radius: var(--card-radius);
+    color: var(--primary-blue);
 
-        &:disabled {
-            pointer-events: none;
-            color: lightgrey;
-        }
+    &:disabled {
+      pointer-events: none;
+      color: lightgrey;
     }
+  }
 `;
 
 interface ReorderButtonsProps {
-    isFirst: boolean;
-    isLast: boolean;
-    onMoveUp: () => void;
-    onMoveDown: () => void;
+  isFirst: boolean;
+  isLast: boolean;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
 }
 
-function ReorderButtons({ isFirst, isLast, onMoveDown, onMoveUp }: ReorderButtonsProps) {
-    return (
-        <StyledActionButtonsWrapper>
-            <button disabled={isLast} aria-disabled={isLast} onClick={onMoveDown}>
-                <ArrowDownIcon />
-            </button>
-            <button disabled={isFirst} aria-disabled={isFirst} onClick={onMoveUp}>
-                <ArrowUpIcon />
-            </button>
-        </StyledActionButtonsWrapper>
-    );
+function ReorderButtons({
+  isFirst,
+  isLast,
+  onMoveDown,
+  onMoveUp,
+}: ReorderButtonsProps) {
+  return (
+    <StyledActionButtonsWrapper>
+      <button disabled={isLast} aria-disabled={isLast} onClick={onMoveDown}>
+        <ArrowDownIcon />
+      </button>
+      <button disabled={isFirst} aria-disabled={isFirst} onClick={onMoveUp}>
+        <ArrowUpIcon />
+      </button>
+    </StyledActionButtonsWrapper>
+  );
 }
 
 export default ReorderButtons;

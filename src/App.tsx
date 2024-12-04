@@ -1,7 +1,7 @@
-import RepricingPage from './pages/RepricingPage';
+import RepricingPage from "./pages/RepricingPage";
 
 function App() {
-    return <RepricingPage />;
+  return <RepricingPage />;
 }
 
 export default App;

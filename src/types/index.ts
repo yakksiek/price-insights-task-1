@@ -1,3 +1,3 @@
-import { PlotlyChartConfig, ColorScheme } from './PlotlyChartConfig';
+import { PlotlyChartConfig, ColorScheme } from "./PlotlyChartConfig";
 
 export type { PlotlyChartConfig, ColorScheme };
